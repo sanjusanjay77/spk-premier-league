@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SPK Premier League</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="background-glow"></div>
+
+<!-- HERO -->
+
+<header class="hero">
+
+<div class="hero-content">
+
+<h1>🏏 SPK PREMIER LEAGUE</h1>
+
+<p>
+Professional Cricket Analytics Dashboard
+</p>
+
+</div>
+
+</header>
+
+<!-- DASHBOARD -->
+
+<section class="dashboard">
+
+<div class="stat-card gold">
+<h2 id="totalRuns">0</h2>
+<p>Total Runs</p>
+</div>
+
+<div class="stat-card blue">
+<h2 id="totalWickets">0</h2>
+<p>Total Wickets</p>
+</div>
+
+<div class="stat-card purple">
+<h2 id="totalSixes">0</h2>
+<p>Total Sixes</p>
+</div>
+
+<div class="stat-card green">
+<h2 id="totalMatches">0</h2>
+<p>Matches Played</p>
+</div>
+
+</section>
+
+<!-- MVP -->
+
+<section class="mvp-section">
+
+<h2 class="section-title">👑 MVP OF THE SEASON</h2>
+
+<div class="mvp-card">
+
+<img id="mvpPhoto" src="">
+
+<div>
+
+<h3 id="mvpName">Loading...</h3>
+
+<p id="mvpStats"></p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- RECORDS -->
+
+<section>
+
+<h2 class="section-title">
+🏆 Tournament Records
+</h2>
+
+<div class="records-grid">
+
+<div class="record-card runs">
+<h3>🏏 Most Runs</h3>
+<p id="mostRuns"></p>
+</div>
+
+<div class="record-card wickets">
+<h3>🎯 Most Wickets</h3>
+<p id="mostWickets"></p>
+</div>
+
+<div class="record-card sixes">
+<h3>💥 Most Sixes Hit</h3>
+<p id="mostSixes"></p>
+</div>
+
+<div class="record-card economy">
+<h3>🛡 Best Economy</h3>
+<p id="bestEconomy"></p>
+</div>
+
+<div class="record-card sr">
+<h3>⚡ Highest Strike Rate</h3>
+<p id="highestSR"></p>
+</div>
+
+<div class="record-card fours">
+<h3>🏏 Most Fours</h3>
+<p id="mostFours"></p>
+</div>
+
+</div>
+
+
+<!-- LEADERBOARD -->
+
+<section>
+
+<h2 class="section-title">
+📈 Leaderboard
+</h2>
+
+<div class="table-wrapper">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Match No</th>
+<th>Date</th>
+<th>Player</th>
+<th>Runs</th>
+<th>Balls</th>
+<th>Sixes</th>
+<th>Fours</th>
+<th>Strike Rate</th>
+<th>Wickets</th>
+<th>Runs Conceded</th>
+<th>Balls Bowled</th>
+<th>Sixes Given</th>
+<th>Economy</th>
+
+</tr>
+
+</thead>
+
+<tbody id="leaderboardBody">
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+<!-- PLAYER CARDS -->
+
+<section>
+
+<h2 class="section-title">
+👤 Player Profiles
+</h2>
+
+<div class="player-grid" id="playerGrid">
+
+</div>
+
+</section>
+
+<!-- ANALYTICS -->
+
+<section>
+
+<h2 class="section-title">
+📊 Performance Analytics
+</h2>
+
+<div class="chart-container">
+
+<canvas id="runsChart"></canvas>
+
+</div>
+
+<div class="chart-container">
+
+<canvas id="wicketsChart"></canvas>
+
+</div>
+
+</section>
+
+<section class="head-to-head-section">
+
+<h2 class="section-title">
+<section class="head2head">
+
+<h2 class="section-title">
+⚔️ Head-to-Head Comparison
+</h2>
+
+<div class="compare-select">
+
+<select id="player1">
+<option value="">Select Player 1</option>
+</select>
+
+<span class="vs">VS</span>
+
+<select id="player2">
+<option value="">Select Player 2</option>
+</select>
+
+<button onclick="comparePlayers()">
+Compare
+</button>
+
+</div>
+
+<div id="comparisonResult"></div>
+
+</section>
+<section class="recent-form-section">
+
+<h2 class="section-title">
+🔥 Recent Form
+</h2>
+
+<div id="recentFormContainer">
+
+</div>
+
+</section>
+
+<!-- AWARDS -->
+
+<section>
+
+<h2 class="section-title">
+🏅 Awards
+</h2>
+
+<div class="awards-grid">
+
+<div class="award-card">
+🏏 Best Batsman
+</div>
+
+<div class="award-card">
+🎯 Best Bowler
+</div>
+
+
+</div>
+
+</section>
+</section>
+<section class="hall-of-fame">
+
+<h2 class="section-title">
+🏆 Hall Of Fame
+</h2>
+
+<div class="hof-grid">
+
+<div class="hof-card">
+
+<div class="hof-icon">🏏</div>
+
+<h3>Highest Score</h3>
+
+<p id="highestScore">
+Loading...
+</p>
+
+</div>
+
+<div class="hof-card">
+
+<div class="hof-icon">🎯</div>
+
+<h3>Best Bowling</h3>
+
+<p id="bestBowling">
+Loading...
+</p>
+
+</div>
+
+<div class="hof-card">
+
+<div class="hof-icon">💥</div>
+
+<h3>Most Sixes In Match</h3>
+
+<p id="mostSixesMatch">
+Loading...
+</p>
+
+</div>
+
+<div class="hof-card">
+
+<div class="hof-icon">⚡</div>
+
+<h3>Fastest Fifty</h3>
+
+<p id="fastestFifty">
+Loading...
+</p>
+
+</div>
+
+</div>
+
+</section>
+<section class="cap-section">
+
+<h2 class="section-title">
+🏅 Cap Holders
+</h2>
+
+<div class="caps-container">
+
+<div class="cap-card orange-card">
+
+<div class="cap-icon">
+🟠
+</div>
+
+<h3>Orange Cap</h3>
+
+<img id="orangeCapPhoto" src="">
+
+<h4 id="orangeCapName">
+Loading...
+</h4>
+
+<p id="orangeCapRuns">
+0 Runs
+</p>
+
+</div>
+
+<div class="cap-card purple-card">
+
+<div class="cap-icon">
+🟣
+</div>
+
+<h3>Purple Cap</h3>
+
+<img id="purpleCapPhoto" src="">
+
+<h4 id="purpleCapName">
+Loading...
+</h4>
+
+<p id="purpleCapWickets">
+0 Wickets
+</p>
+
+</div>
+
+</div>
+
+</section>
+<section class="win-section">
+
+<h2 class="section-title">
+🥇 Win Percentage
+</h2>
+
+<div id="winPercentageContainer"></div>
+
+</section>
+<!-- Latest Final Match -->
+
+<section>
+<h1>🏏 Latest Match History</h1>
+
+<div id="latestMatchCard"></div>
+</section>
+
+<section class="award-history-section">
+
+<h1>🏆 Award History</h1>
+
+<div id="awardHistory"></div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<p>
+SPK Premier League © 2026
+</p>
+
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
