@@ -1442,3 +1442,8 @@ tbody tr:nth-child(3){
 .player-link:hover{
     text-decoration:underline;
 }
+
+html, body {
+    overflow-x: hidden;
+    touch-action: pan-y;
+}
