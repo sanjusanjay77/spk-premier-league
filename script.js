@@ -386,12 +386,12 @@ onclick="openPlayer('${player.name}')">
 
 function openPlayer(name){
 
-const records =
-players.filter(p => p.name === name);
+const records = players.filter(p => p.name === name);
 
 let totalRuns = 0;
 let totalWickets = 0;
 let totalSixes = 0;
+let totalFours = 0;
 
 let totalBallsFaced = 0;
 let totalBallsBowled = 0;
@@ -404,6 +404,7 @@ records.forEach(r => {
 totalRuns += Number(r.runs || 0);
 totalWickets += Number(r.wickets || 0);
 totalSixes += Number(r.sixes || 0);
+totalFours += Number(r.fours || 0);
 
 totalBallsFaced += Number(r.ballsFaced || 0);
 totalBallsBowled += Number(r.ballsBowled || 0);
@@ -426,32 +427,42 @@ totalBallsBowled > 0
 document.getElementById("modalImg").src =
 playerPhotos[name];
 
-document.getElementById("modalRuns").textContent = totalRuns;
-document.getElementById("modalWickets").textContent = totalWickets;
-document.getElementById("modalFours").textContent = totalFours;
-document.getElementById("modalSixes").textContent = totalSixes;
-document.getElementById("modalSR").textContent = strikeRate;
-document.getElementById("modalEconomy").textContent = economy;
-document.getElementById("modalBallsFaced").textContent = totalBallsFaced;
-document.getElementById("modalBallsBowled").textContent = totalBallsBowled;
-document.getElementById("modalFoursGiven").textContent = totalFoursGiven;
-document.getElementById("modalSixesGiven").textContent = totalSixesGiven;
-document.getElementById("modalMatches").textContent = records.length;
+document.getElementById("modalName").textContent =
+name;
+
+document.getElementById("modalRuns").textContent =
+totalRuns;
+
+document.getElementById("modalWickets").textContent =
+totalWickets;
+
+document.getElementById("modalFours").textContent =
+totalFours;
+
+document.getElementById("modalSixes").textContent =
+totalSixes;
+
+document.getElementById("modalSR").textContent =
+strikeRate;
+
+document.getElementById("modalEconomy").textContent =
+economy;
+
+document.getElementById("modalBallsFaced").textContent =
+totalBallsFaced;
+
+document.getElementById("modalBallsBowled").textContent =
+totalBallsBowled;
+
+document.getElementById("modalSixesGiven").textContent =
+totalSixesGiven;
+
+document.getElementById("modalMatches").textContent =
+records.length;
+
 document.getElementById("playerModal").style.display =
 "flex";
-
 }
-
-document.addEventListener("click",e=>{
-
-if(e.target.classList.contains("close")){
-
-document.getElementById("playerModal").style.display =
-"none";
-
-}
-
-});
 
 /* Charts */
 
@@ -1265,28 +1276,30 @@ document.getElementById(
 function closeModal(){
 document.getElementById("playerModal").style.display="none";
 }
-
 function downloadPlayerCard(){
 
-const card =
-document.getElementById("downloadCard");
+const card = document.getElementById("downloadCard");
+const btn = document.querySelector(".download-btn");
+
+btn.style.display = "none";
 
 html2canvas(card,{
-scale:2,
-useCORS:true
+    scale:3,
+    useCORS:true,
+    backgroundColor:"#111827"
 }).then(canvas=>{
 
-const link =
-document.createElement("a");
+    const link = document.createElement("a");
 
-link.download =
-document.getElementById("modalName").textContent +
-"_SPK_Player_Card.png";
+    link.download =
+    document.getElementById("modalName").textContent +
+    "_SPK_Player_Card.png";
 
-link.href =
-canvas.toDataURL("image/png");
+    link.href = canvas.toDataURL("image/png");
 
-link.click();
+    link.click();
+
+    btn.style.display = "block";
 
 });
 
