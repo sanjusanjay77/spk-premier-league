@@ -500,10 +500,76 @@ onclick="openPlayer('${player.name}')">
 });
 
 }
+
+/*glow*/
+let orangeCapPlayer="";
+let purpleCapPlayer="";
+
+
+function calculateCaps(){
+
+let highestRuns=0;
+let highestWickets=0;
+
+
+players.forEach(p=>{
+
+
+if(Number(p.runs)>highestRuns){
+
+highestRuns=Number(p.runs);
+
+orangeCapPlayer=p.name;
+
+}
+
+
+
+if(Number(p.wickets)>highestWickets){
+
+highestWickets=Number(p.wickets);
+
+purpleCapPlayer=p.name;
+
+}
+
+
+});
+
+}
+
+calculateCaps();
+
 /* Popup */
 
 function openPlayer(name){
 
+
+/*addti*/
+const card =
+document.getElementById("downloadCard");
+
+
+card.classList.remove(
+"orange-cap",
+"purple-cap"
+);
+
+
+if(name===orangeCapPlayer){
+
+card.classList.add("orange-cap");
+
+}
+
+
+if(name===purpleCapPlayer){
+
+card.classList.add("purple-cap");
+
+}
+
+/*addti*/
 const records = players.filter(p => p.name === name);
 
 let totalRuns = 0;
@@ -580,6 +646,12 @@ records.length;
 
 document.getElementById("playerModal").style.display =
 "flex";
+
+if(name === orangeCapPlayer){
+
+showFireworks();
+
+}
 
 document.getElementById("downloadDate").textContent =
 new Date().toLocaleString("en-IN");
@@ -1436,5 +1508,47 @@ window.onclick = function(event){
         modal.style.display = "none";
 
     }
+
+}
+
+
+function showFireworks(){
+
+for(let i=0;i<40;i++){
+
+let fire =
+document.createElement("span");
+
+fire.className="firework";
+
+
+let x =
+(Math.random()-0.5)*400+"px";
+
+let y =
+(Math.random()-0.5)*400+"px";
+
+
+fire.style.setProperty("--x",x);
+
+fire.style.setProperty("--y",y);
+
+
+fire.style.left="50%";
+
+fire.style.top="40%";
+
+
+document.body.appendChild(fire);
+
+
+setTimeout(()=>{
+
+fire.remove();
+
+},1000);
+
+
+}
 
 }
