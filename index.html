@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-https://github.com/sanjusanjay77/spk-premier-league/edit/main/index.html
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -26,11 +25,13 @@ https://github.com/sanjusanjay77/spk-premier-league/edit/main/index.html
 
 <div class="hero-content">
 
+<img src="https://drive.google.com/thumbnail?id=1bnipnY19y3c6BFiSKgRjAu7cyDkWZjip&sz=w1000"
+class="league-logo"
+alt="SPK Premier League Logo">
+
 <h1>🏏 SPK PREMIER LEAGUE</h1>
 
-<p>
-Professional Cricket Analytics Dashboard
-</p>
+<p>Professional Cricket Analytics Dashboard</p>
 
 </div>
 
@@ -407,6 +408,85 @@ Loading...
 <div id="awardHistory"></div>
 
 </section>
+
+<!-- PLAYER POPUP MODAL -->
+
+<div id="playerModal" class="modal">
+
+<div class="modal-content" id="downloadCard">
+
+<span class="close"
+onclick="closeModal()">&times;</span>
+
+<img id="modalImg" class="modal-img">
+
+<h2 id="modalName">Player Name</h2>
+
+<div class="stat-row">
+🏏 Total Runs:
+<span id="modalRuns">0</span>
+</div>
+
+<div class="stat-row">
+🎯 Wickets:
+<span id="modalWickets">0</span>
+</div>
+
+<div class="stat-row">
+4️⃣ Fours:
+<span id="modalFours">0</span>
+</div>
+
+<div class="stat-row">
+💥 Sixes:
+<span id="modalSixes">0</span>
+</div>
+
+<div class="stat-row">
+⚡ Strike Rate:
+<span id="modalSR">0</span>
+</div>
+
+<div class="stat-row">
+🛡 Economy:
+<span id="modalEconomy">0</span>
+</div>
+
+<div class="stat-row">
+🏃 Balls Faced:
+<span id="modalBallsFaced">0</span>
+</div>
+
+<div class="stat-row">
+🎳 Balls Bowled:
+<span id="modalBallsBowled">0</span>
+</div>
+
+<div class="stat-row">
+🚫 Fours Given:
+<span id="modalFoursGiven">0</span>
+</div>
+
+<div class="stat-row">
+🚫 Sixes Given:
+<span id="modalSixesGiven">0</span>
+</div>
+
+<div class="stat-row">
+🎮 Matches Played:
+<span id="modalMatches">0</span>
+</div>
+
+<button class="download-btn"
+onclick="downloadPlayerCard()">
+
+📸 Download Player Card
+
+</button>
+
+</div>
+
+</div>
 
 
 <!-- FOOTER -->
