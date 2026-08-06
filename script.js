@@ -284,25 +284,6 @@ document.getElementById("mostSixes").innerHTML =
 document.getElementById("mostFours").innerHTML =
 `${mostFours.name}<br>${mostFours.fours}`;
 
-const highestSR =
-[...playerTotals]
-.sort((a,b)=>b.strikeRate-a.strikeRate)[0];
-
-const bestEconomy =
-[...playerTotals]
-.filter(p => p.economy > 0)
-.sort((a,b)=>a.economy-b.economy)[0];
-
-if(highestSR){
-document.getElementById("highestSR").innerHTML =
-`${highestSR.name}<br>${highestSR.strikeRate}`;
-}
-
-if(bestEconomy){
-document.getElementById("bestEconomy").innerHTML =
-`${bestEconomy.name}<br>${bestEconomy.economy}`;
-}
-
 }
 }
 /* MVP */
