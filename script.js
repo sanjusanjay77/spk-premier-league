@@ -113,7 +113,6 @@ players.forEach(player=>{
 if(!totals[player.name]){
 
 totals[player.name] = {
-
 runs:0,
 wickets:0,
 sixes:0,
@@ -122,7 +121,6 @@ ballsPlayed:0,
 ballsBowled:0,
 runsConceded:0,
 sixesGiven:0
-
 };
 
 }
@@ -140,61 +138,56 @@ totals[player.name].sixesGiven += Number(player.sixesGiven || 0);
 
 });
 
-const playerTotals = Object.entries(totals).map(([name,data])=>({
+const playerTotals = Object.entries(totals).map(([name,data])=>{
 
-name,
+const strikeRate =
+data.ballsPlayed > 0
+? ((data.runs / data.ballsPlayed) * 100).toFixed(1)
+: 0;
 
+const economy =
+data.ballsBowled > 0
+? ((data.runsConceded * 6) / data.ballsBowled).toFixed(2)
+: 0;
+
+return{
+name:name,
 runs:data.runs,
 wickets:data.wickets,
 sixes:data.sixes,
 fours:data.fours,
+sixesGiven:data.sixesGiven,
+strikeRate:Number(strikeRate),
+economy:Number(economy)
+};
 
-const strikeRate =
-totalBallsFaced > 0
-? ((totalRuns / totalBallsFaced) * 100).toFixed(1)
-: 0;
+});
 
-const economy =
-totalBallsBowled > 0
-? ((totalRunsConceded * 6) / totalBallsBowled).toFixed(2)
-: 0;
+const mostRuns =
+[...playerTotals].sort((a,b)=>b.runs-a.runs)[0];
 
-sixesGiven:data.sixesGiven
+const mostWickets =
+[...playerTotals].sort((a,b)=>b.wickets-a.wickets)[0];
 
-}));
+const mostSixes =
+[...playerTotals].sort((a,b)=>b.sixes-a.sixes)[0];
+
+const mostFours =
+[...playerTotals].sort((a,b)=>b.fours-a.fours)[0];
 
 document.getElementById("mostRuns").innerHTML =
-playerTotals.sort((a,b)=>b.runs-a.runs)[0].name +
-"<br>" +
-playerTotals.sort((a,b)=>b.runs-a.runs)[0].runs;
+`${mostRuns.name}<br>${mostRuns.runs}`;
 
 document.getElementById("mostWickets").innerHTML =
-playerTotals.sort((a,b)=>b.wickets-a.wickets)[0].name +
-"<br>" +
-playerTotals.sort((a,b)=>b.wickets-a.wickets)[0].wickets;
+`${mostWickets.name}<br>${mostWickets.wickets}`;
 
 document.getElementById("mostSixes").innerHTML =
-playerTotals.sort((a,b)=>b.sixes-a.sixes)[0].name +
-"<br>" +
-playerTotals.sort((a,b)=>b.sixes-a.sixes)[0].sixes;
+`${mostSixes.name}<br>${mostSixes.sixes}`;
 
 document.getElementById("mostFours").innerHTML =
-playerTotals.sort((a,b)=>b.fours-a.fours)[0].name +
-"<br>" +
-playerTotals.sort((a,b)=>b.fours-a.fours)[0].fours;
-
-document.getElementById("highestSR").innerHTML =
-playerTotals.sort((a,b)=>b.strikeRate-a.strikeRate)[0].name +
-"<br>" +
-playerTotals.sort((a,b)=>b.strikeRate-a.strikeRate)[0].strikeRate;
-
-document.getElementById("bestEconomy").innerHTML =
-playerTotals.sort((a,b)=>a.economy-b.economy)[0].name +
-"<br>" +
-playerTotals.sort((a,b)=>a.economy-b.economy)[0].economy;
+`${mostFours.name}<br>${mostFours.fours}`;
 
 }
-
 /* MVP */
 function calculateMVP(){
 
