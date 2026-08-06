@@ -581,6 +581,9 @@ records.length;
 
 document.getElementById("playerModal").style.display =
 "flex";
+
+document.getElementById("downloadDate").textContent =
+new Date().toLocaleString("en-IN");
 }
 
 /* Charts */
