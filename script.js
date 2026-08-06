@@ -1403,72 +1403,39 @@ const btn = document.querySelector(".download-btn");
 btn.style.display = "none";
 
 html2canvas(card,{
-    scale:3,
-    useCORS:true,
-    backgroundColor:"#111827"
+scale:3,
+useCORS:true,
+backgroundColor:"#111827"
 }).then(canvas=>{
 
-    const link = document.createElement("a");
+const image = canvas.toDataURL("image/png");
 
-    link.download =
-    document.getElementById("modalName").textContent +
-    "_SPK_Player_Card.png";
+const link = document.createElement("a");
 
-    link.href = canvas.toDataURL("image/png");
+link.href = image;
 
-    link.click();
+link.download =
+document.getElementById("modalName").textContent +
+"_SPK_Player_Card.png";
 
-    btn.style.display = "block";
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+btn.style.display = "block";
+
+if(navigator.vibrate){
+navigator.vibrate(100);
+}
+
+}).catch(error=>{
+
+console.error(error);
+
+btn.style.display = "block";
 
 });
 
 }
-
-const leaderboard = {};
-
-players.forEach(p => {
-
-if(!leaderboard[p.name]){
-
-leaderboard[p.name] = {
-name:p.name,
-runs:0,
-ballsFaced:0,
-wickets:0,
-ballsBowled:0,
-runsConceded:0,
-sixes:0,
-fours:0,
-matches:0
-};
-
-}
-
-leaderboard[p.name].runs += Number(p.runs||0);
-leaderboard[p.name].ballsFaced += Number(p.ballsFaced||0);
-leaderboard[p.name].wickets += Number(p.wickets||0);
-leaderboard[p.name].ballsBowled += Number(p.ballsBowled||0);
-leaderboard[p.name].runsConceded += Number(p.runsConceded||0);
-leaderboard[p.name].sixes += Number(p.sixes||0);
-leaderboard[p.name].fours += Number(p.fours||0);
-leaderboard[p.name].matches++;
-
-});
-
-Object.values(leaderboard).forEach(player=>{
-
-player.strikeRate =
-player.ballsFaced > 0
-? ((player.runs/player.ballsFaced)*100).toFixed(1)
-: 0;
-
-player.economy =
-player.ballsBowled > 0
-? ((player.runsConceded*6)/player.ballsBowled).toFixed(2)
-: 0;
-
-});
-
-const rankings =
-Object.values(leaderboard)
-.sort((a,b)=>b.runs-a.runs);
