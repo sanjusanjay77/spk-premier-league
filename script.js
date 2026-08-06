@@ -38,12 +38,12 @@ date: cols[1],
 name: cols[2],
 runs: Number(cols[3]),
 ballsPlayed: Number(cols[4]),
-sixes: Number(cols[5]),
-wickets: Number(cols[6]),
-runsConceded: Number(cols[7]),
+sixes: Number(cols[6]),
+wickets: Number(cols[7]),
+runsConceded: Number(cols[9]),
 ballsBowled: Number(cols[8]),
-sixesGiven: Number(cols[9]),
-fours: Number(cols[10]),
+sixesGiven: Number(cols[10]),
+fours: Number(cols[5),
 
 };
 
