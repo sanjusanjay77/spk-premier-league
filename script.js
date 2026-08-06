@@ -1401,26 +1401,18 @@ document.getElementById("playerModal").style.display="none";
 function downloadPlayerCard(){
 
 const card = document.getElementById("downloadCard");
-const btn = document.querySelector(".download-btn");
-
-btn.style.display = "none";
 
 html2canvas(card,{
-scale:4,
+scale:2,
 useCORS:true,
-backgroundColor:"#111827",
-scrollY: -window.scrollY,
-windowWidth: card.scrollWidth,
-windowHeight: card.scrollHeight
+allowTaint:true
 }).then(canvas=>{
-
-btn.style.display = "block";
 
 const link = document.createElement("a");
 
 link.download =
 document.getElementById("modalName").textContent +
-"_SPK_Player_Card.png";
+"_PlayerCard.png";
 
 link.href = canvas.toDataURL("image/png");
 
