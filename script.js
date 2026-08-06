@@ -43,7 +43,7 @@ wickets: Number(cols[7]),
 runsConceded: Number(cols[9]),
 ballsBowled: Number(cols[8]),
 sixesGiven: Number(cols[10]),
-fours: Number(cols[5),
+fours: Number(cols[5]),
 
 };
 
