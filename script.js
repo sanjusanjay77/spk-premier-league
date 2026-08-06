@@ -1397,44 +1397,30 @@ document.getElementById("playerModal").style.display="none";
 }
 function downloadPlayerCard(){
 
-const card = document.getElementById("downloadCard");
-const btn = document.querySelector(".download-btn");
-
-btn.style.display = "none";
+const card =
+document.getElementById("downloadCard");
 
 html2canvas(card,{
-scale:3,
+scale:4,
 useCORS:true,
 backgroundColor:"#111827"
 }).then(canvas=>{
 
-const image = canvas.toDataURL("image/png");
+const image =
+canvas.toDataURL("image/png");
 
-const link = document.createElement("a");
+const link =
+document.createElement("a");
 
 link.href = image;
 
 link.download =
 document.getElementById("modalName").textContent +
-"_SPK_Player_Card.png";
-
-document.body.appendChild(link);
+"_SPK_Player_Card_" +
+new Date().toISOString().split("T")[0] +
+".png";
 
 link.click();
-
-document.body.removeChild(link);
-
-btn.style.display = "block";
-
-if(navigator.vibrate){
-navigator.vibrate(100);
-}
-
-}).catch(error=>{
-
-console.error(error);
-
-btn.style.display = "block";
 
 });
 
