@@ -426,33 +426,17 @@ totalBallsBowled > 0
 document.getElementById("modalImg").src =
 playerPhotos[name];
 
-document.getElementById("modalName").textContent =
-name;
-
-document.getElementById("modalRuns").textContent =
-totalRuns;
-
-document.getElementById("modalWickets").textContent =
-totalWickets;
-
-document.getElementById("modalSixes").textContent =
-totalSixes;
-
-document.getElementById("modalSR").textContent =
-strikeRate;
-
-document.getElementById("modalEconomy").textContent =
-economy;
-
-document.getElementById("modalBallsFaced").textContent =
-totalBallsFaced;
-
-document.getElementById("modalBallsBowled").textContent =
-totalBallsBowled;
-
-document.getElementById("modalSixesGiven").textContent =
-totalSixesGiven;
-
+document.getElementById("modalRuns").textContent = totalRuns;
+document.getElementById("modalWickets").textContent = totalWickets;
+document.getElementById("modalFours").textContent = totalFours;
+document.getElementById("modalSixes").textContent = totalSixes;
+document.getElementById("modalSR").textContent = strikeRate;
+document.getElementById("modalEconomy").textContent = economy;
+document.getElementById("modalBallsFaced").textContent = totalBallsFaced;
+document.getElementById("modalBallsBowled").textContent = totalBallsBowled;
+document.getElementById("modalFoursGiven").textContent = totalFoursGiven;
+document.getElementById("modalSixesGiven").textContent = totalSixesGiven;
+document.getElementById("modalMatches").textContent = records.length;
 document.getElementById("playerModal").style.display =
 "flex";
 
@@ -1274,5 +1258,36 @@ ${bestBowler.wickets} Wickets
 document.getElementById(
 "awardHistory"
 ).innerHTML = html;
+
+}
+
+
+function closeModal(){
+document.getElementById("playerModal").style.display="none";
+}
+
+function downloadPlayerCard(){
+
+const card =
+document.getElementById("downloadCard");
+
+html2canvas(card,{
+scale:2,
+useCORS:true
+}).then(canvas=>{
+
+const link =
+document.createElement("a");
+
+link.download =
+document.getElementById("modalName").textContent +
+"_SPK_Player_Card.png";
+
+link.href =
+canvas.toDataURL("image/png");
+
+link.click();
+
+});
 
 }
