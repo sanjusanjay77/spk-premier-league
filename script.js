@@ -1399,24 +1399,42 @@ document.getElementById("playerModal").style.display="none";
 }
 function downloadPlayerCard(){
 
-const card = document.getElementById("downloadCard");
+    const card = document.getElementById("downloadCard");
 
-html2canvas(card,{
-scale:2,
-useCORS:true,
-allowTaint:true
-}).then(canvas=>{
+    html2canvas(card,{
+        scale:2,
+        useCORS:true,
+        allowTaint:true
+    }).then(canvas=>{
 
-const link = document.createElement("a");
+        const link = document.createElement("a");
 
-link.download =
-document.getElementById("modalName").textContent +
-"_PlayerCard.png";
+        link.download =
+        document.getElementById("modalName").textContent +
+        "_PlayerCard.png";
 
-link.href = canvas.toDataURL("image/png");
+        link.href = canvas.toDataURL("image/png");
 
-link.click();
+        link.click();
 
-});
+        document.getElementById("playerModal").style.display = "none";
+
+    });
+
+}
+
+
+// Close modal when clicking outside the player card
+
+window.onclick = function(event){
+
+    const modal =
+    document.getElementById("playerModal");
+
+    if(event.target == modal){
+
+        modal.style.display = "none";
+
+    }
 
 }
