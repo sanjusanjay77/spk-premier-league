@@ -106,23 +106,79 @@ totalMatches;
 
 function updateRecords(){
 
+const totals = {};
+
+players.forEach(player => {
+
+if(!totals[player.name]){
+
+totals[player.name] = {
+runs:0,
+wickets:0,
+sixes:0,
+fours:0,
+ballsFaced:0,
+ballsBowled:0,
+runsConceded:0,
+sixesGiven:0
+};
+
+}
+
+totals[player.name].runs += Number(player.runs || 0);
+totals[player.name].wickets += Number(player.wickets || 0);
+totals[player.name].sixes += Number(player.sixes || 0);
+totals[player.name].fours += Number(player.fours || 0);
+
+totals[player.name].ballsFaced += Number(player.ballsFaced || 0);
+totals[player.name].ballsBowled += Number(player.ballsBowled || 0);
+
+totals[player.name].runsConceded += Number(player.runsConceded || 0);
+totals[player.name].sixesGiven += Number(player.sixesGiven || 0);
+
+});
+
+const playerTotals = Object.entries(totals).map(([name,data]) => {
+
+const strikeRate =
+data.ballsFaced > 0
+? ((data.runs / data.ballsFaced) * 100)
+: 0;
+
+const economy =
+data.ballsBowled > 0
+? ((data.runsConceded * 6) / data.ballsBowled)
+: 999;
+
+return {
+name,
+runs:data.runs,
+wickets:data.wickets,
+sixes:data.sixes,
+fours:data.fours,
+strikeRate,
+economy
+};
+
+});
+
 const mostRuns =
-[...players].sort((a,b)=>b.runs-a.runs)[0];
+[...playerTotals].sort((a,b)=>b.runs-a.runs)[0];
 
 const mostWickets =
-[...players].sort((a,b)=>b.wickets-a.wickets)[0];
+[...playerTotals].sort((a,b)=>b.wickets-a.wickets)[0];
 
 const mostSixes =
-[...players].sort((a,b)=>b.sixes-a.sixes)[0];
-
-const bestEconomy =
-[...players].sort((a,b)=>a.economy-b.economy)[0];
-
-const highestSR =
-[...players].sort((a,b)=>b.strikeRate-a.strikeRate)[0];
+[...playerTotals].sort((a,b)=>b.sixes-a.sixes)[0];
 
 const mostFours =
-[...players].sort((a,b)=>b.fours-a.fours)[0];
+[...playerTotals].sort((a,b)=>b.fours-a.fours)[0];
+
+const highestSR =
+[...playerTotals].sort((a,b)=>b.strikeRate-a.strikeRate)[0];
+
+const bestEconomy =
+[...playerTotals].sort((a,b)=>a.economy-b.economy)[0];
 
 document.getElementById("mostRuns").innerHTML =
 `${mostRuns.name}<br>${mostRuns.runs}`;
@@ -133,14 +189,14 @@ document.getElementById("mostWickets").innerHTML =
 document.getElementById("mostSixes").innerHTML =
 `${mostSixes.name}<br>${mostSixes.sixes}`;
 
-document.getElementById("bestEconomy").innerHTML =
-`${bestEconomy.name}<br>${bestEconomy.economy}`;
+document.getElementById("mostFours").innerHTML =
+`${mostFours.name}<br>${mostFours.fours}`;
 
 document.getElementById("highestSR").innerHTML =
-`${highestSR.name}<br>${highestSR.strikeRate}`;
+`${highestSR.name}<br>${highestSR.strikeRate.toFixed(1)}`;
 
-document.getElementById("mostFours").innerHTML =
-`${mostFours.name}<br>${mostFours.fours} Fours`;
+document.getElementById("bestEconomy").innerHTML =
+`${bestEconomy.name}<br>${bestEconomy.economy.toFixed(2)}`;
 
 }
 /* Records */
