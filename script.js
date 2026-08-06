@@ -37,7 +37,7 @@ matchNo: cols[0],
 date: cols[1],
 name: cols[2],
 runs: Number(cols[3]),
-ballsPlayed: Number(cols[4]),
+ballsFaced: Number(cols[4]),
 sixes: Number(cols[6]),
 wickets: Number(cols[7]),
 runsConceded: Number(cols[9]),
@@ -77,17 +77,14 @@ console.error("LOAD ERROR:", err);
 
 function updateDashboard(){
 
-const totalRuns = players.reduce(
-(a,b)=>a + Number(b.runs || 0),0);
+const totalRuns =
+players.reduce((a,b)=>a+b.runs,0);
 
-const totalWickets = players.reduce(
-(a,b)=>a + Number(b.wickets || 0),0);
+const totalWickets =
+players.reduce((a,b)=>a+b.wickets,0);
 
-const totalSixes = players.reduce(
-(a,b)=>a + Number(b.sixes || 0),0);
-
-const totalMatches =
-new Set(players.map(player => player.matchNo)).size;
+const totalSixes =
+players.reduce((a,b)=>a+b.sixes,0);
 
 document.getElementById("totalRuns").textContent =
 totalRuns;
@@ -98,10 +95,57 @@ totalWickets;
 document.getElementById("totalSixes").textContent =
 totalSixes;
 
+const totalMatches =
+new Set(players.map(player => player.matchNo)).size;
+
 document.getElementById("totalMatches").textContent =
 totalMatches;
+}
 
-/* Tournament Records */
+/* Records */
+
+function updateRecords(){
+
+const mostRuns =
+[...players].sort((a,b)=>b.runs-a.runs)[0];
+
+const mostWickets =
+[...players].sort((a,b)=>b.wickets-a.wickets)[0];
+
+const mostSixes =
+[...players].sort((a,b)=>b.sixes-a.sixes)[0];
+
+const bestEconomy =
+[...players].sort((a,b)=>a.economy-b.economy)[0];
+
+const highestSR =
+[...players].sort((a,b)=>b.strikeRate-a.strikeRate)[0];
+
+const mostFours =
+[...players].sort((a,b)=>b.fours-a.fours)[0];
+
+document.getElementById("mostRuns").innerHTML =
+`${mostRuns.name}<br>${mostRuns.runs}`;
+
+document.getElementById("mostWickets").innerHTML =
+`${mostWickets.name}<br>${mostWickets.wickets}`;
+
+document.getElementById("mostSixes").innerHTML =
+`${mostSixes.name}<br>${mostSixes.sixes}`;
+
+document.getElementById("bestEconomy").innerHTML =
+`${bestEconomy.name}<br>${bestEconomy.economy}`;
+
+document.getElementById("highestSR").innerHTML =
+`${highestSR.name}<br>${highestSR.strikeRate}`;
+
+document.getElementById("mostFours").innerHTML =
+`${mostFours.name}<br>${mostFours.fours} Fours`;
+
+}
+/* Records */
+
+function updateRecords(){
 
 const totals = {};
 
@@ -127,126 +171,7 @@ totals[player.name].wickets += Number(player.wickets || 0);
 totals[player.name].sixes += Number(player.sixes || 0);
 totals[player.name].fours += Number(player.fours || 0);
 
-totals[player.name].ballsFaced +=
-Number(player.ballsFaced || 0);
-
-totals[player.name].ballsBowled +=
-Number(player.ballsBowled || 0);
-
-totals[player.name].runsConceded +=
-Number(player.runsConceded || 0);
-
-totals[player.name].sixesGiven +=
-Number(player.sixesGiven || 0);
-
-});
-
-const playerTotals =
-Object.entries(totals).map(([name,data])=>{
-
-const strikeRate =
-data.ballsFaced > 0
-? ((data.runs / data.ballsFaced) * 100).toFixed(1)
-: 0;
-
-const economy =
-data.ballsBowled > 0
-? ((data.runsConceded * 6) / data.ballsBowled).toFixed(2)
-: 0;
-
-return{
-name,
-runs:data.runs,
-wickets:data.wickets,
-sixes:data.sixes,
-fours:data.fours,
-sixesGiven:data.sixesGiven,
-strikeRate:Number(strikeRate),
-economy:Number(economy)
-};
-
-});
-
-const mostRuns =
-[...playerTotals].sort((a,b)=>b.runs-a.runs)[0];
-
-const mostWickets =
-[...playerTotals].sort((a,b)=>b.wickets-a.wickets)[0];
-
-const mostSixes =
-[...playerTotals].sort((a,b)=>b.sixes-a.sixes)[0];
-
-const mostFours =
-[...playerTotals].sort((a,b)=>b.fours-a.fours)[0];
-
-document.getElementById("mostRuns").innerHTML =
-`${mostRuns.name}<br>${mostRuns.runs}`;
-
-document.getElementById("mostWickets").innerHTML =
-`${mostWickets.name}<br>${mostWickets.wickets}`;
-
-document.getElementById("mostSixes").innerHTML =
-`${mostSixes.name}<br>${mostSixes.sixes}`;
-
-document.getElementById("mostFours").innerHTML =
-`${mostFours.name}<br>${mostFours.fours}`;
-
-const highestSR =
-[...playerTotals]
-.filter(p=>p.strikeRate>0)
-.sort((a,b)=>b.strikeRate-a.strikeRate)[0];
-
-if(highestSR &&
-document.getElementById("highestSR")){
-
-document.getElementById("highestSR").innerHTML =
-`${highestSR.name}<br>${highestSR.strikeRate}`;
-
-}
-
-const bestEconomy =
-[...playerTotals]
-.filter(p=>p.economy>0)
-.sort((a,b)=>a.economy-b.economy)[0];
-
-if(bestEconomy &&
-document.getElementById("bestEconomy")){
-
-document.getElementById("bestEconomy").innerHTML =
-`${bestEconomy.name}<br>${bestEconomy.economy}`;
-
-}
-
-}
-/* Records */
-
-function updateRecords(){
-
-const totals = {};
-
-players.forEach(player=>{
-
-if(!totals[player.name]){
-
-totals[player.name] = {
-runs:0,
-wickets:0,
-sixes:0,
-fours:0,
-ballsPlayed:0,
-ballsBowled:0,
-runsConceded:0,
-sixesGiven:0
-};
-
-}
-
-totals[player.name].runs += Number(player.runs || 0);
-totals[player.name].wickets += Number(player.wickets || 0);
-totals[player.name].sixes += Number(player.sixes || 0);
-totals[player.name].fours += Number(player.fours || 0);
-
-totals[player.name].ballsPlayed += Number(player.ballsPlayed || 0);
+totals[player.name].ballsFaced += Number(player.ballsFaced || 0);
 totals[player.name].ballsBowled += Number(player.ballsBowled || 0);
 
 totals[player.name].runsConceded += Number(player.runsConceded || 0);
@@ -257,8 +182,8 @@ totals[player.name].sixesGiven += Number(player.sixesGiven || 0);
 const playerTotals = Object.entries(totals).map(([name,data])=>{
 
 const strikeRate =
-data.ballsPlayed > 0
-? ((data.runs / data.ballsPlayed) * 100).toFixed(1)
+data.ballsFaced > 0
+? ((data.runs / data.ballsFaced) * 100).toFixed(1)
 : 0;
 
 const economy =
@@ -394,7 +319,7 @@ function generateLeaderboard(){
             </td>
 
             <td>${player.runs}</td>
-            <td>${player.ballsPlayed}</td>
+            <td>${player.ballsFaced}</td>
             <td>${player.sixes}</td>
             <td>${player.fours}</td>
             <td>${player.strikeRate}</td>
@@ -1040,7 +965,7 @@ if(fiftyPlayers.length){
 
 fastestFifty =
 fiftyPlayers.sort(
-(a,b)=>a.ballsPlayed-b.ballsPlayed
+(a,b)=>a.ballsFaced-b.ballsFaced
 )[0];
 
 }
@@ -1072,7 +997,7 @@ document.getElementById(
 "fastestFifty"
 ).innerHTML =
 
-`${fastestFifty.ballsPlayed} Balls<br>
+`${fastestFifty.ballsFaced} Balls<br>
 ${fastestFifty.name}`;
 
 }
