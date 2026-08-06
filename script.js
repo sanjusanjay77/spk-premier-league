@@ -5,11 +5,10 @@ const SHEET_URL =
 
 
 const playerPhotos = {
-  "Sanjay": "https://drive.google.com/thumbnail?id=1cto2yQ5qRuHhHNDSF2kjkd13L6gCoQF-&sz=w1000",
-  "Pranesh": "https://drive.google.com/thumbnail?id=1J-49zs7_qQAKOhyirH6D8wPpe3mml_Bs&sz=w1000",
-  "Karthick": "https://drive.google.com/thumbnail?id=12R404kHlrZHh3hrJmS40OVyAY4MUo8wh&sz=w1000"
+  "Sanjay": "images/WhatsApp Image 2026-08-05 at 3.16.37 PM.jpeg",
+  "Pranesh": "images/WhatsApp Image 2026-08-05 at 3.18.47 PM.jpeg",
+  "Karthick": "images/WhatsApp Image 2026-08-06 at 8.35.40 PM.jpeg"
 };
-
 async function loadPlayers() {
 
 try {
