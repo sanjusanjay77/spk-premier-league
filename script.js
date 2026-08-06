@@ -43,9 +43,7 @@ wickets: Number(cols[6]),
 runsConceded: Number(cols[7]),
 ballsBowled: Number(cols[8]),
 sixesGiven: Number(cols[9]),
-economy: Number(cols[10]),
-fours: Number(cols[11]),
-strikeRate: Number(cols[12])
+fours: Number(cols[10]),
 
 };
 
@@ -151,15 +149,15 @@ wickets:data.wickets,
 sixes:data.sixes,
 fours:data.fours,
 
-strikeRate:
-data.ballsPlayed > 0
-? ((data.runs/data.ballsPlayed)*100).toFixed(1)
-: 0,
+const strikeRate =
+totalBallsFaced > 0
+? ((totalRuns / totalBallsFaced) * 100).toFixed(1)
+: 0;
 
-economy:
-data.ballsBowled > 0
-? (data.runsConceded/(data.ballsBowled/6)).toFixed(2)
-: 0,
+const economy =
+totalBallsBowled > 0
+? ((totalRunsConceded * 6) / totalBallsBowled).toFixed(2)
+: 0;
 
 sixesGiven:data.sixesGiven
 
@@ -1304,3 +1302,52 @@ html2canvas(card,{
 });
 
 }
+
+const leaderboard = {};
+
+players.forEach(p => {
+
+if(!leaderboard[p.name]){
+
+leaderboard[p.name] = {
+name:p.name,
+runs:0,
+ballsFaced:0,
+wickets:0,
+ballsBowled:0,
+runsConceded:0,
+sixes:0,
+fours:0,
+matches:0
+};
+
+}
+
+leaderboard[p.name].runs += Number(p.runs||0);
+leaderboard[p.name].ballsFaced += Number(p.ballsFaced||0);
+leaderboard[p.name].wickets += Number(p.wickets||0);
+leaderboard[p.name].ballsBowled += Number(p.ballsBowled||0);
+leaderboard[p.name].runsConceded += Number(p.runsConceded||0);
+leaderboard[p.name].sixes += Number(p.sixes||0);
+leaderboard[p.name].fours += Number(p.fours||0);
+leaderboard[p.name].matches++;
+
+});
+
+Object.values(leaderboard).forEach(player=>{
+
+player.strikeRate =
+player.ballsFaced > 0
+? ((player.runs/player.ballsFaced)*100).toFixed(1)
+: 0;
+
+player.economy =
+player.ballsBowled > 0
+? ((player.runsConceded*6)/player.ballsBowled).toFixed(2)
+: 0;
+
+});
+
+const rankings =
+Object.values(leaderboard)
+.sort((a,b)=>b.runs-a.runs);
