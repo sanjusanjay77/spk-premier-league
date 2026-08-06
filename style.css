@@ -1162,3 +1162,419 @@ font-size:18px;
 font-weight:600;
 margin:8px 0;
 }
+
+/* SPK League Logo */
+
+.league-logo{
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px;
+    object-fit: contain;
+
+    border-radius: 50%;
+    background: white;
+    padding: 10px;
+
+    box-shadow: 0 0 25px rgba(255,215,0,.7);
+
+    transition: all 0.3s ease;
+}
+
+/* Tablet */
+
+@media (max-width: 992px){
+
+    .league-logo{
+        max-width: 140px;
+        padding: 8px;
+    }
+
+}
+
+/* Mobile */
+
+@media (max-width: 768px){
+
+    .league-logo{
+        max-width: 110px;
+        padding: 6px;
+    }
+
+}
+
+/* Small Mobile */
+
+@media (max-width: 480px){
+
+    .league-logo{
+        max-width: 85px;
+        padding: 5px;
+    }
+
+    .hero h1{
+        font-size: 1.8rem;
+    }
+
+    .hero p{
+        font-size: 0.9rem;
+    }
+
+}
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.8);
+z-index:9999;
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+width:90%;
+max-width:500px;
+background:#111827;
+padding:25px;
+border-radius:20px;
+overflow-y:auto;
+max-height:90vh;
+}
+
+.modal-img{
+width:120px;
+height:120px;
+border-radius:50%;
+display:block;
+margin:auto;
+object-fit:cover;
+}
+
+.close{
+float:right;
+font-size:30px;
+cursor:pointer;
+}
+
+.stat-row{
+display:flex;
+justify-content:space-between;
+padding:10px;
+margin:8px 0;
+background:rgba(255,255,255,.08);
+border-radius:10px;
+}
+
+.download-btn{
+width:100%;
+margin-top:20px;
+padding:14px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-size:16px;
+font-weight:600;
+}
+
+
+/* =========================
+   TABLET VIEW
+   ========================= */
+@media screen and (max-width: 1024px){
+
+.dashboard{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.records-grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.player-grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.caps-container{
+    flex-direction:column;
+}
+
+.hof-grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.hero h1{
+    font-size:2.5rem;
+}
+
+}
+
+
+/* =========================
+   MOBILE VIEW
+   ========================= */
+@media screen and (max-width: 768px){
+
+.hero{
+    padding:40px 15px;
+}
+
+.hero h1{
+    font-size:2rem;
+}
+
+.hero p{
+    font-size:14px;
+}
+
+.dashboard{
+    grid-template-columns:1fr;
+}
+
+.records-grid{
+    grid-template-columns:1fr;
+}
+
+.player-grid{
+    grid-template-columns:1fr;
+}
+
+.hof-grid{
+    grid-template-columns:1fr;
+}
+
+.awards-grid{
+    grid-template-columns:1fr;
+}
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    min-width:1000px;
+}
+
+.modal-content{
+    width:95%;
+    padding:15px;
+}
+
+.stat-row{
+    font-size:14px;
+}
+
+.cap-card{
+    width:100%;
+}
+
+.chart-container{
+    height:300px;
+}
+
+.section-title{
+    font-size:1.5rem;
+}
+
+}
+
+
+/* =========================
+   SMALL MOBILE
+   ========================= */
+@media screen and (max-width: 480px){
+
+.hero h1{
+    font-size:1.6rem;
+}
+
+.section-title{
+    font-size:1.2rem;
+}
+
+.stat-card h2{
+    font-size:1.8rem;
+}
+
+.player-card img{
+    width:80px;
+    height:80px;
+}
+
+.modal-img{
+    width:90px;
+    height:90px;
+}
+
+.download-btn{
+    font-size:14px;
+    padding:10px;
+}
+
+}
+
+.table-wrapper{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.dashboard,
+.records-grid,
+.player-grid,
+.hof-grid,
+.awards-grid{
+    display:grid;
+    gap:20px;
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+}
+
+/* DESKTOP TABLE */
+.table-wrapper{
+    overflow-x:auto;
+    border-radius:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:linear-gradient(135deg,#ff9800,#ff5722);
+    color:white;
+    padding:15px;
+}
+
+td{
+    padding:12px;
+    text-align:center;
+}
+
+/* MOBILE LEADERBOARD */
+@media(max-width:768px){
+
+table,
+thead,
+tbody,
+th,
+td,
+tr{
+    display:block;
+}
+
+thead{
+    display:none;
+}
+
+tr{
+    background:#111827;
+    margin-bottom:20px;
+    border-radius:20px;
+    padding:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+td{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+td:last-child{
+    border-bottom:none;
+}
+
+td::before{
+    font-weight:700;
+    color:#ff9800;
+}
+
+/* Column Names */
+
+td:nth-child(1)::before{
+    content:"Match";
+}
+
+td:nth-child(2)::before{
+    content:"Date";
+}
+
+td:nth-child(3)::before{
+    content:"Player";
+}
+
+td:nth-child(4)::before{
+    content:"Runs";
+}
+
+td:nth-child(5)::before{
+    content:"Balls";
+}
+
+td:nth-child(6)::before{
+    content:"Sixes";
+}
+
+td:nth-child(7)::before{
+    content:"Fours";
+}
+
+td:nth-child(8)::before{
+    content:"SR";
+}
+
+td:nth-child(9)::before{
+    content:"Wickets";
+}
+
+td:nth-child(10)::before{
+    content:"Runs Conceded";
+}
+
+td:nth-child(11)::before{
+    content:"Balls Bowled";
+}
+
+td:nth-child(12)::before{
+    content:"Sixes Given";
+}
+
+td:nth-child(13)::before{
+    content:"Economy";
+}
+
+}
+
+tbody tr:hover{
+    transform:translateY(-3px);
+    transition:.3s;
+}
+
+tbody tr:nth-child(1){
+    background:rgba(255,215,0,.12);
+}
+
+tbody tr:nth-child(2){
+    background:rgba(192,192,192,.12);
+}
+
+tbody tr:nth-child(3){
+    background:rgba(205,127,50,.12);
+}
+
+.player-link{
+    color:#00e5ff;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.player-link:hover{
+    text-decoration:underline;
+}
