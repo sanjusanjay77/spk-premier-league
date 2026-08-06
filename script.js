@@ -1400,28 +1400,29 @@ document.getElementById("playerModal").style.display="none";
 }
 function downloadPlayerCard(){
 
-const card =
-document.getElementById("downloadCard");
+const card = document.getElementById("downloadCard");
+const btn = document.querySelector(".download-btn");
+
+btn.style.display = "none";
 
 html2canvas(card,{
 scale:4,
 useCORS:true,
-backgroundColor:"#111827"
+backgroundColor:"#111827",
+scrollY: -window.scrollY,
+windowWidth: card.scrollWidth,
+windowHeight: card.scrollHeight
 }).then(canvas=>{
 
-const image =
-canvas.toDataURL("image/png");
+btn.style.display = "block";
 
-const link =
-document.createElement("a");
-
-link.href = image;
+const link = document.createElement("a");
 
 link.download =
 document.getElementById("modalName").textContent +
-"_SPK_Player_Card_" +
-new Date().toISOString().split("T")[0] +
-".png";
+"_SPK_Player_Card.png";
+
+link.href = canvas.toDataURL("image/png");
 
 link.click();
 
