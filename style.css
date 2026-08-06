@@ -1559,4 +1559,34 @@ animation:swingBat 2s ease-in-out infinite;
 50%{transform:rotate(15deg);}
 }  
 
+.card-header{
+font-size:24px;
+font-weight:700;
+text-align:center;
+color:#FFD700;
+margin-bottom:15px;
+}
+
+#downloadCard{
+background:#111827;
+padding:20px;
+border-radius:20px;
+max-width:400px;
+}
+
+.modal-content{
+height:auto;
+max-height:none;
+overflow:visible;
+}
+
+
+#downloadCard{
+width:450px;
+padding:25px;
+background:#111827;
+border-radius:20px;
+overflow:visible;
+}
+
 
