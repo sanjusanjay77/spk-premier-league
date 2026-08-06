@@ -108,72 +108,160 @@ totalMatches;
 
 function updateRecords(){
 
-const mostRuns =
-[...players].sort((a,b)=>b.runs-a.runs)[0];
+const totals = {};
 
-const mostWickets =
-[...players].sort((a,b)=>b.wickets-a.wickets)[0];
+players.forEach(player=>{
 
-const mostSixes =
-[...players].sort((a,b)=>b.sixes-a.sixes)[0];
+if(!totals[player.name]){
 
-const bestEconomy =
-[...players].sort((a,b)=>a.economy-b.economy)[0];
+totals[player.name] = {
 
-const highestSR =
-[...players].sort((a,b)=>b.strikeRate-a.strikeRate)[0];
+runs:0,
+wickets:0,
+sixes:0,
+fours:0,
+ballsPlayed:0,
+ballsBowled:0,
+runsConceded:0,
+sixesGiven:0
 
-const mostFours =
-[...players].sort((a,b)=>b.fours-a.fours)[0];
+};
+
+}
+
+totals[player.name].runs += Number(player.runs || 0);
+totals[player.name].wickets += Number(player.wickets || 0);
+totals[player.name].sixes += Number(player.sixes || 0);
+totals[player.name].fours += Number(player.fours || 0);
+
+totals[player.name].ballsPlayed += Number(player.ballsPlayed || 0);
+totals[player.name].ballsBowled += Number(player.ballsBowled || 0);
+
+totals[player.name].runsConceded += Number(player.runsConceded || 0);
+totals[player.name].sixesGiven += Number(player.sixesGiven || 0);
+
+});
+
+const playerTotals = Object.entries(totals).map(([name,data])=>({
+
+name,
+
+runs:data.runs,
+wickets:data.wickets,
+sixes:data.sixes,
+fours:data.fours,
+
+strikeRate:
+data.ballsPlayed > 0
+? ((data.runs/data.ballsPlayed)*100).toFixed(1)
+: 0,
+
+economy:
+data.ballsBowled > 0
+? (data.runsConceded/(data.ballsBowled/6)).toFixed(2)
+: 0,
+
+sixesGiven:data.sixesGiven
+
+}));
 
 document.getElementById("mostRuns").innerHTML =
-`${mostRuns.name}<br>${mostRuns.runs}`;
+playerTotals.sort((a,b)=>b.runs-a.runs)[0].name +
+"<br>" +
+playerTotals.sort((a,b)=>b.runs-a.runs)[0].runs;
 
 document.getElementById("mostWickets").innerHTML =
-`${mostWickets.name}<br>${mostWickets.wickets}`;
+playerTotals.sort((a,b)=>b.wickets-a.wickets)[0].name +
+"<br>" +
+playerTotals.sort((a,b)=>b.wickets-a.wickets)[0].wickets;
 
 document.getElementById("mostSixes").innerHTML =
-`${mostSixes.name}<br>${mostSixes.sixes}`;
-
-document.getElementById("bestEconomy").innerHTML =
-`${bestEconomy.name}<br>${bestEconomy.economy}`;
-
-document.getElementById("highestSR").innerHTML =
-`${highestSR.name}<br>${highestSR.strikeRate}`;
+playerTotals.sort((a,b)=>b.sixes-a.sixes)[0].name +
+"<br>" +
+playerTotals.sort((a,b)=>b.sixes-a.sixes)[0].sixes;
 
 document.getElementById("mostFours").innerHTML =
-`${mostFours.name}<br>${mostFours.fours} Fours`;
+playerTotals.sort((a,b)=>b.fours-a.fours)[0].name +
+"<br>" +
+playerTotals.sort((a,b)=>b.fours-a.fours)[0].fours;
+
+document.getElementById("highestSR").innerHTML =
+playerTotals.sort((a,b)=>b.strikeRate-a.strikeRate)[0].name +
+"<br>" +
+playerTotals.sort((a,b)=>b.strikeRate-a.strikeRate)[0].strikeRate;
+
+document.getElementById("bestEconomy").innerHTML =
+playerTotals.sort((a,b)=>a.economy-b.economy)[0].name +
+"<br>" +
+playerTotals.sort((a,b)=>a.economy-b.economy)[0].economy;
 
 }
 
 /* MVP */
-
 function calculateMVP(){
 
-players.forEach(player=>{
+const latestDate =
+players[players.length - 1].date;
 
-player.mvp =
-player.runs +
-(player.wickets*20) +
-(player.sixes*3);
+const latestDatePlayers =
+players.filter(
+p => p.date === latestDate
+);
+
+const totals = {};
+
+latestDatePlayers.forEach(player=>{
+
+if(!totals[player.name]){
+
+totals[player.name] = {
+
+runs:0,
+wickets:0,
+sixes:0
+
+};
+
+}
+
+totals[player.name].runs += player.runs;
+totals[player.name].wickets += player.wickets;
+totals[player.name].sixes += player.sixes;
 
 });
 
-const mvp =
-players.reduce((a,b)=>
-a.mvp>b.mvp?a:b);
+let mvpName = "";
+let highestPoints = 0;
 
-document.getElementById("mvpName").textContent =
-mvp.name;
+Object.keys(totals).forEach(name=>{
+
+const points =
+totals[name].runs +
+(totals[name].wickets * 20) +
+(totals[name].sixes * 3);
+
+if(points > highestPoints){
+
+highestPoints = points;
+mvpName = name;
+
+}
+
+});
+
+document.getElementById("mvpTitle").innerHTML =
+"👑 MVP of the Week";
+
+document.getElementById("mvpName").innerHTML =
+mvpName;
 
 document.getElementById("mvpPhoto").src =
-playerPhotos[mvp.name];
+playerPhotos[mvpName];
 
 document.getElementById("mvpStats").innerHTML =
 `
-🏏 ${mvp.runs} Runs |
-🎯 ${mvp.wickets} Wickets |
-💥 ${mvp.sixes} Sixes
+📅 ${latestDate}<br>
+⭐ ${highestPoints} MVP Points
 `;
 
 }
