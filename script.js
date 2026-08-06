@@ -205,7 +205,7 @@ function updateRecords(){
 
 const totals = {};
 
-players.forEach(player=>{
+players.forEach(player => {
 
 if(!totals[player.name]){
 
@@ -235,7 +235,7 @@ totals[player.name].sixesGiven += Number(player.sixesGiven || 0);
 
 });
 
-const playerTotals = Object.entries(totals).map(([name,data])=>{
+const playerTotals = Object.entries(totals).map(([name,data]) => {
 
 const strikeRate =
 data.ballsFaced > 0
@@ -245,7 +245,7 @@ data.ballsFaced > 0
 const economy =
 data.ballsBowled > 0
 ? ((data.runsConceded * 6) / data.ballsBowled).toFixed(2)
-: 0;
+: 999;
 
 return{
 name:name,
@@ -272,6 +272,12 @@ const mostSixes =
 const mostFours =
 [...playerTotals].sort((a,b)=>b.fours-a.fours)[0];
 
+const highestSR =
+[...playerTotals].sort((a,b)=>b.strikeRate-a.strikeRate)[0];
+
+const bestEconomy =
+[...playerTotals].sort((a,b)=>a.economy-b.economy)[0];
+
 document.getElementById("mostRuns").innerHTML =
 `${mostRuns.name}<br>${mostRuns.runs}`;
 
@@ -284,7 +290,12 @@ document.getElementById("mostSixes").innerHTML =
 document.getElementById("mostFours").innerHTML =
 `${mostFours.name}<br>${mostFours.fours}`;
 
-}
+document.getElementById("highestSR").innerHTML =
+`${highestSR.name}<br>${highestSR.strikeRate}`;
+
+document.getElementById("bestEconomy").innerHTML =
+`${bestEconomy.name}<br>${bestEconomy.economy}`;
+
 }
 /* MVP */
 function calculateMVP(){
