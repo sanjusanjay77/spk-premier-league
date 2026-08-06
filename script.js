@@ -38,12 +38,12 @@ date: cols[1],
 name: cols[2],
 runs: Number(cols[3]),
 ballsFaced: Number(cols[4]),
+fours: Number(cols[5]),
 sixes: Number(cols[6]),
 wickets: Number(cols[7]),
-runsConceded: Number(cols[9]),
 ballsBowled: Number(cols[8]),
+runsConceded: Number(cols[9]),
 sixesGiven: Number(cols[10]),
-fours: Number(cols[5]),
 
 };
 
@@ -300,42 +300,61 @@ document.getElementById("mvpStats").innerHTML =
 
 /* Leaderboard */
 
-/* Leaderboard */
-
 function generateLeaderboard(){
 
-    let html = "";
+let html = "";
 
-    players.forEach(player => {
+players.forEach(player => {
 
-        html += `
-        <tr>
-            <td>${player.matchNo}</td>
-            <td>${player.date}</td>
+const strikeRate =
+player.ballsFaced > 0
+? ((player.runs / player.ballsFaced) * 100).toFixed(1)
+: "-";
 
-            <td onclick="openPlayer('${player.name}')"
-                style="cursor:pointer;color:#00D4FF;font-weight:bold;">
-                ${player.name}
-            </td>
+const economy =
+player.ballsBowled > 0
+? ((player.runsConceded * 6) / player.ballsBowled).toFixed(2)
+: "-";
 
-            <td>${player.runs}</td>
-            <td>${player.ballsFaced}</td>
-            <td>${player.sixes}</td>
-            <td>${player.fours}</td>
-            <td>${player.strikeRate}</td>
-            <td>${player.wickets}</td>
-            <td>${player.runsConceded}</td>
-            <td>${player.ballsBowled}</td>
-            <td>${player.sixesGiven}</td>
-            <td>${player.economy}</td>
-        </tr>
-        `;
+html += `
+<tr>
+<td>${player.matchNo}</td>
 
-    });
+<td>${player.date}</td>
 
-    document.getElementById("leaderboardBody").innerHTML = html;
+<td onclick="openPlayer('${player.name}')"
+style="cursor:pointer;color:#00D4FF;font-weight:bold;">
+${player.name}
+</td>
+
+<td>${player.runs}</td>
+
+<td>${player.ballsFaced}</td>
+
+<td>${player.sixes}</td>
+
+<td>${player.fours}</td>
+
+<td>${strikeRate}</td>
+
+<td>${player.wickets}</td>
+
+<td>${player.runsConceded}</td>
+
+<td>${player.ballsBowled}</td>
+
+<td>${player.sixesGiven}</td>
+
+<td>${economy}</td>
+
+</tr>
+`;
+
+});
+
+document.getElementById("leaderboardBody").innerHTML = html;
+
 }
-
 /* Player Cards */
 
 
