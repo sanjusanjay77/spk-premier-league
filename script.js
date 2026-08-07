@@ -105,6 +105,9 @@ totalMatches;
 
 function updateRecords(){
 
+orangeCapPlayer = mostRuns.name;
+purpleCapPlayer = mostWickets.name;
+
 const totals = {};
 
 players.forEach(player => {
@@ -1561,66 +1564,51 @@ particle.remove();
 }
 
 }
-
-
 function showBestBatsmanHistory(){
 
-const bestBatsman =
-document.getElementById("mostRuns")
-.innerText.split("\n")[0];
-
-const records =
-players
-.filter(p => p.name === bestBatsman)
-.sort((a,b) => b.runs - a.runs);
+const records = players
+.filter(p => p.name === orangeCapPlayer)
+.sort((a,b) => Number(b.runs) - Number(a.runs));
 
 let html = `
-<h3>🏏 ${bestBatsman} - Best Batting Performances</h3>
+<h3>🏏 ${orangeCapPlayer} - Best Batting Days</h3>
 `;
 
-records.forEach(r=>{
+records.forEach(r => {
 
 html += `
 <div class="history-row">
-📅 ${r.date} → ${r.runs} Runs
+📅 ${r.date} - ${r.runs} Runs
 </div>
 `;
 
 });
 
-document.getElementById("awardHistory")
-.innerHTML = html;
+document.getElementById("awardHistory").innerHTML = html;
 
 }
 
 
 function showBestBowlerHistory(){
 
-const bestBowler =
-document.getElementById("mostWickets")
-.innerText.split("\n")[0];
-
-const records =
-players
-.filter(p => p.name === bestBowler)
-.sort((a,b) => b.wickets - a.wickets);
+const records = players
+.filter(p => p.name === purpleCapPlayer)
+.sort((a,b) => Number(b.wickets) - Number(a.wickets));
 
 let html = `
-<h3>🎯 ${bestBowler} - Best Bowling Performances</h3>
+<h3>🎯 ${purpleCapPlayer} - Best Bowling Days</h3>
 `;
 
-records.forEach(r=>{
+records.forEach(r => {
 
 html += `
 <div class="history-row">
-📅 ${r.date} → ${r.wickets} Wickets
+📅 ${r.date} - ${r.wickets} Wickets
 </div>
 `;
 
 });
 
-document.getElementById("awardHistory")
-.innerHTML = html;
+document.getElementById("awardHistory").innerHTML = html;
 
 }
-
