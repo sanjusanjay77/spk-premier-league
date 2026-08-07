@@ -1700,3 +1700,65 @@ box-shadow:0 0 0 20px rgba(255,215,0,0);
 }
 
 }
+
+.dashboard .stat-card{
+transition:0.3s ease;
+}
+
+.dashboard .stat-card:hover{
+transform:translateY(-5px);
+}
+
+.gold{
+box-shadow:
+0 0 15px rgba(255,193,7,.4),
+0 0 30px rgba(255,193,7,.2);
+}
+
+.blue{
+box-shadow:
+0 0 15px rgba(0,191,255,.4),
+0 0 30px rgba(0,191,255,.2);
+}
+
+.purple{
+box-shadow:
+0 0 15px rgba(156,39,176,.4),
+0 0 30px rgba(156,39,176,.2);
+}
+
+.green{
+box-shadow:
+0 0 15px rgba(46,204,113,.4),
+0 0 30px rgba(46,204,113,.2);
+}
+
+.runs{
+box-shadow:
+0 0 20px rgba(255,152,0,.4);
+}
+
+.wickets{
+box-shadow:
+0 0 20px rgba(33,150,243,.4);
+}
+
+.sixes{
+box-shadow:
+0 0 20px rgba(233,30,99,.4);
+}
+
+.economy{
+box-shadow:
+0 0 20px rgba(0,230,118,.4);
+}
+
+.sr{
+box-shadow:
+0 0 20px rgba(255,87,34,.4);
+}
+
+.fours{
+box-shadow:
+0 0 20px rgba(255,235,59,.4);
+}
