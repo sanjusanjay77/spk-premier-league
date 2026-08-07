@@ -103,10 +103,10 @@ totalMatches;
 
 /* Records */
 
-function updateRecords(){
+let orangeCapPlayer = "";
+let purpleCapPlayer = "";
 
-orangeCapPlayer = mostRuns.name;
-purpleCapPlayer = mostWickets.name;
+function updateRecords(){
 
 const totals = {};
 
@@ -182,25 +182,13 @@ const highestSR =
 const bestEconomy =
 [...playerTotals].sort((a,b)=>a.economy-b.economy)[0];
 
+orangeCapPlayer = mostRuns.name;
+purpleCapPlayer = mostWickets.name;
+
 document.getElementById("mostRuns").innerHTML =
 `${mostRuns.name}<br>${mostRuns.runs}`;
 
-document.getElementById("mostWickets").innerHTML =
-`${mostWickets.name}<br>${mostWickets.wickets}`;
-
-document.getElementById("mostSixes").innerHTML =
-`${mostSixes.name}<br>${mostSixes.sixes}`;
-
-document.getElementById("mostFours").innerHTML =
-`${mostFours.name}<br>${mostFours.fours}`;
-
-document.getElementById("highestSR").innerHTML =
-`${highestSR.name}<br>${highestSR.strikeRate.toFixed(1)}`;
-
-document.getElementById("bestEconomy").innerHTML =
-`${bestEconomy.name}<br>${bestEconomy.economy.toFixed(2)}`;
-
-}
+document.getElementById
 /* Records */
 
 function updateRecords(){
@@ -1567,30 +1555,8 @@ particle.remove();
 console.log(records);
 
 function showBestBatsmanHistory(){
-
-try{
-
-console.log("Clicked");
-
-console.log("Orange:", orangeCapPlayer);
-
-const records =
-players.filter(p => p.name === orangeCapPlayer);
-
-console.log(records);
-
-document.getElementById("awardHistory").innerHTML =
-`Found ${records.length} records`;
-
-}catch(err){
-
-console.log(err);
-alert(err);
-
+alert("Orange Cap Player: " + orangeCapPlayer);
 }
-
-}
-
 function showBestBowlerHistory(){
 
 const records = players
