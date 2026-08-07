@@ -2862,3 +2862,79 @@ rgba(255,193,7,.2),
 rgba(255,215,0,.45),
 transparent
 );
+
+
+/* Premium Dashboard Border */
+
+.dashboard-card,
+.stat-card,
+.record-card,
+.win-card,
+.form-card,
+.compare-card{
+
+position:relative;
+
+border:2px solid rgba(255,215,0,.6);
+
+border-radius:22px;
+
+background:linear-gradient(
+135deg,
+#0f172a,
+#1e293b
+);
+
+overflow:hidden;
+
+box-shadow:
+0 0 15px rgba(255,215,0,.25),
+0 0 30px rgba(0,229,255,.15);
+
+}
+
+/* Animated Border Shine */
+
+.dashboard-card::before,
+.stat-card::before,
+.record-card::before,
+.win-card::before,
+.form-card::before,
+.compare-card::before{
+
+content:"";
+
+position:absolute;
+
+top:-50%;
+left:-50%;
+
+width:50%;
+height:200%;
+
+background:linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.15),
+transparent
+);
+
+transform:rotate(25deg);
+
+animation:borderShine 5s linear infinite;
+
+}
+
+/* Animation */
+
+@keyframes borderShine{
+
+0%{
+left:-60%;
+}
+
+100%{
+left:160%;
+}
+
+}
