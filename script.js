@@ -592,11 +592,11 @@ console.log("Orange:", orangeCap);
 console.log("Purple:", purpleCap);
 
 if(name === orangeCap){
-alert("Orange Cap Opened");
+showFireworks("#ff9800");
 }
 
 if(name === purpleCap){
-alert("Purple Cap Opened");
+showFireworks("#9c27b0");
 }
   
 document.getElementById("playerModal").style.display =
@@ -1487,25 +1487,26 @@ window.onclick = function(event){
 
 function showFireworks(color){
 
-const fw = document.createElement("div");
+for(let i=0;i<15;i++){
 
-fw.className = "fireworks";
+const spark = document.createElement("div");
 
-fw.style.background = color;
+spark.className = "firework";
 
-fw.style.boxShadow = `
-0 -60px ${color},
-0 60px ${color},
-60px 0 ${color},
--60px 0 ${color},
-45px 45px ${color},
--45px -45px ${color}
-`;
+spark.style.background = color;
 
-document.body.appendChild(fw);
+spark.style.left =
+(window.innerWidth/2 + (Math.random()*200-100)) + "px";
+
+spark.style.top =
+(window.innerHeight/2 + (Math.random()*200-100)) + "px";
+
+document.body.appendChild(spark);
 
 setTimeout(()=>{
-fw.remove();
+spark.remove();
 },1000);
+
+}
 
 }
