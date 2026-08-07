@@ -1565,6 +1565,32 @@ particle.remove();
 
 }
 console.log(records);
+
+function showBestBatsmanHistory(){
+
+try{
+
+console.log("Clicked");
+
+console.log("Orange:", orangeCapPlayer);
+
+const records =
+players.filter(p => p.name === orangeCapPlayer);
+
+console.log(records);
+
+document.getElementById("awardHistory").innerHTML =
+`Found ${records.length} records`;
+
+}catch(err){
+
+console.log(err);
+alert(err);
+
+}
+
+}
+
 function showBestBowlerHistory(){
 
 const records = players
