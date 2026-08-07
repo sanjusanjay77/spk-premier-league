@@ -1626,3 +1626,23 @@ document.getElementById("awardHistory").innerHTML =
 html;
 
 }
+
+
+document.getElementById("mainLogo")
+.addEventListener("click",()=>{
+
+const bat =
+document.getElementById("bat");
+
+const ball =
+document.getElementById("ball");
+
+bat.classList.remove("hitBat");
+ball.classList.remove("hitBall");
+
+void bat.offsetWidth;
+
+bat.classList.add("hitBat");
+ball.classList.add("hitBall");
+
+});
