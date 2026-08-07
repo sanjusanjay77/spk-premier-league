@@ -1629,13 +1629,61 @@ html;
 
 function logoHit(){
 
+
 const logo =
 document.getElementById("mainLogo");
 
+
+const bat =
+document.getElementById("bat");
+
+
+const ball =
+document.getElementById("ball");
+
+
+// reset animation
+
+bat.classList.remove("bat-animation");
+
+ball.classList.remove("ball-animation");
+
 logo.classList.remove("logo-hit");
 
-void logo.offsetWidth;
+
+
+void bat.offsetWidth;
+
+
+// start animation
 
 logo.classList.add("logo-hit");
+
+
+bat.classList.add("bat-animation");
+
+
+
+setTimeout(()=>{
+
+ball.classList.add("ball-animation");
+
+
+},300);
+
+
+
+setTimeout(()=>{
+
+
+bat.classList.remove("bat-animation");
+
+ball.classList.remove("ball-animation");
+
+logo.classList.remove("logo-hit");
+
+
+},1200);
+
 
 }
