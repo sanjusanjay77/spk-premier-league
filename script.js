@@ -602,7 +602,7 @@ alert("Purple Cap Opened");
 document.getElementById("playerModal").style.display =
 "flex";
 
-document.getElementById("downloadDate").textContent =
+document.getElementById("downloadDateTime").textContent =
 new Date().toLocaleString("en-IN");
 }
 
