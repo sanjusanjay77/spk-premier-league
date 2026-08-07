@@ -740,26 +740,50 @@ let html = `
 
 <p>📅 ${latestPlayers[0].date}</p>
 
+<div class="latest-scroll">
+
 <table class="latest-table">
 
 <tr>
 <th>Player</th>
 <th>Runs</th>
-<th>Wickets</th>
-<th>Sixes</th>
+<th>Balls</th>
+<th>4s</th>
+<th>6s</th>
+<th>SR</th>
+<th>Wkts</th>
+<th>Runs Given</th>
+<th>Balls Bowled</th>
+<th>Economy</th>
 </tr>
 
 `;
 
 latestPlayers.forEach(player => {
 
+const sr =
+player.ballsFaced > 0
+? ((player.runs/player.ballsFaced)*100).toFixed(1)
+: "-";
+
+const eco =
+player.ballsBowled > 0
+? ((player.runsConceded*6)/player.ballsBowled).toFixed(2)
+: "-";
+
 html += `
 
 <tr>
 <td>${player.name}</td>
 <td>${player.runs}</td>
-<td>${player.wickets}</td>
+<td>${player.ballsFaced}</td>
+<td>${player.fours}</td>
 <td>${player.sixes}</td>
+<td>${sr}</td>
+<td>${player.wickets}</td>
+<td>${player.runsConceded}</td>
+<td>${player.ballsBowled}</td>
+<td>${eco}</td>
 </tr>
 
 `;
@@ -767,73 +791,16 @@ html += `
 });
 
 html += `
+
 </table>
+
 </div>
+
+</div>
+
 `;
 
-document.getElementById("latestMatchCard").innerHTML =
-html;
-
-}
-function generateHeadToHead(){
-
-const totals = {};
-
-players.forEach(player=>{
-
-if(!totals[player.name]){
-
-totals[player.name] = {
-
-runs:0,
-wickets:0,
-photo:player.photo
-
-};
-
-}
-
-totals[player.name].runs += player.runs;
-totals[player.name].wickets += player.wickets;
-
-});
-
-const sortedRuns =
-Object.entries(totals)
-.sort((a,b)=>b[1].runs-a[1].runs);
-
-const leader = sortedRuns[0];
-const second = sortedRuns[1];
-
-const runLead =
-leader[1].runs - second[1].runs;
-
-const sortedWickets =
-Object.entries(totals)
-.sort((a,b)=>b[1].wickets-a[1].wickets);
-
-const wicketLead =
-sortedWickets[0][1].wickets -
-sortedWickets[1][1].wickets;
-
-document.getElementById("h2hPhoto").src =
-leader[1].photo;
-
-document.getElementById("h2hWinner").innerHTML =
-leader[0];
-
-document.getElementById("runsLead").innerHTML =
-runLead;
-
-document.getElementById("wicketsLead").innerHTML =
-wicketLead;
-
-document.getElementById("h2hSummary").innerHTML =
-`
-${leader[0]} is leading by
-${runLead} runs and
-${wicketLead} wickets compared to the nearest competitor.
-`;
+document.getElementById("latestMatchCard").innerHTML = html;
 
 }
 function loadComparisonPlayers(){
