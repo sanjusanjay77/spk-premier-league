@@ -2785,13 +2785,13 @@ box-shadow:
 
 position:relative;
 
-overflow:auto;
+overflow:hidden;
 
 border-radius:20px;
 
 }
 
-/* Moving Glow Effect */
+/* Smooth Moving Shine */
 
 .table-wrapper::before{
 
@@ -2799,30 +2799,35 @@ content:"";
 
 position:absolute;
 
-left:0;
-right:0;
+top:-50%;
+left:-30%;
 
-height:150px;
+width:40%;
+height:200%;
 
 background:linear-gradient(
-to top,
+90deg,
 transparent,
-rgba(0,229,255,.15),
+rgba(255,255,255,.05),
 rgba(255,215,0,.25),
+rgba(0,229,255,.25),
+rgba(255,255,255,.05),
 transparent
 );
 
-filter:blur(25px);
+transform:rotate(15deg);
+
+filter:blur(20px);
 
 pointer-events:none;
 
 z-index:1;
 
-animation:leaderboardGlowMove 5s ease-in-out infinite;
+animation:smoothShine 4s linear infinite;
 
 }
 
-/* Keep table above glow */
+/* Table stays visible */
 
 .table-wrapper table{
 
@@ -2832,30 +2837,23 @@ z-index:2;
 
 }
 
-/* Bottom → Top → Bottom */
+/* Smooth Left→Right Sweep */
 
-@keyframes leaderboardGlowMove{
+@keyframes smoothShine{
 
 0%{
 
-transform:translateY(100%);
-
-}
-
-50%{
-
-transform:translateY(-100%);
+left:-40%;
 
 }
 
 100%{
 
-transform:translateY(100%);
+left:120%;
 
 }
 
 }
-
 
 background:linear-gradient(
 to top,
