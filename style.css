@@ -2264,3 +2264,37 @@ overflow-x:scroll;
 }
 
 }
+
+
+/* Sanjay - Orange */
+.sanjay-glow{
+border:2px solid #ff9800;
+box-shadow:
+0 0 10px #ff9800,
+0 0 20px #ff9800,
+0 0 40px rgba(255,152,0,.6);
+}
+
+/* Karthick - Purple */
+.karthick-glow{
+border:2px solid #9c27b0;
+box-shadow:
+0 0 10px #9c27b0,
+0 0 20px #9c27b0,
+0 0 40px rgba(156,39,176,.6);
+}
+
+/* Pranesh - Blue */
+.pranesh-glow{
+border:2px solid #00e5ff;
+box-shadow:
+0 0 10px #00e5ff,
+0 0 20px #00e5ff,
+0 0 40px rgba(0,229,255,.6);
+}
+
+/* Hover effect */
+.win-card:hover{
+transform:translateY(-5px) scale(1.03);
+transition:.3s;
+}
