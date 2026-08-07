@@ -56,7 +56,7 @@ generateLeaderboard();
 generateCapHolders();
 generatePlayerCards();
 calculateMVP();
-generateCharts();
+
 generateWinPercentage();
 loadComparisonPlayers();
 generateRecentForm();
