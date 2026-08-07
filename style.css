@@ -2548,14 +2548,57 @@ box-shadow:
 transition:.3s ease;
 
 }
+/* Head To Head Main Card */
+
+.compare-card{
+
+background:linear-gradient(
+135deg,
+#0f172a,
+#1e293b,
+#111827
+);
+
+border:2px solid #ffd700;
+
+border-radius:25px;
+
+padding:20px;
+
+box-shadow:
+0 0 15px rgba(255,215,0,.5),
+0 0 35px rgba(255,215,0,.3);
+
+animation:h2hGlow 2s infinite alternate;
+
+}
+
+/* Player Cards */
+
+.compare-player{
+
+background:rgba(255,255,255,.04);
+
+border:1px solid rgba(0,229,255,.4);
+
+border-radius:18px;
+
+padding:15px;
+
+box-shadow:
+0 0 12px rgba(0,229,255,.25);
+
+transition:.3s;
+
+}
 
 .compare-player:hover{
 
-transform:translateY(-5px);
+transform:translateY(-4px);
 
 box-shadow:
 0 0 20px #00e5ff,
-0 0 40px #00e5ff;
+0 0 40px rgba(0,229,255,.5);
 
 }
 
@@ -2564,24 +2607,21 @@ box-shadow:
 .winner-box{
 
 margin-top:20px;
+
 padding:15px;
 
 border-radius:15px;
 
-background:rgba(255,215,0,.1);
+background:rgba(255,215,0,.08);
 
 border:1px solid #ffd700;
 
-box-shadow:
-0 0 15px #ffd700,
-0 0 30px rgba(255,215,0,.6);
+color:#ffd700;
 
-font-size:20px;
 font-weight:bold;
 
-text-align:center;
-
-color:#ffd700;
+box-shadow:
+0 0 15px rgba(255,215,0,.6);
 
 }
 
@@ -2590,17 +2630,31 @@ color:#ffd700;
 .lead-box{
 
 margin-top:15px;
+
 padding:15px;
 
 border-radius:15px;
 
-background:rgba(156,39,176,.1);
+background:rgba(0,229,255,.05);
 
-border:1px solid #9c27b0;
+border:1px solid #00e5ff;
 
 box-shadow:
-0 0 15px #9c27b0,
-0 0 30px rgba(156,39,176,.5);
+0 0 15px rgba(0,229,255,.4);
+
+}
+
+/* Photo Glow */
+
+.compare-player img{
+
+border-radius:50%;
+
+border:3px solid #00e5ff;
+
+box-shadow:
+0 0 12px #00e5ff,
+0 0 25px rgba(0,229,255,.5);
 
 }
 
@@ -2608,46 +2662,178 @@ box-shadow:
 
 @keyframes h2hGlow{
 
-0%{
+from{
+
 box-shadow:
-0 0 15px #ff0000,
-0 0 30px #ff0000;
+0 0 15px rgba(255,215,0,.4),
+0 0 30px rgba(255,215,0,.2);
+
 }
 
-25%{
+to{
+
 box-shadow:
-0 0 15px #00ff00,
-0 0 30px #00ff00;
+0 0 25px rgba(255,215,0,.8),
+0 0 50px rgba(255,215,0,.4);
+
 }
 
-50%{
+}
+
+
+
+/* Recent Form Main Card */
+
+.form-card{
+
+background:linear-gradient(
+135deg,
+#0f172a,
+#1e293b,
+#111827
+);
+
+border:1px solid rgba(0,229,255,.3);
+
+border-radius:20px;
+
+padding:18px;
+
 box-shadow:
-0 0 15px #00e5ff,
-0 0 30px #00e5ff;
+0 0 12px rgba(0,229,255,.25);
+
+transition:.3s ease;
+
 }
 
-75%{
+.form-card:hover{
+
+transform:translateY(-5px);
+
 box-shadow:
-0 0 15px #9c27b0,
-0 0 30px #9c27b0;
+0 0 18px rgba(0,229,255,.5),
+0 0 35px rgba(255,215,0,.25);
+
 }
 
-100%{
+/* Player Image */
+
+.form-card img{
+
+width:80px;
+height:80px;
+
+border-radius:50%;
+
+border:3px solid #00e5ff;
+
 box-shadow:
-0 0 15px #ff9800,
-0 0 30px #ff9800;
-}
+0 0 12px #00e5ff,
+0 0 25px rgba(0,229,255,.5);
 
 }
 
-@keyframes borderMove{
+/* Player Name */
 
-0%{
-background-position:0% 50%;
+.form-card h2{
+
+color:#ffffff;
+
+text-shadow:
+0 0 8px rgba(255,255,255,.4);
+
 }
 
-100%{
-background-position:400% 50%;
+/* Form Score Boxes */
+
+.score-box{
+
+width:42px;
+height:42px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:10px;
+
+font-weight:bold;
+
+color:white;
+
 }
+
+/* Good Form */
+
+.form-good{
+
+background:#00c853;
+
+box-shadow:
+0 0 10px #00c853,
+0 0 20px rgba(0,200,83,.5);
+
+}
+
+/* Average Form */
+
+.form-average{
+
+background:#ffd600;
+
+color:#111;
+
+box-shadow:
+0 0 10px #ffd600,
+0 0 20px rgba(255,214,0,.5);
+
+}
+
+/* Poor Form */
+
+.form-poor{
+
+background:#ff1744;
+
+box-shadow:
+0 0 10px #ff1744,
+0 0 20px rgba(255,23,68,.5);
+
+}
+
+/* Average Box */
+
+.avg-box{
+
+margin-top:15px;
+
+padding:12px;
+
+border-radius:15px;
+
+background:rgba(255,215,0,.08);
+
+border:1px solid #ffd700;
+
+box-shadow:
+0 0 12px rgba(255,215,0,.4);
+
+}
+
+.avg-box h3{
+
+color:#ffd700;
+
+}
+
+.avg-box p{
+
+font-size:22px;
+font-weight:bold;
+
+color:white;
+
+text-shadow:
+0 0 10px #ffd700;
 
 }
