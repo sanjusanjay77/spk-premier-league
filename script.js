@@ -883,14 +883,14 @@ players.forEach(p=>{
 if(!totals[p.name]){
 
 totals[p.name]={
-
 runs:0,
 wickets:0,
 sixes:0,
+ballsFaced:0,
+ballsBowled:0,
+runsConceded:0,
 photo:playerPhotos[p.name],
-strikeRate:0,
 matches:0
-
 };
 
 }
@@ -898,7 +898,13 @@ matches:0
 totals[p.name].runs += p.runs;
 totals[p.name].wickets += p.wickets;
 totals[p.name].sixes += p.sixes;
-totals[p.name].strikeRate += p.strikeRate;
+totals[p.name].ballsFaced +=
+Number(p.ballsFaced || 0);
+totals[p.name].ballsBowled +=
+Number(p.ballsBowled || 0);
+
+totals[p.name].runsConceded +=
+Number(p.runsConceded || 0);
 totals[p.name].matches++;
 
 });
@@ -917,10 +923,24 @@ a.runs > b.runs ? player1 : player2;
 const wicketLeader =
 a.wickets > b.wickets ? player1 : player2;
 const avgSR1 =
-(a.strikeRate/a.matches).toFixed(1);
+a.ballsFaced > 0
+? ((a.runs / a.ballsFaced) * 100).toFixed(1)
+: "0";
 
 const avgSR2 =
-(b.strikeRate/b.matches).toFixed(1);
+b.ballsFaced > 0
+? ((b.runs / b.ballsFaced) * 100).toFixed(1)
+: "0";
+
+const eco1 =
+a.ballsBowled > 0
+? ((a.runsConceded * 6) / a.ballsBowled).toFixed(2)
+: "0";
+
+const eco2 =
+b.ballsBowled > 0
+? ((b.runsConceded * 6) / b.ballsBowled).toFixed(2)
+: "0";
 
 const pointsA =
 a.runs + (a.wickets*20);
