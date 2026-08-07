@@ -1629,20 +1629,22 @@ html;
 
 function logoHit(){
 
-const bat = document.getElementById("bat");
-const ball = document.getElementById("ball");
+const ball =
+document.getElementById("ball");
 
-bat.classList.remove("batSwing");
 ball.classList.remove("ballFly");
 
-void bat.offsetWidth;
+void ball.offsetWidth;
 
-bat.classList.add("batSwing");
-
-setTimeout(()=>{
+ball.style.display="block";
 
 ball.classList.add("ballFly");
 
-},300);
+
+setTimeout(()=>{
+
+ball.style.display="none";
+
+},1200);
 
 }
