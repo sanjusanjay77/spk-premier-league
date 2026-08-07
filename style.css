@@ -2181,33 +2181,40 @@ font-size:13px;
 }
 
 }
-
-
 .latest-scroll{
-overflow-x:auto;
+
 width:100%;
+
+overflow-x:scroll;
+
+overflow-y:hidden;
+
+-webkit-overflow-scrolling:touch;
+
+touch-action:pan-x;
+
+border-radius:12px;
+
 }
 
 .latest-table{
-width:100%;
+
+min-width:1000px;
+
+width:max-content;
+
 border-collapse:collapse;
-min-width:900px;
+
 }
 
 .latest-table th,
 .latest-table td{
 
 padding:10px;
+
+white-space:nowrap;
+
 text-align:center;
-
-border:1px solid rgba(255,255,255,.15);
-
-}
-
-.latest-table th{
-
-background:#ff9800;
-color:white;
 
 }
 
@@ -2215,8 +2222,19 @@ color:white;
 
 .latest-scroll{
 
-overflow-x:auto;
+display:block;
+
+overflow-x:scroll !important;
+
+overflow-y:hidden;
+
 -webkit-overflow-scrolling:touch;
+
+}
+
+.latest-table{
+
+min-width:1000px;
 
 }
 
