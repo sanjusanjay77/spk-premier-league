@@ -2182,3 +2182,43 @@ font-size:13px;
 
 }
 
+
+.latest-scroll{
+overflow-x:auto;
+width:100%;
+}
+
+.latest-table{
+width:100%;
+border-collapse:collapse;
+min-width:900px;
+}
+
+.latest-table th,
+.latest-table td{
+
+padding:10px;
+text-align:center;
+
+border:1px solid rgba(255,255,255,.15);
+
+}
+
+.latest-table th{
+
+background:#ff9800;
+color:white;
+
+}
+
+@media(max-width:768px){
+
+.latest-scroll{
+
+overflow-x:auto;
+-webkit-overflow-scrolling:touch;
+
+}
+
+}
+
