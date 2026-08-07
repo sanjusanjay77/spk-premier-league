@@ -1711,3 +1711,8 @@ opacity:0;
 }
 
 }
+
+.modal-content{
+    max-height:none !important;
+    overflow:visible !important;
+}
