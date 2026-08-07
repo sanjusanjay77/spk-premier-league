@@ -1661,31 +1661,26 @@ box-shadow:
 
 
 /* Firework particles */
-
-.firework{
+.firework-particle{
 position:fixed;
-width:12px;
-height:12px;
+width:6px;
+height:6px;
 border-radius:50%;
-z-index:9999;
 pointer-events:none;
-animation:explode 1s ease-out forwards;
+z-index:99999;
+animation:explode 2s ease-out forwards;
 }
 
 @keyframes explode{
-
 0%{
-transform:scale(0);
+transform:translate(0,0) scale(1);
 opacity:1;
 }
-
 100%{
-transform:scale(6);
+transform:translate(var(--x),var(--y)) scale(0);
 opacity:0;
 }
-
 }
-
 
 .cap-card img{
 
