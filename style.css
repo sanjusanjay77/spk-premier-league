@@ -2047,7 +2047,6 @@ box-shadow:0 0 15px #9c27b0;
 
 /* Latest Match Result Card */
 /* Latest Match Card Premium Style */
-
 #latestMatchCard{
 
 width:95%;
@@ -2074,37 +2073,31 @@ animation:latestMatchGlow 2s infinite alternate;
 
 transition:.3s ease;
 
-overflow:hidden;
+/* IMPORTANT */
+overflow:visible;
+word-wrap:break-word;
 
 }
 
 #latestMatchCard:hover{
-
 transform:translateY(-4px);
-
 }
 
 @keyframes latestMatchGlow{
 
 from{
-
 box-shadow:
 0 0 10px #ff9800,
 0 0 20px rgba(255,152,0,.4);
-
 }
 
 to{
-
 box-shadow:
 0 0 20px #ffd700,
 0 0 40px rgba(255,215,0,.7);
-
 }
 
 }
-
-/* Match Winner */
 
 #latestMatchCard .winner{
 
@@ -2119,8 +2112,6 @@ text-shadow:
 
 }
 
-/* Teams */
-
 #latestMatchCard .team{
 
 font-weight:700;
@@ -2132,26 +2123,36 @@ text-shadow:
 
 }
 
-/* Mobile Responsive */
+/* Mobile */
 
 @media(max-width:768px){
 
 #latestMatchCard{
 
+width:100%;
 padding:14px;
-border-radius:16px;
+
+}
+
+#latestMatchCard *{
+
+white-space:normal !important;
+overflow:visible !important;
+text-overflow:unset !important;
 
 }
 
 #latestMatchCard h2{
-
 font-size:18px;
-
 }
 
-#latestMatchCard p{
+#latestMatchCard p,
+#latestMatchCard span,
+#latestMatchCard div{
 
 font-size:14px;
+display:block;
+width:100%;
 
 }
 
@@ -2161,18 +2162,19 @@ font-size:14px;
 
 #latestMatchCard{
 
+width:100%;
 padding:12px;
-width:98%;
+border-radius:16px;
 
 }
 
 #latestMatchCard h2{
-
 font-size:16px;
-
 }
 
-#latestMatchCard p{
+#latestMatchCard p,
+#latestMatchCard span,
+#latestMatchCard div{
 
 font-size:13px;
 
