@@ -1617,52 +1617,43 @@ overflow-y:auto;
 
 /* ORANGE CAP PLAYER GLOW */
 
-.orange-cap {
-
-border:3px solid #ff9800 !important;
-
-box-shadow:
-0 0 15px #ff9800,
-0 0 35px #ff9800;
+.orange-card{
 
 animation:orangeGlow 2s infinite;
 
 }
 
-
 @keyframes orangeGlow{
+
+0%,100%{
+box-shadow:0 0 10px #ff9800;
+}
 
 50%{
 box-shadow:
-0 0 30px #ff9800;
+0 0 25px #ff9800,
+0 0 40px #ff5722;
 }
 
 }
 
 
-
-/* PURPLE CAP PLAYER GLOW */
-
-.purple-cap {
-
-border:3px solid #9c27ff !important;
-
-box-shadow:
-0 0 15px #9c27ff,
-0 0 35px #9c27ff;
+.purple-card{
 
 animation:purpleGlow 2s infinite;
 
 }
 
-
 @keyframes purpleGlow{
 
+0%,100%{
+box-shadow:0 0 10px #9c27b0;
+}
+
 50%{
-
 box-shadow:
-0 0 35px #9c27ff;
-
+0 0 25px #9c27b0,
+0 0 40px #e040fb;
 }
 
 }
@@ -1671,48 +1662,52 @@ box-shadow:
 
 /* Firework particles */
 
-.firework{
+.fireworks{
+position:absolute;
+top:50%;
+left:50%;
+width:10px;
+height:10px;
+border-radius:50%;
+background:#FFD700;
+box-shadow:
+0 -60px #ff4757,
+0 60px #00e5ff,
+60px 0 #2ed573,
+-60px 0 #ff9800,
+45px 45px #ff00ff,
+-45px -45px #00ff99;
+animation:firework 1s ease-out;
+pointer-events:none;
+}
 
-position:fixed;
+@keyframes firework{
+0%{
+transform:scale(0);
+opacity:1;
+}
+100%{
+transform:scale(2);
+opacity:0;
+}
+}
 
-width:6px;
 
-height:6px;
-
-background:gold;
+.cap-card img{
 
 border-radius:50%;
-
-animation:explode 1s ease-out forwards;
-
-pointer-events:none;
+animation:ringPulse 2s infinite;
 
 }
 
-
-@keyframes explode{
+@keyframes ringPulse{
 
 0%{
-
-transform:translate(0,0);
-
-opacity:1;
-
+box-shadow:0 0 0 0 rgba(255,215,0,.7);
 }
-
 
 100%{
-
-transform:
-translate(var(--x),var(--y));
-
-opacity:0;
-
+box-shadow:0 0 0 20px rgba(255,215,0,0);
 }
 
-}
-
-.modal-content{
-    max-height:none !important;
-    overflow:visible !important;
 }
