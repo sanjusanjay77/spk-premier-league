@@ -1627,6 +1627,16 @@ html;
 
 }
 
-document.getElementById("mainLogo").onclick = function(){
-    alert("Logo Clicked");
-};
+const bat =
+document.getElementById("bat");
+
+const ball =
+document.getElementById("ball");
+
+bat.classList.remove("hitBat");
+ball.classList.remove("hitBall");
+
+void bat.offsetWidth;
+
+bat.classList.add("hitBat");
+ball.classList.add("hitBall");
