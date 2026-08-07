@@ -1627,19 +1627,12 @@ html;
 
 }
 
+document.getElementById("mainLogo").addEventListener("click", function(){
 
-document.getElementById("mainLogo")
-.addEventListener("click",()=>{
+this.classList.remove("logo-hit");
 
-const bat = document.getElementById("bat");
-const ball = document.getElementById("ball");
+void this.offsetWidth;
 
-bat.classList.remove("hitBat");
-ball.classList.remove("hitBall");
-
-void bat.offsetWidth;
-
-bat.classList.add("hitBat");
-ball.classList.add("hitBall");
+this.classList.add("logo-hit");
 
 });
