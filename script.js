@@ -1627,12 +1627,6 @@ html;
 
 }
 
-document.getElementById("mainLogo").addEventListener("click", function(){
-
-this.classList.remove("logo-hit");
-
-void this.offsetWidth;
-
-this.classList.add("logo-hit");
-
-});
+document.getElementById("mainLogo").onclick = function(){
+    alert("Logo Clicked");
+};
