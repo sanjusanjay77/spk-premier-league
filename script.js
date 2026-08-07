@@ -1627,16 +1627,15 @@ html;
 
 }
 
-const bat =
-document.getElementById("bat");
+function logoHit(){
 
-const ball =
-document.getElementById("ball");
+const logo =
+document.getElementById("mainLogo");
 
-bat.classList.remove("hitBat");
-ball.classList.remove("hitBall");
+logo.classList.remove("logo-hit");
 
-void bat.offsetWidth;
+void logo.offsetWidth;
 
-bat.classList.add("hitBat");
-ball.classList.add("hitBall");
+logo.classList.add("logo-hit");
+
+}
