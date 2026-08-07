@@ -1762,3 +1762,28 @@ box-shadow:
 box-shadow:
 0 0 20px rgba(255,235,59,.4);
 }
+
+
+#mostRuns,
+#mostWickets{
+cursor:pointer;
+transition:.3s;
+}
+
+#mostRuns:hover,
+#mostWickets:hover{
+transform:scale(1.05);
+}
+
+#awardHistory{
+margin-top:20px;
+padding:15px;
+border-radius:15px;
+background:#111827;
+}
+
+.history-row{
+padding:8px;
+margin:5px 0;
+border-bottom:1px solid rgba(255,255,255,.1);
+}
