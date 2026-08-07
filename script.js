@@ -1568,8 +1568,29 @@ particle.remove();
 console.log(records);
 
 function showBestBatsmanHistory(){
-alert("Orange Cap Player: " + orangeCapPlayer);
+
+const records = players
+.filter(p => p.name === orangeCapPlayer)
+.sort((a,b) => Number(b.runs) - Number(a.runs));
+
+let html = `
+<h3>🏏 ${orangeCapPlayer} - Best Batting Performances</h3>
+`;
+
+records.forEach(r => {
+
+html += `
+<div class="history-row">
+📅 ${r.date} → 🏏 ${r.runs} Runs
+</div>
+`;
+
+});
+
+document.getElementById("awardHistory").innerHTML = html;
+
 }
+
 function showBestBowlerHistory(){
 
 const records = players
@@ -1577,14 +1598,14 @@ const records = players
 .sort((a,b) => Number(b.wickets) - Number(a.wickets));
 
 let html = `
-<h3>🎯 ${purpleCapPlayer} - Best Bowling Days</h3>
+<h3>🎯 ${purpleCapPlayer} - Best Bowling Performances</h3>
 `;
 
 records.forEach(r => {
 
 html += `
 <div class="history-row">
-📅 ${r.date} - ${r.wickets} Wickets
+📅 ${r.date} → 🎯 ${r.wickets} Wickets
 </div>
 `;
 
