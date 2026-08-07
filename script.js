@@ -1258,7 +1258,6 @@ playersMap[player.name].matches++;
 
 });
 
-
 const matchGroups = {};
 
 players.forEach(player=>{
@@ -1273,7 +1272,6 @@ matchGroups[player.matchNo].push(player);
 
 });
 
-
 Object.values(matchGroups).forEach(match=>{
 
 const winner =
@@ -1284,23 +1282,17 @@ playersMap[winner.name].wins++;
 
 });
 
-
-let html =
-'<div class="win-grid">';
+let html = '<div class="win-grid">';
 
 Object.keys(playersMap).forEach(name=>{
 
-const data =
-playersMap[name];
+const data = playersMap[name];
 
 const winPercent =
 (
 data.wins /
-data.matches
-*100
+data.matches * 100
 ).toFixed(1);
-
-html += `
 
 let glowClass = "";
 
@@ -1337,6 +1329,16 @@ Matches: ${data.matches}
 </div>
 
 `;
+
+});
+
+html += '</div>';
+
+document.getElementById(
+"winPercentageContainer"
+).innerHTML = html;
+
+}
 loadPlayers();
 
 function generateAwardHistory(){
