@@ -1471,30 +1471,53 @@ document.getElementById("playerModal").style.display="none";
 }
 function downloadPlayerCard(){
 
+try{
+
 const now = new Date();
 
-document.getElementById("downloadDateTime").textContent =
-now.toLocaleString("en-IN");
+const dateElement =
+document.getElementById("downloadDateTime");
 
-const card = document.getElementById("downloadCard");
+if(dateElement){
+dateElement.textContent =
+now.toLocaleDateString("en-IN") +
+" | " +
+now.toLocaleTimeString("en-IN");
+}
+
+const card =
+document.getElementById("downloadCard");
 
 html2canvas(card,{
-scale:3,
+scale:2,
 useCORS:true,
 backgroundColor:"#111827"
 }).then(canvas=>{
 
-const link = document.createElement("a");
+const link =
+document.createElement("a");
 
 link.download =
 document.getElementById("modalName").textContent +
-"_SPK_Player_Card.png";
+"_PlayerCard.png";
 
-link.href = canvas.toDataURL("image/png");
+link.href =
+canvas.toDataURL("image/png");
+
+document.body.appendChild(link);
 
 link.click();
 
+document.body.removeChild(link);
+
 });
+
+}catch(err){
+
+console.error(err);
+alert("Download Error");
+
+}
 
 }
 
