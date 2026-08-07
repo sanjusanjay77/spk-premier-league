@@ -970,6 +970,7 @@ document.getElementById(
 <div class="compare-stat">🎯 Wickets: ${a.wickets}</div>
 <div class="compare-stat">💥 Sixes: ${a.sixes}</div>
 <div class="compare-stat">⚡ SR: ${avgSR1}</div>
+<div class="compare-stat">🛡 ECO: ${eco1}</div>
 
 </div>
 
@@ -978,10 +979,11 @@ document.getElementById(
 <img src="${b.photo}">
 <h2>${player2}</h2>
 
-<div class="compare-stat">🏏 Runs: ${b.runs}</div>
-<div class="compare-stat">🎯 Wickets: ${b.wickets}</div>
-<div class="compare-stat">💥 Sixes: ${b.sixes}</div>
-<div class="compare-stat">⚡ SR: ${avgSR2}</div>
+<div class="compare-stat">🏏 Runs: ${a.runs}</div>
+<div class="compare-stat">🎯 Wickets: ${a.wickets}</div>
+<div class="compare-stat">💥 Sixes: ${a.sixes}</div>
+<div class="compare-stat">⚡ SR: ${avgSR1}</div>
+<div class="compare-stat">🛡 ECO: ${eco1}</div>
 
 </div>
 
