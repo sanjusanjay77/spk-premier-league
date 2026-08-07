@@ -501,75 +501,12 @@ onclick="openPlayer('${player.name}')">
 
 }
 
-/*glow*/
-let orangeCapPlayer="";
-let purpleCapPlayer="";
-
-
-function calculateCaps(){
-
-let highestRuns=0;
-let highestWickets=0;
-
-
-players.forEach(p=>{
-
-
-if(Number(p.runs)>highestRuns){
-
-highestRuns=Number(p.runs);
-
-orangeCapPlayer=p.name;
-
-}
-
-
-
-if(Number(p.wickets)>highestWickets){
-
-highestWickets=Number(p.wickets);
-
-purpleCapPlayer=p.name;
-
-}
-
-
-});
-
-}
-
-calculateCaps();
 
 /* Popup */
 
 function openPlayer(name){
 
 
-/*addti*/
-const card =
-document.getElementById("downloadCard");
-
-
-card.classList.remove(
-"orange-cap",
-"purple-cap"
-);
-
-
-if(name===orangeCapPlayer){
-
-card.classList.add("orange-cap");
-
-}
-
-
-if(name===purpleCapPlayer){
-
-card.classList.add("purple-cap");
-
-}
-
-/*addti*/
 const records = players.filter(p => p.name === name);
 
 let totalRuns = 0;
@@ -644,14 +581,25 @@ totalSixesGiven;
 document.getElementById("modalMatches").textContent =
 records.length;
 
+// 🟠 Orange Cap Fireworks
+const orangeCap =
+document.getElementById("orangeCapName").textContent;
+
+// 🟣 Purple Cap Fireworks
+const purpleCap =
+document.getElementById("purpleCapName").textContent;
+
+if(name === orangeCap){
+showFireworks("#ff9800");
+}
+
+if(name === purpleCap){
+showFireworks("#9c27b0");
+}
+
+  
 document.getElementById("playerModal").style.display =
 "flex";
-
-if(name === orangeCapPlayer){
-
-showFireworks();
-
-}
 
 document.getElementById("downloadDate").textContent =
 new Date().toLocaleString("en-IN");
@@ -1536,44 +1484,16 @@ window.onclick = function(event){
 
 }
 
-
 function showFireworks(){
 
-for(let i=0;i<40;i++){
+const fw = document.createElement("div");
 
-let fire =
-document.createElement("span");
+fw.className = "fireworks";
 
-fire.className="firework";
-
-
-let x =
-(Math.random()-0.5)*400+"px";
-
-let y =
-(Math.random()-0.5)*400+"px";
-
-
-fire.style.setProperty("--x",x);
-
-fire.style.setProperty("--y",y);
-
-
-fire.style.left="50%";
-
-fire.style.top="40%";
-
-
-document.body.appendChild(fire);
-
+document.body.appendChild(fw);
 
 setTimeout(()=>{
-
-fire.remove();
-
+fw.remove();
 },1000);
-
-
-}
 
 }
