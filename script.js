@@ -1631,7 +1631,7 @@ ${bestBowler.wickets} Wickets
 
 document.getElementById("awardHistory").innerHTML = html;
 
-}}
+}
 function logoHit(){
 
 const ball =
