@@ -1536,67 +1536,102 @@ particle.remove();
 }
 
 }
-console.log(records);function showBestBatsmanHistory(){
+console.log(records);
+function showBestBatsmanHistory(){
 
-const playerName =
-document.getElementById("mostRuns")
-.textContent
-.split("\n")[0]
-.trim();
+const matches = {};
 
-const records = players.filter(
-p => p.name === playerName
-);
+players.forEach(player=>{
 
-let html =
-`<h3>🏏 ${playerName} - Best Batting Performances</h3>`;
+if(!matches[player.date]){
+matches[player.date] = [];
+}
 
-records.forEach(r => {
+matches[player.date].push(player);
+
+});
+
+let html = `
+<h3>🏏 Best Batsman History</h3>
+`;
+
+Object.keys(matches)
+.reverse()
+.forEach(date=>{
+
+const bestBatsman =
+matches[date]
+.sort((a,b)=>b.runs-a.runs)[0];
 
 html += `
-<div class="history-row">
-📅 ${r.date || "No Date"} →
-🏏 ${r.runs} Runs
+<div class="award-history-card">
+
+<p>📅 ${date}</p>
+
+<p>
+🏏 ${bestBatsman.name}
+</p>
+
+<p>
+${bestBatsman.runs} Runs
+</p>
+
 </div>
 `;
 
 });
 
-document.getElementById("awardHistory").innerHTML =
-html;
+document.getElementById("awardHistory").innerHTML = html;
 
 }
 
 function showBestBowlerHistory(){
 
-const playerName =
-document.getElementById("mostWickets")
-.textContent
-.split("\n")[0]
-.trim();
+const matches = {};
 
-const records = players.filter(
-p => p.name === playerName
-);
+players.forEach(player=>{
 
-let html =
-`<h3>🎯 ${playerName} - Best Bowling Performances</h3>`;
+if(!matches[player.date]){
+matches[player.date] = [];
+}
 
-records.forEach(r => {
+matches[player.date].push(player);
+
+});
+
+let html = `
+<h3>🎯 Best Bowler History</h3>
+`;
+
+Object.keys(matches)
+.reverse()
+.forEach(date=>{
+
+const bestBowler =
+matches[date]
+.sort((a,b)=>b.wickets-a.wickets)[0];
 
 html += `
-<div class="history-row">
-📅 ${r.date || "No Date"} →
-🎯 ${r.wickets} Wickets
+<div class="award-history-card">
+
+<p>📅 ${date}</p>
+
+<p>
+🎯 ${bestBowler.name}
+</p>
+
+<p>
+${bestBowler.wickets} Wickets
+</p>
+
 </div>
 `;
 
 });
 
-document.getElementById("awardHistory").innerHTML =
-html;
+document.getElementById("awardHistory").innerHTML = html;
 
-}
+}}
 function logoHit(){
 
 const ball =
