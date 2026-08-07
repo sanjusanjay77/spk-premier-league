@@ -587,16 +587,32 @@ document.getElementById("orangeCapName").textContent.trim();
 const purpleCap =
 document.getElementById("purpleCapName").textContent.trim();
 
-console.log("Clicked:", name);
-console.log("Orange:", orangeCap);
-console.log("Purple:", purpleCap);
-
 if(name === orangeCap){
+
 showFireworks("#ff9800");
+
+const sound =
+document.getElementById("fireworkSound");
+
+if(sound){
+sound.currentTime = 0;
+sound.play();
+}
+
 }
 
 if(name === purpleCap){
+
 showFireworks("#9c27b0");
+
+const sound =
+document.getElementById("fireworkSound");
+
+if(sound){
+sound.currentTime = 0;
+sound.play();
+}
+
 }
   
 document.getElementById("playerModal").style.display =
@@ -1487,25 +1503,38 @@ window.onclick = function(event){
 
 function showFireworks(color){
 
-for(let i=0;i<15;i++){
+const centerX = window.innerWidth / 2;
+const centerY = window.innerHeight / 2;
 
-const spark = document.createElement("div");
+for(let i=0;i<40;i++){
 
-spark.className = "firework";
+const particle = document.createElement("div");
 
-spark.style.background = color;
+particle.className = "firework-particle";
 
-spark.style.left =
-(window.innerWidth/2 + (Math.random()*200-100)) + "px";
+particle.style.background = color;
 
-spark.style.top =
-(window.innerHeight/2 + (Math.random()*200-100)) + "px";
+const angle = (Math.PI * 2 * i) / 40;
+const distance = 150 + Math.random()*100;
 
-document.body.appendChild(spark);
+particle.style.left = centerX + "px";
+particle.style.top = centerY + "px";
+
+particle.style.setProperty(
+"--x",
+Math.cos(angle)*distance + "px"
+);
+
+particle.style.setProperty(
+"--y",
+Math.sin(angle)*distance + "px"
+);
+
+document.body.appendChild(particle);
 
 setTimeout(()=>{
-spark.remove();
-},1000);
+particle.remove();
+},2000);
 
 }
 
