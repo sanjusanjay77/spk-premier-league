@@ -1811,22 +1811,148 @@ box-shadow:
 }
 
 
+#logoArea{
+
+position:relative;
+
+display:inline-block;
+
+cursor:pointer;
+
+}
+
+
+/* Logo bounce */
+
 .logo-hit{
-animation:logoHit 0.6s ease;
+
+animation:logoBounce 0.5s ease;
+
 }
 
-@keyframes logoHit{
 
-0%{
-transform:scale(1);
-}
+@keyframes logoBounce{
 
 50%{
-transform:scale(1.15) rotate(8deg);
+
+transform:scale(1.12)
+rotate(5deg);
+
 }
 
+}
+
+
+/* Bat animation */
+
+#bat{
+
+position:absolute;
+
+width:60px;
+
+height:20px;
+
+background:#d69b45;
+
+border-radius:5px;
+
+left:45%;
+
+top:55%;
+
+display:none;
+
+transform-origin:left center;
+
+z-index:5;
+
+}
+
+
+.bat-animation{
+
+display:block !important;
+
+animation:batSwing 0.5s ease;
+
+}
+
+
+@keyframes batSwing{
+
+
+0%{
+
+transform:rotate(-60deg);
+
+}
+
+
 100%{
-transform:scale(1);
+
+transform:rotate(35deg);
+
+}
+
+}
+
+
+
+/* Ball */
+
+#ball{
+
+position:absolute;
+
+width:18px;
+
+height:18px;
+
+background:white;
+
+border-radius:50%;
+
+display:none;
+
+left:55%;
+
+top:50%;
+
+box-shadow:
+0 0 10px white;
+
+z-index:6;
+
+}
+
+
+.ball-animation{
+
+display:block !important;
+
+animation:ballShot 0.9s ease-out;
+
+}
+
+
+
+@keyframes ballShot{
+
+
+0%{
+
+transform:translate(0,0);
+
+}
+
+
+100%{
+
+transform:
+translate(180px,-80px)
+scale(0.5);
+
 }
 
 }
