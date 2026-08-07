@@ -1564,19 +1564,7 @@ particle.remove();
 }
 
 }
-function showBestBatsmanHistory(){
-
-console.log("Orange Cap Player:", orangeCapPlayer);
-
-const records =
-players.filter(p => p.name === orangeCapPlayer);
-
 console.log(records);
-
-document.getElementById("awardHistory").innerHTML =
-`Found ${records.length} records for ${orangeCapPlayer}`;
-
-}
 function showBestBowlerHistory(){
 
 const records = players
