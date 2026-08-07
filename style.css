@@ -2779,92 +2779,88 @@ box-shadow:
 
 /* Table Glow */
 
-table{
+/* Leaderboard Wrapper */
+
+.table-wrapper{
+
+position:relative;
+
+overflow:auto;
+
+border-radius:20px;
+
+}
+
+/* Moving Glow Effect */
+
+.table-wrapper::before{
+
+content:"";
+
+position:absolute;
+
+left:0;
+right:0;
+
+height:150px;
 
 background:linear-gradient(
-135deg,
-#0f172a,
-#1e293b
+to top,
+transparent,
+rgba(0,229,255,.15),
+rgba(255,215,0,.25),
+transparent
 );
 
-border:2px solid rgba(255,215,0,.5);
+filter:blur(25px);
 
-overflow:hidden;
+pointer-events:none;
 
-animation:leaderboardGlow 2s infinite alternate;
+z-index:1;
+
+animation:leaderboardGlowMove 5s ease-in-out infinite;
 
 }
 
-/* Header */
+/* Keep table above glow */
 
-table thead{
+.table-wrapper table{
+
+position:relative;
+
+z-index:2;
+
+}
+
+/* Bottom → Top → Bottom */
+
+@keyframes leaderboardGlowMove{
+
+0%{
+
+transform:translateY(100%);
+
+}
+
+50%{
+
+transform:translateY(-100%);
+
+}
+
+100%{
+
+transform:translateY(100%);
+
+}
+
+}
+
 
 background:linear-gradient(
-90deg,
-#ffd700,
-#ff9800
+to top,
+transparent,
+rgba(255,193,7,.2),
+rgba(255,215,0,.45),
+transparent
 );
-
-}
-
-table thead th{
-
-color:#111;
-
-font-weight:700;
-
-}
-
-/* Rows */
-
-table tbody tr{
-
-transition:.3s;
-
-}
-
-table tbody tr:hover{
-
-background:rgba(0,229,255,.08);
-
-transform:scale(1.01);
-
-box-shadow:
-inset 0 0 15px rgba(0,229,255,.2);
-
-}
-
-/* Player Name */
-
-table tbody td:nth-child(3){
-
-color:#00e5ff;
-
-font-weight:bold;
-
-text-shadow:
-0 0 8px rgba(0,229,255,.5);
-
-}
-
-/* Glow Animation */
-
-@keyframes leaderboardGlow{
-
-from{
-
-box-shadow:
-0 0 10px rgba(255,215,0,.3),
-0 0 20px rgba(0,229,255,.2);
-
-}
-
-to{
-
-box-shadow:
-0 0 20px rgba(255,215,0,.6),
-0 0 40px rgba(0,229,255,.4);
-
-}
-
-}
