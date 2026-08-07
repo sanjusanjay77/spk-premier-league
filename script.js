@@ -1629,61 +1629,28 @@ html;
 
 function logoHit(){
 
+const bat=document.getElementById("bat");
+const ball=document.getElementById("ball");
+const six=document.getElementById("sixText");
 
-const logo =
-document.getElementById("mainLogo");
-
-
-const bat =
-document.getElementById("bat");
-
-
-const ball =
-document.getElementById("ball");
-
-
-// reset animation
-
-bat.classList.remove("bat-animation");
-
-ball.classList.remove("ball-animation");
-
-logo.classList.remove("logo-hit");
-
-
+bat.classList.remove("batSwing");
+ball.classList.remove("ballFly");
+six.classList.remove("showSix");
 
 void bat.offsetWidth;
 
-
-// start animation
-
-logo.classList.add("logo-hit");
-
-
-bat.classList.add("bat-animation");
-
-
+bat.classList.add("batSwing");
 
 setTimeout(()=>{
 
-ball.classList.add("ball-animation");
+ball.classList.add("ballFly");
 
-
-},300);
-
-
+},250);
 
 setTimeout(()=>{
 
+six.classList.add("showSix");
 
-bat.classList.remove("bat-animation");
-
-ball.classList.remove("ball-animation");
-
-logo.classList.remove("logo-hit");
-
-
-},1200);
-
+},700);
 
 }
