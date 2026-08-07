@@ -1565,29 +1565,8 @@ particle.remove();
 
 }
 function showBestBatsmanHistory(){
-
-const records = players
-.filter(p => p.name === orangeCapPlayer)
-.sort((a,b) => Number(b.runs) - Number(a.runs));
-
-let html = `
-<h3>🏏 ${orangeCapPlayer} - Best Batting Days</h3>
-`;
-
-records.forEach(r => {
-
-html += `
-<div class="history-row">
-📅 ${r.date} - ${r.runs} Runs
-</div>
-`;
-
-});
-
-document.getElementById("awardHistory").innerHTML = html;
-
+    alert("Best Batsman Clicked");
 }
-
 
 function showBestBowlerHistory(){
 
