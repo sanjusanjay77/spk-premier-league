@@ -1471,30 +1471,32 @@ document.getElementById("playerModal").style.display="none";
 }
 function downloadPlayerCard(){
 
-    const card = document.getElementById("downloadCard");
+const now = new Date();
 
-    html2canvas(card,{
-        scale:2,
-        useCORS:true,
-        allowTaint:true
-    }).then(canvas=>{
+document.getElementById("downloadDateTime").textContent =
+now.toLocaleString("en-IN");
 
-        const link = document.createElement("a");
+const card = document.getElementById("downloadCard");
 
-        link.download =
-        document.getElementById("modalName").textContent +
-        "_PlayerCard.png";
+html2canvas(card,{
+scale:3,
+useCORS:true,
+backgroundColor:"#111827"
+}).then(canvas=>{
 
-        link.href = canvas.toDataURL("image/png");
+const link = document.createElement("a");
 
-        link.click();
+link.download =
+document.getElementById("modalName").textContent +
+"_SPK_Player_Card.png";
 
-        document.getElementById("playerModal").style.display = "none";
+link.href = canvas.toDataURL("image/png");
 
-    });
+link.click();
+
+});
 
 }
-
 
 // Close modal when clicking outside the player card
 
