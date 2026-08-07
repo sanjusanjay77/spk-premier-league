@@ -1626,25 +1626,33 @@ document.getElementById("awardHistory").innerHTML =
 html;
 
 }
-
 function logoHit(){
 
 const ball =
 document.getElementById("ball");
 
+const sound =
+document.getElementById("hitSound");
+
+
 ball.classList.remove("ballFly");
 
 void ball.offsetWidth;
 
-ball.style.display="block";
+
+sound.currentTime = 0;
+sound.play();
+
+
+ball.style.display = "block";
 
 ball.classList.add("ballFly");
 
 
 setTimeout(()=>{
 
-ball.style.display="none";
+ball.style.display = "none";
 
-},1200);
+},3000);
 
 }
