@@ -581,22 +581,23 @@ totalSixesGiven;
 document.getElementById("modalMatches").textContent =
 records.length;
 
-// 🟠 Orange Cap Fireworks
 const orangeCap =
-document.getElementById("orangeCapName").textContent;
+document.getElementById("orangeCapName").textContent.trim();
 
-// 🟣 Purple Cap Fireworks
 const purpleCap =
-document.getElementById("purpleCapName").textContent;
+document.getElementById("purpleCapName").textContent.trim();
+
+console.log("Clicked:", name);
+console.log("Orange:", orangeCap);
+console.log("Purple:", purpleCap);
 
 if(name === orangeCap){
-showFireworks("#ff9800");
+alert("Orange Cap Opened");
 }
 
 if(name === purpleCap){
-showFireworks("#9c27b0");
+alert("Purple Cap Opened");
 }
-
   
 document.getElementById("playerModal").style.display =
 "flex";
@@ -1484,11 +1485,22 @@ window.onclick = function(event){
 
 }
 
-function showFireworks(){
+function showFireworks(color){
 
 const fw = document.createElement("div");
 
 fw.className = "fireworks";
+
+fw.style.background = color;
+
+fw.style.boxShadow = `
+0 -60px ${color},
+0 60px ${color},
+60px 0 ${color},
+-60px 0 ${color},
+45px 45px ${color},
+-45px -45px ${color}
+`;
 
 document.body.appendChild(fw);
 
