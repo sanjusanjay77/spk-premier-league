@@ -2575,6 +2575,33 @@ animation:h2hGlow 2s infinite alternate;
 
 /* Player Cards */
 
+/* Head To Head Main Card */
+
+.compare-card{
+
+background:linear-gradient(
+135deg,
+#0f172a,
+#1e293b,
+#111827
+);
+
+border:2px solid #ffd700;
+
+border-radius:25px;
+
+padding:20px;
+
+box-shadow:
+0 0 15px rgba(255,215,0,.5),
+0 0 35px rgba(255,215,0,.3);
+
+animation:h2hGlow 2s infinite alternate;
+
+}
+
+/* Player Cards */
+
 .compare-player{
 
 background:rgba(255,255,255,.04);
@@ -2679,7 +2706,6 @@ box-shadow:
 }
 
 }
-
 
 
 /* Recent Form Main Card */
