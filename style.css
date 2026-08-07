@@ -2781,4 +2781,75 @@ box-shadow:
 
 /* Leaderboard Wrapper */
 
+/* LEADERBOARD ONLY */
 
+.table-wrapper{
+
+position:relative;
+
+overflow:hidden;
+
+border-radius:20px;
+
+border:2px solid rgba(255,215,0,.4);
+
+}
+
+/* Smooth Moving Light */
+
+.table-wrapper::before{
+
+content:"";
+
+position:absolute;
+
+top:-50%;
+left:-40%;
+
+width:25%;
+height:220%;
+
+background:linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.05),
+rgba(255,215,0,.35),
+rgba(255,255,255,.05),
+transparent
+);
+
+transform:rotate(15deg);
+
+filter:blur(15px);
+
+pointer-events:none;
+
+z-index:1;
+
+animation:leaderboardShine 4s linear infinite;
+
+}
+
+/* Keep table above shine */
+
+.table-wrapper table{
+
+position:relative;
+
+z-index:2;
+
+}
+
+/* Smooth Sweep */
+
+@keyframes leaderboardShine{
+
+0%{
+left:-40%;
+}
+
+100%{
+left:140%;
+}
+
+}
