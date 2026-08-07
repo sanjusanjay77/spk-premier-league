@@ -1820,55 +1820,50 @@ cursor:pointer;
 #bat,
 #ball{
 position:absolute;
-font-size:40px;
+font-size:35px;
 opacity:0;
 pointer-events:none;
+z-index:999;
 }
 
 #bat{
-left:-40px;
-top:20px;
+left:-20px;
+top:40px;
 }
 
 #ball{
-right:-20px;
-top:20px;
+right:10px;
+top:40px;
 }
 
 .hitBat{
-animation:batSwing .8s ease;
+animation:batSwing .7s ease;
 }
 
 .hitBall{
-animation:ballFly .8s ease;
+animation:ballFly .7s ease;
 }
 
 @keyframes batSwing{
-
 0%{
 opacity:1;
-transform:rotate(-60deg);
+transform:rotate(-80deg);
 }
-
 100%{
 opacity:0;
 transform:rotate(40deg);
 }
-
 }
 
 @keyframes ballFly{
-
 0%{
 opacity:1;
-transform:translate(0,0);
+transform:translate(0,0) scale(1);
 }
-
 100%{
 opacity:0;
-transform:translate(150px,-80px);
+transform:translate(180px,-80px) scale(1.3);
 }
-
 }
 
 
