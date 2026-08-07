@@ -1302,7 +1302,21 @@ data.matches
 
 html += `
 
-<div class="win-card">
+let glowClass = "";
+
+if(name === "Sanjay"){
+glowClass = "sanjay-glow";
+}
+else if(name === "Karthick"){
+glowClass = "karthick-glow";
+}
+else if(name === "Pranesh"){
+glowClass = "pranesh-glow";
+}
+
+html += `
+
+<div class="win-card ${glowClass}">
 
 <img src="${data.photo}">
 
@@ -1313,28 +1327,16 @@ ${winPercent}%
 </div>
 
 <p>
-Wins:
-${data.wins}
+Wins: ${data.wins}
 </p>
 
 <p>
-Matches:
-${data.matches}
+Matches: ${data.matches}
 </p>
 
 </div>
 
 `;
-
-});
-
-html += '</div>';
-
-document.getElementById(
-"winPercentageContainer"
-).innerHTML = html;
-
-}
 loadPlayers();
 
 function generateAwardHistory(){
