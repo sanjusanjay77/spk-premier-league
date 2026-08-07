@@ -1787,3 +1787,100 @@ padding:8px;
 margin:5px 0;
 border-bottom:1px solid rgba(255,255,255,.1);
 }
+
+
+
+.premium-glow{
+position:relative;
+border-radius:20px;
+overflow:hidden;
+
+box-shadow:
+0 0 15px rgba(255,193,7,.25),
+0 0 30px rgba(255,193,7,.12);
+
+transition:.3s ease;
+}
+
+.premium-glow:hover{
+transform:translateY(-3px);
+
+box-shadow:
+0 0 20px rgba(255,193,7,.45),
+0 0 40px rgba(255,193,7,.20);
+}
+
+
+#logoArea{
+position:relative;
+display:inline-block;
+cursor:pointer;
+}
+
+#bat,
+#ball{
+position:absolute;
+font-size:40px;
+opacity:0;
+pointer-events:none;
+}
+
+#bat{
+left:-40px;
+top:20px;
+}
+
+#ball{
+right:-20px;
+top:20px;
+}
+
+.hitBat{
+animation:batSwing .8s ease;
+}
+
+.hitBall{
+animation:ballFly .8s ease;
+}
+
+@keyframes batSwing{
+
+0%{
+opacity:1;
+transform:rotate(-60deg);
+}
+
+100%{
+opacity:0;
+transform:rotate(40deg);
+}
+
+}
+
+@keyframes ballFly{
+
+0%{
+opacity:1;
+transform:translate(0,0);
+}
+
+100%{
+opacity:0;
+transform:translate(150px,-80px);
+}
+
+}
+
+
+
+.leaderboard{
+
+background:
+linear-gradient(
+135deg,
+rgba(255,193,7,.08),
+rgba(255,255,255,.02)
+);
+
+backdrop-filter:blur(8px);
+}
