@@ -259,8 +259,6 @@ Compare
 
 </section>
 
-<!-- AWARDS -->
-
 <section>
 
 <h2 class="section-title">
@@ -269,24 +267,29 @@ Compare
 
 <div class="awards-grid">
 
-<div class="award-card">
+<div class="award-card"
+onclick="showBestBatsmanHistory()">
+
 🏏 Best Batsman
+
+<div id="mostRuns"></div>
+
 </div>
 
-<div class="award-card">
+<div class="award-card"
+onclick="showBestBowlerHistory()">
+
 🎯 Best Bowler
+
+<div id="mostWickets"></div>
+
 </div>
 
-
 </div>
-
-</section>
-</section>
-<div id="mostRuns" onclick="showBestBatsmanHistory()"></div>
-
-<div id="mostWickets" onclick="showBestBowlerHistory()"></div>
 
 <div id="awardHistory"></div>
+
+</section>
 <section class="hall-of-fame">
 
 <h2 class="section-title">
