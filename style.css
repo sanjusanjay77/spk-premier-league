@@ -1972,48 +1972,13 @@ backdrop-filter:blur(8px);
 }
 
 
-#logoArea{
-
-position:relative;
-
-display:inline-block;
-
-cursor:pointer;
-
-}
-
-
-#ball{
-
-position:absolute;
-
-width:22px;
-
-height:22px;
-
-left:50%;
-
-top:50%;
-
-display:none;
-
-z-index:10;
-
-border-radius:50%;
-
-}
-
-
-
 .ballFly{
 
 display:block !important;
 
-animation:ballFly 1.2s ease-out forwards;
+animation:ballFly 3s ease-out forwards;
 
 }
-
-
 
 @keyframes ballFly{
 
@@ -2027,12 +1992,28 @@ opacity:1;
 
 }
 
+25%{
+
+transform:
+translate(80px,-40px)
+rotate(180deg);
+
+}
+
+60%{
+
+transform:
+translate(180px,-120px)
+rotate(540deg);
+
+}
+
 100%{
 
 transform:
-translate(350px,-220px)
+translate(350px,-250px)
 rotate(1080deg)
-scale(.6);
+scale(.7);
 
 opacity:0;
 
