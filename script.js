@@ -106,7 +106,8 @@ totalMatches;
 let orangeCapPlayer = "";
 let purpleCapPlayer = "";
 
-function updateRecords(){
+function updateRecords()
+{
 
 const totals = {};
 
