@@ -1629,13 +1629,11 @@ html;
 
 function logoHit(){
 
-const bat=document.getElementById("bat");
-const ball=document.getElementById("ball");
-const six=document.getElementById("sixText");
+const bat = document.getElementById("bat");
+const ball = document.getElementById("ball");
 
 bat.classList.remove("batSwing");
 ball.classList.remove("ballFly");
-six.classList.remove("showSix");
 
 void bat.offsetWidth;
 
@@ -1645,12 +1643,6 @@ setTimeout(()=>{
 
 ball.classList.add("ballFly");
 
-},250);
-
-setTimeout(()=>{
-
-six.classList.add("showSix");
-
-},700);
+},300);
 
 }
