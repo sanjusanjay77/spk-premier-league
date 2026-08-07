@@ -1561,3 +1561,66 @@ particle.remove();
 }
 
 }
+
+
+function showBestBatsmanHistory(){
+
+const bestBatsman =
+document.getElementById("mostRuns")
+.innerText.split("\n")[0];
+
+const records =
+players
+.filter(p => p.name === bestBatsman)
+.sort((a,b) => b.runs - a.runs);
+
+let html = `
+<h3>🏏 ${bestBatsman} - Best Batting Performances</h3>
+`;
+
+records.forEach(r=>{
+
+html += `
+<div class="history-row">
+📅 ${r.date} → ${r.runs} Runs
+</div>
+`;
+
+});
+
+document.getElementById("awardHistory")
+.innerHTML = html;
+
+}
+
+
+function showBestBowlerHistory(){
+
+const bestBowler =
+document.getElementById("mostWickets")
+.innerText.split("\n")[0];
+
+const records =
+players
+.filter(p => p.name === bestBowler)
+.sort((a,b) => b.wickets - a.wickets);
+
+let html = `
+<h3>🎯 ${bestBowler} - Best Bowling Performances</h3>
+`;
+
+records.forEach(r=>{
+
+html += `
+<div class="history-row">
+📅 ${r.date} → ${r.wickets} Wickets
+</div>
+`;
+
+});
+
+document.getElementById("awardHistory")
+.innerHTML = html;
+
+}
+
