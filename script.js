@@ -62,6 +62,7 @@ loadComparisonPlayers();
 generateRecentForm();
 generateHallOfFame();
 generateLatestMatch();
+updateTrophyCabinet();
 
 }
 catch(err){
@@ -1660,5 +1661,40 @@ setTimeout(()=>{
 ball.style.display = "none";
 
 },3000);
+
+}
+
+
+function updateTrophyCabinet(){
+
+const html = `
+
+<div class="trophy-card gold">
+🏆
+<h3>Orange Cap</h3>
+<p>${orangeCapPlayer}</p>
+</div>
+
+<div class="trophy-card purple">
+🎯
+<h3>Purple Cap</h3>
+<p>${purpleCapPlayer}</p>
+</div>
+
+<div class="trophy-card blue">
+⚡
+<h3>Highest SR</h3>
+<p>${document.getElementById("highestSR").innerText}</p>
+</div>
+
+<div class="trophy-card green">
+🛡️
+<h3>Best Economy</h3>
+<p>${document.getElementById("bestEconomy").innerText}</p>
+</div>
+
+`;
+
+document.getElementById("trophyCabinet").innerHTML = html;
 
 }
