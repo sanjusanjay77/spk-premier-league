@@ -2963,3 +2963,39 @@ font-weight:800;
 .section-title{
 text-shadow:0 0 12px rgba(0,229,255,.4);
 }
+
+
+.leaderboard-container{
+width:100%;
+overflow-x:auto;
+overflow-y:hidden;
+-webkit-overflow-scrolling:touch;
+scrollbar-width:thin;
+}
+
+.leaderboard-table{
+width:100%;
+min-width:1100px;
+border-collapse:collapse;
+}
+
+@media (max-width:768px){
+
+.leaderboard-container{
+overflow-x:auto;
+}
+
+.leaderboard-table{
+min-width:1100px;
+}
+
+}
+
+.leaderboard-container::after{
+content:"← Swipe to view more →";
+display:block;
+text-align:center;
+font-size:12px;
+padding:6px;
+color:#9ca3af;
+}
