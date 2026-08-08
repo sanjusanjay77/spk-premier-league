@@ -1671,12 +1671,16 @@ const purpleCount = {};
 const sixesCount = {};
 
 const dates =
-[...new Set(players.map(p => p.date))];
+[...new Set(players.map(p => p.matchDate || p.date))];
 
 dates.forEach(date=>{
 
 const dayPlayers =
-players.filter(p => p.date === date);
+players.filter(p =>
+(p.matchDate || p.date) === date
+);
+
+if(dayPlayers.length === 0) return;
 
 const topRuns =
 [...dayPlayers].sort((a,b)=>b.runs-a.runs)[0];
@@ -1698,8 +1702,31 @@ sixesCount[topSixes.name] =
 
 });
 
-console.log(orangeCount);
-console.log(purpleCount);
-console.log(sixesCount);
+const orangeWinner =
+Object.keys(orangeCount)
+.sort((a,b)=>orangeCount[b]-orangeCount[a])[0];
+
+const purpleWinner =
+Object.keys(purpleCount)
+.sort((a,b)=>purpleCount[b]-purpleCount[a])[0];
+
+const sixerWinner =
+Object.keys(sixesCount)
+.sort((a,b)=>sixesCount[b]-sixesCount[a])[0];
+
+document.getElementById("orangeCapKing").innerHTML =
+orangeWinner
+? `${orangeWinner}<br>🏆 ${orangeCount[orangeWinner]} Times`
+: "No Data";
+
+document.getElementById("purpleCapKing").innerHTML =
+purpleWinner
+? `${purpleWinner}<br>🏆 ${purpleCount[purpleWinner]} Times`
+: "No Data";
+
+document.getElementById("sixerKing").innerHTML =
+sixerWinner
+? `${sixerWinner}<br>🏆 ${sixesCount[sixerWinner]} Times`
+: "No Data";
 
 }
