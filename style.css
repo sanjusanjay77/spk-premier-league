@@ -2966,67 +2966,70 @@ text-shadow:0 0 12px rgba(0,229,255,.4);
 
 
 .table-wrapper{
-width:100%;
 overflow-x:auto;
-overflow-y:hidden;
 -webkit-overflow-scrolling:touch;
-scrollbar-width:thin;
 }
 
 .table-wrapper table{
-width:100%;
 min-width:1400px;
 border-collapse:collapse;
 }
 
-@media(max-width:768px){
-
-.table-wrapper{
-overflow-x:auto;
-}
-
-.table-wrapper table{
-min-width:1400px;
-}
-
-}
-
-.table-wrapper::after{
-content:"← Swipe to view more →";
-display:block;
-text-align:center;
-font-size:12px;
-padding:5px;
-color:#aaa;
-}
-
-
-@media (max-width:768px){
-
-.table-wrapper{
-overflow-x:hidden;
-}
-
-.table-wrapper table{
-width:100%;
-min-width:auto;
-table-layout:fixed;
-}
-
 .table-wrapper th,
 .table-wrapper td{
-
-padding:3px;
-font-size:9px;
 white-space:nowrap;
-text-align:center;
-
 }
 
+/* Match No */
+.table-wrapper th:nth-child(1),
+.table-wrapper td:nth-child(1){
+position:sticky;
+left:0;
+z-index:3;
+background:#111827;
+}
+
+/* Date */
+.table-wrapper th:nth-child(2),
+.table-wrapper td:nth-child(2){
+position:sticky;
+left:90px;
+z-index:3;
+background:#111827;
+}
+
+/* Player */
+.table-wrapper th:nth-child(3),
+.table-wrapper td:nth-child(3){
+position:sticky;
+left:190px;
+z-index:3;
+background:#111827;
+}
+
+/* Header */
 .table-wrapper th{
-
-font-size:8px;
-
+position:sticky;
+top:0;
+z-index:4;
+background:#00acc1;
 }
 
+
+.table-wrapper th:nth-child(1),
+.table-wrapper td:nth-child(1){
+width:90px;
+min-width:90px;
+}
+
+.table-wrapper th:nth-child(2),
+.table-wrapper td:nth-child(2){
+width:100px;
+min-width:100px;
+}
+
+.table-wrapper th:nth-child(3),
+.table-wrapper td:nth-child(3){
+width:140px;
+min-width:140px;
 }
