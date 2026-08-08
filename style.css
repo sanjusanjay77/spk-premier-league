@@ -2999,3 +2999,34 @@ font-size:12px;
 padding:5px;
 color:#aaa;
 }
+
+
+@media (max-width:768px){
+
+.table-wrapper{
+overflow-x:hidden;
+}
+
+.table-wrapper table{
+width:100%;
+min-width:auto;
+table-layout:fixed;
+}
+
+.table-wrapper th,
+.table-wrapper td{
+
+padding:3px;
+font-size:9px;
+white-space:nowrap;
+text-align:center;
+
+}
+
+.table-wrapper th{
+
+font-size:8px;
+
+}
+
+}
