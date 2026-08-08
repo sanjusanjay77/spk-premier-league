@@ -1664,37 +1664,42 @@ ball.style.display = "none";
 
 }
 
-
 function updateTrophyCabinet(){
 
-const html = `
+const orangeCount = {};
+const purpleCount = {};
+const sixesCount = {};
 
-<div class="trophy-card gold">
-🏆
-<h3>Orange Cap</h3>
-<p>${orangeCapPlayer}</p>
-</div>
+const dates =
+[...new Set(players.map(p => p.date))];
 
-<div class="trophy-card purple">
-🎯
-<h3>Purple Cap</h3>
-<p>${purpleCapPlayer}</p>
-</div>
+dates.forEach(date=>{
 
-<div class="trophy-card blue">
-⚡
-<h3>Highest SR</h3>
-<p>${document.getElementById("highestSR").innerText}</p>
-</div>
+const dayPlayers =
+players.filter(p => p.date === date);
 
-<div class="trophy-card green">
-🛡️
-<h3>Best Economy</h3>
-<p>${document.getElementById("bestEconomy").innerText}</p>
-</div>
+const topRuns =
+[...dayPlayers].sort((a,b)=>b.runs-a.runs)[0];
 
-`;
+const topWickets =
+[...dayPlayers].sort((a,b)=>b.wickets-a.wickets)[0];
 
-document.getElementById("trophyCabinet").innerHTML = html;
+const topSixes =
+[...dayPlayers].sort((a,b)=>b.sixes-a.sixes)[0];
+
+orangeCount[topRuns.name] =
+(orangeCount[topRuns.name] || 0) + 1;
+
+purpleCount[topWickets.name] =
+(purpleCount[topWickets.name] || 0) + 1;
+
+sixesCount[topSixes.name] =
+(sixesCount[topSixes.name] || 0) + 1;
+
+});
+
+console.log(orangeCount);
+console.log(purpleCount);
+console.log(sixesCount);
 
 }
