@@ -1728,10 +1728,10 @@ orange + purple + sixes;
 
 html += `
 <tr>
-<td>👤 ${player}</td>
-<td>🟠 ${orange}</td>
-<td>🟣 ${purple}</td>
-<td>💥 ${sixes}</td>
+<td> ${player}</td>
+<td> ${orange}</td>
+<td> ${purple}</td>
+<td> ${sixes}</td>
 <td class="gold-cell">🏆 ${total}</td>
 </tr>
 `;
