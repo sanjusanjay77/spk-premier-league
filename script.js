@@ -1670,8 +1670,7 @@ const orangeCount = {};
 const purpleCount = {};
 const sixesCount = {};
 
-const dates =
-[...new Set(players.map(p => p.matchDate || p.date))];
+const dates = [...new Set(players.map(p => p.matchDate || p.date))];
 
 dates.forEach(date=>{
 
@@ -1683,13 +1682,13 @@ players.filter(p =>
 if(dayPlayers.length === 0) return;
 
 const topRuns =
-[...dayPlayers].sort((a,b)=>b.runs-a.runs)[0];
+[...dayPlayers].sort((a,b)=>Number(b.runs)-Number(a.runs))[0];
 
 const topWickets =
-[...dayPlayers].sort((a,b)=>b.wickets-a.wickets)[0];
+[...dayPlayers].sort((a,b)=>Number(b.wickets)-Number(a.wickets))[0];
 
 const topSixes =
-[...dayPlayers].sort((a,b)=>b.sixes-a.sixes)[0];
+[...dayPlayers].sort((a,b)=>Number(b.sixes)-Number(a.sixes))[0];
 
 orangeCount[topRuns.name] =
 (orangeCount[topRuns.name] || 0) + 1;
@@ -1714,19 +1713,26 @@ const sixerWinner =
 Object.keys(sixesCount)
 .sort((a,b)=>sixesCount[b]-sixesCount[a])[0];
 
-document.getElementById("orangeCapKing").innerHTML =
-orangeWinner
-? `${orangeWinner}<br>🏆 ${orangeCount[orangeWinner]} Times`
-: "No Data";
+document.getElementById("trophyTableBody").innerHTML = `
 
-document.getElementById("purpleCapKing").innerHTML =
-purpleWinner
-? `${purpleWinner}<br>🏆 ${purpleCount[purpleWinner]} Times`
-: "No Data";
+<tr>
+<td>🟠 Orange Cap King</td>
+<td>${orangeWinner || "No Data"}</td>
+<td>${orangeWinner ? orangeCount[orangeWinner] : 0}</td>
+</tr>
 
-document.getElementById("sixerKing").innerHTML =
-sixerWinner
-? `${sixerWinner}<br>🏆 ${sixesCount[sixerWinner]} Times`
-: "No Data";
+<tr>
+<td>🟣 Purple Cap King</td>
+<td>${purpleWinner || "No Data"}</td>
+<td>${purpleWinner ? purpleCount[purpleWinner] : 0}</td>
+</tr>
+
+<tr>
+<td>💥 Sixer King</td>
+<td>${sixerWinner || "No Data"}</td>
+<td>${sixerWinner ? sixesCount[sixerWinner] : 0}</td>
+</tr>
+
+`;
 
 }
