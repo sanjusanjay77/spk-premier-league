@@ -1663,14 +1663,14 @@ ball.style.display = "none";
 },3000);
 
 }
-
 function updateTrophyCabinet(){
 
 const orangeCount = {};
 const purpleCount = {};
 const sixesCount = {};
 
-const dates = [...new Set(players.map(p => p.matchDate || p.date))];
+const dates =
+[...new Set(players.map(p => p.matchDate || p.date))];
 
 dates.forEach(date=>{
 
@@ -1682,13 +1682,19 @@ players.filter(p =>
 if(dayPlayers.length === 0) return;
 
 const topRuns =
-[...dayPlayers].sort((a,b)=>Number(b.runs)-Number(a.runs))[0];
+[...dayPlayers].sort((a,b)=>
+Number(b.runs)-Number(a.runs)
+)[0];
 
 const topWickets =
-[...dayPlayers].sort((a,b)=>Number(b.wickets)-Number(a.wickets))[0];
+[...dayPlayers].sort((a,b)=>
+Number(b.wickets)-Number(a.wickets)
+)[0];
 
 const topSixes =
-[...dayPlayers].sort((a,b)=>Number(b.sixes)-Number(a.sixes))[0];
+[...dayPlayers].sort((a,b)=>
+Number(b.sixes)-Number(a.sixes)
+)[0];
 
 orangeCount[topRuns.name] =
 (orangeCount[topRuns.name] || 0) + 1;
@@ -1701,38 +1707,37 @@ sixesCount[topSixes.name] =
 
 });
 
-const orangeWinner =
-Object.keys(orangeCount)
-.sort((a,b)=>orangeCount[b]-orangeCount[a])[0];
+const allPlayers =
+[...new Set(players.map(p => p.name))];
 
-const purpleWinner =
-Object.keys(purpleCount)
-.sort((a,b)=>purpleCount[b]-purpleCount[a])[0];
+let html = "";
 
-const sixerWinner =
-Object.keys(sixesCount)
-.sort((a,b)=>sixesCount[b]-sixesCount[a])[0];
+allPlayers.forEach(player=>{
 
-document.getElementById("trophyTableBody").innerHTML = `
+const orange =
+orangeCount[player] || 0;
 
+const purple =
+purpleCount[player] || 0;
+
+const sixes =
+sixesCount[player] || 0;
+
+const total =
+orange + purple + sixes;
+
+html += `
 <tr>
-<td>🟠 Orange Cap King</td>
-<td>${orangeWinner || "No Data"}</td>
-<td>${orangeWinner ? orangeCount[orangeWinner] : 0}</td>
+<td>👤 ${player}</td>
+<td>🟠 ${orange}</td>
+<td>🟣 ${purple}</td>
+<td>💥 ${sixes}</td>
+<td class="gold-cell">🏆 ${total}</td>
 </tr>
-
-<tr>
-<td>🟣 Purple Cap King</td>
-<td>${purpleWinner || "No Data"}</td>
-<td>${purpleWinner ? purpleCount[purpleWinner] : 0}</td>
-</tr>
-
-<tr>
-<td>💥 Sixer King</td>
-<td>${sixerWinner || "No Data"}</td>
-<td>${sixerWinner ? sixesCount[sixerWinner] : 0}</td>
-</tr>
-
 `;
+
+});
+
+document.getElementById("trophyTableBody").innerHTML = html;
 
 }
