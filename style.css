@@ -2964,14 +2964,14 @@ font-weight:800;
 text-shadow:0 0 12px rgba(0,229,255,.4);
 }
 
-
 .table-wrapper{
 overflow-x:auto;
 -webkit-overflow-scrolling:touch;
+border-radius:12px;
 }
 
 .table-wrapper table{
-min-width:1400px;
+min-width:1200px;
 border-collapse:collapse;
 }
 
@@ -2980,34 +2980,17 @@ border-collapse:collapse;
 white-space:nowrap;
 }
 
-/* Match No */
-.table-wrapper th:nth-child(1),
-.table-wrapper td:nth-child(1){
-position:sticky;
-left:0;
-z-index:3;
-background:#111827;
-}
-
-/* Date */
-.table-wrapper th:nth-child(2),
-.table-wrapper td:nth-child(2){
-position:sticky;
-left:90px;
-z-index:3;
-background:#111827;
-}
-
-/* Player */
+/* Sticky Player Column */
 .table-wrapper th:nth-child(3),
 .table-wrapper td:nth-child(3){
 position:sticky;
-left:190px;
-z-index:3;
+left:0;
 background:#111827;
+z-index:3;
+font-weight:700;
 }
 
-/* Header */
+/* Sticky Header */
 .table-wrapper th{
 position:sticky;
 top:0;
@@ -3015,21 +2998,16 @@ z-index:4;
 background:#00acc1;
 }
 
+/* Mobile */
+@media(max-width:768px){
 
-.table-wrapper th:nth-child(1),
-.table-wrapper td:nth-child(1){
-width:90px;
-min-width:90px;
-}
-
-.table-wrapper th:nth-child(2),
-.table-wrapper td:nth-child(2){
-width:100px;
-min-width:100px;
+.table-wrapper table{
+min-width:1000px;
 }
 
 .table-wrapper th:nth-child(3),
 .table-wrapper td:nth-child(3){
-width:140px;
-min-width:140px;
+min-width:120px;
+}
+
 }
