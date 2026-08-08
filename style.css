@@ -2903,9 +2903,11 @@ text-decoration:none;
 
 .trophy-table-container{
 overflow-x:auto;
-border-radius:20px;
+margin-top:20px;
+border-radius:18px;
 background:#111827;
-box-shadow:0 0 25px rgba(255,215,0,.25);
+border:1px solid rgba(255,255,255,.08);
+box-shadow:0 0 20px rgba(0,229,255,.15);
 }
 
 .trophy-table{
@@ -2915,23 +2917,49 @@ border-collapse:collapse;
 
 .trophy-table th{
 padding:16px;
-background:linear-gradient(90deg,#ff9800,#ff5722);
+background:linear-gradient(90deg,#00bcd4,#0097a7);
+color:white;
 font-size:15px;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:1px;
 }
 
 .trophy-table td{
 padding:14px;
 text-align:center;
-border-bottom:1px solid rgba(255,255,255,.08);
+border-bottom:1px solid rgba(255,255,255,.06);
 font-weight:600;
+color:#e5e7eb;
 }
 
 .trophy-table tr:hover{
-background:rgba(255,255,255,.05);
+background:rgba(0,229,255,.08);
+}
+
+.trophy-table tr:nth-child(1){
+background:rgba(255,215,0,.12);
+}
+
+.trophy-table tr:nth-child(2){
+background:rgba(192,192,192,.08);
+}
+
+.trophy-table tr:nth-child(3){
+background:rgba(205,127,50,.08);
+}
+
+.trophy-table td:first-child{
+font-weight:700;
+color:#ffffff;
 }
 
 .gold-cell{
 color:#FFD700;
-font-weight:bold;
 font-size:18px;
+font-weight:800;
+}
+
+.section-title{
+text-shadow:0 0 12px rgba(0,229,255,.4);
 }
