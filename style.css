@@ -2854,3 +2854,48 @@ left:140%;
 
 }
 
+
+.venue-card{
+background:linear-gradient(135deg,#1e293b,#0f172a);
+padding:20px;
+border-radius:20px;
+text-align:center;
+
+border:1px solid rgba(255,255,255,.08);
+
+box-shadow:
+0 0 15px rgba(0,229,255,.25);
+
+transition:.3s;
+}
+
+.venue-card:hover{
+transform:translateY(-4px);
+}
+
+.venue-card h3{
+color:#00e5ff;
+margin-bottom:10px;
+}
+
+.venue-buttons{
+display:flex;
+gap:10px;
+justify-content:center;
+margin-top:15px;
+flex-wrap:wrap;
+}
+
+.map-btn,
+.weather-btn{
+
+padding:10px 15px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+
+background:#00e5ff;
+color:#000;
+font-weight:700;
+text-decoration:none;
+}
