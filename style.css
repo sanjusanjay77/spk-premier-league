@@ -2965,7 +2965,7 @@ text-shadow:0 0 12px rgba(0,229,255,.4);
 }
 
 
-.leaderboard-container{
+.table-wrapper{
 width:100%;
 overflow-x:auto;
 overflow-y:hidden;
@@ -2973,29 +2973,29 @@ overflow-y:hidden;
 scrollbar-width:thin;
 }
 
-.leaderboard-table{
+.table-wrapper table{
 width:100%;
-min-width:1100px;
+min-width:1400px;
 border-collapse:collapse;
 }
 
-@media (max-width:768px){
+@media(max-width:768px){
 
-.leaderboard-container{
+.table-wrapper{
 overflow-x:auto;
 }
 
-.leaderboard-table{
-min-width:1100px;
+.table-wrapper table{
+min-width:1400px;
 }
 
 }
 
-.leaderboard-container::after{
+.table-wrapper::after{
 content:"← Swipe to view more →";
 display:block;
 text-align:center;
 font-size:12px;
-padding:6px;
-color:#9ca3af;
+padding:5px;
+color:#aaa;
 }
