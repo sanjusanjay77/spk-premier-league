@@ -11,296 +11,376 @@ const playerPhotos = {
 };
 async function loadPlayers() {
 
-try {
+    try {
 
-const response = await fetch(SHEET_URL);
+        const response = await fetch(SHEET_URL);
 
-console.log("Status:", response.status);
+        if (!response.ok) {
+            throw new Error("Google Sheet loading failed");
+        }
 
-const csv = await response.text();
+        const csv = await response.text();
 
-console.log("CSV Data:");
-console.log(csv);
+        const rows = csv.trim().split(/\r?\n/);
 
-const rows = csv.trim().split("\n");
+        players = rows
+            .slice(1)
+            .map(row => {
 
-console.log("Rows found:", rows.length);
+                const cols = row.split(",");
 
-players = rows.slice(1).map(row => {
+                return {
+                    matchNo: cols[0]?.trim() || "",
+                    date: cols[1]?.trim() || "",
+                    name: cols[2]?.trim() || "",
 
-const cols = row.split(",");
+                    runs: Number(cols[3]) || 0,
+                    ballsFaced: Number(cols[4]) || 0,
+                    fours: Number(cols[5]) || 0,
+                    sixes: Number(cols[6]) || 0,
 
-return {
+                    wickets: Number(cols[7]) || 0,
+                    ballsBowled: Number(cols[8]) || 0,
+                    runsConceded: Number(cols[9]) || 0,
+                    sixesGiven: Number(cols[10]) || 0
+                };
 
-matchNo: cols[0],
-date: cols[1],
-name: cols[2],
-runs: Number(cols[3]),
-ballsFaced: Number(cols[4]),
-fours: Number(cols[5]),
-sixes: Number(cols[6]),
-wickets: Number(cols[7]),
-ballsBowled: Number(cols[8]),
-runsConceded: Number(cols[9]),
-sixesGiven: Number(cols[10]),
+            })
+            .filter(p => p.name);
 
-};
 
-});
+        console.log("Players loaded:", players.length);
 
-console.log("Players:", players);
 
-updateDashboard();
-updateRecords();
-generateLeaderboard();
-generateCapHolders();
-generatePlayerCards();
-calculateMVP();
+        /*
+         * Run each section separately.
+         * This prevents one huge JavaScript task.
+         */
 
-generateWinPercentage();
-loadComparisonPlayers();
-generateRecentForm();
-generateHallOfFame();
-generateLatestMatch();
-updateTrophyCabinet();
+        const tasks = [
+
+            () => updateDashboard(),
+
+            () => updateRecords(),
+
+            () => generateLeaderboard(),
+
+            () => generateCapHolders(),
+
+            () => generatePlayerCards(),
+
+            () => calculateMVP(),
+
+            () => generateWinPercentage(),
+
+            () => loadComparisonPlayers(),
+
+            () => generateRecentForm(),
+
+            () => generateHallOfFame(),
+
+            () => generateLatestMatch(),
+
+            () => updateTrophyCabinet()
+
+        ];
+
+
+        let index = 0;
+
+
+        function runNextTask() {
+
+            if (index >= tasks.length) {
+
+                console.log("Dashboard completely loaded");
+
+                return;
+
+            }
+
+
+            try {
+
+                tasks[index]();
+
+            }
+            catch(error) {
+
+                console.error(
+                    "Dashboard section error:",
+                    error
+                );
+
+            }
+
+
+            index++;
+
+
+            /*
+             * Give browser time to render/handle
+             * scrolling and clicking.
+             */
+
+            requestAnimationFrame(runNextTask);
+
+        }
+
+
+        requestAnimationFrame(runNextTask);
+
+
+    }
+    catch(error) {
+
+        console.error(
+            "Google Sheet loading error:",
+            error
+        );
+
+    }
 
 }
-catch(err){
+```javascript
+/* =========================
+   DASHBOARD
+========================= */
 
-console.error("LOAD ERROR:", err);
+function updateDashboard() {
 
+    let totalRuns = 0;
+    let totalWickets = 0;
+    let totalSixes = 0;
+
+    const matches = new Set();
+
+    for (const player of players) {
+
+        totalRuns += Number(player.runs) || 0;
+        totalWickets += Number(player.wickets) || 0;
+        totalSixes += Number(player.sixes) || 0;
+
+        if (player.matchNo) {
+            matches.add(player.matchNo);
+        }
+    }
+
+    document.getElementById("totalRuns").textContent =
+        totalRuns;
+
+    document.getElementById("totalWickets").textContent =
+        totalWickets;
+
+    document.getElementById("totalSixes").textContent =
+        totalSixes;
+
+    document.getElementById("totalMatches").textContent =
+        matches.size;
 }
 
-}
 
-/* Dashboard */
-
-function updateDashboard(){
-
-const totalRuns =
-players.reduce((a,b)=>a+b.runs,0);
-
-const totalWickets =
-players.reduce((a,b)=>a+b.wickets,0);
-
-const totalSixes =
-players.reduce((a,b)=>a+b.sixes,0);
-
-document.getElementById("totalRuns").textContent =
-totalRuns;
-
-document.getElementById("totalWickets").textContent =
-totalWickets;
-
-document.getElementById("totalSixes").textContent =
-totalSixes;
-
-const totalMatches =
-new Set(players.map(player => player.matchNo)).size;
-
-document.getElementById("totalMatches").textContent =
-totalMatches;
-}
-
-/* Records */
+/* =========================
+   RECORDS
+   KEEP ONLY THIS ONE
+========================= */
 
 let orangeCapPlayer = "";
 let purpleCapPlayer = "";
 
-function updateRecords(){
+function updateRecords() {
 
-const totals = {};
+    const totals = {};
 
-players.forEach(player => {
 
-if(!totals[player.name]){
-totals[player.name] = {
-runs:0,
-wickets:0,
-sixes:0,
-fours:0,
-ballsFaced:0,
-ballsBowled:0,
-runsConceded:0,
-sixesGiven:0
-};
-}
+    /* Calculate player totals */
 
-totals[player.name].runs += Number(player.runs || 0);
-totals[player.name].wickets += Number(player.wickets || 0);
-totals[player.name].sixes += Number(player.sixes || 0);
-totals[player.name].fours += Number(player.fours || 0);
+    for (const player of players) {
 
-totals[player.name].ballsFaced += Number(player.ballsFaced || 0);
-totals[player.name].ballsBowled += Number(player.ballsBowled || 0);
+        const name = String(player.name || "").trim();
 
-totals[player.name].runsConceded += Number(player.runsConceded || 0);
-totals[player.name].sixesGiven += Number(player.sixesGiven || 0);
+        if (!name) continue;
 
-});
 
-const playerTotals = Object.entries(totals).map(([name,data]) => {
+        if (!totals[name]) {
 
-const strikeRate =
-data.ballsFaced > 0
-? ((data.runs / data.ballsFaced) * 100)
-: 0;
+            totals[name] = {
 
-const economy =
-data.ballsBowled > 0
-? ((data.runsConceded * 6) / data.ballsBowled)
-: 999;
+                runs: 0,
+                wickets: 0,
+                sixes: 0,
+                fours: 0,
 
-return {
-name:name,
-runs:data.runs,
-wickets:data.wickets,
-sixes:data.sixes,
-fours:data.fours,
-strikeRate:strikeRate,
-economy:economy
-};
+                ballsFaced: 0,
+                ballsBowled: 0,
 
-});
+                runsConceded: 0,
+                sixesGiven: 0
 
-const mostRuns =
-[...playerTotals].sort((a,b)=>b.runs-a.runs)[0];
+            };
 
-const mostWickets =
-[...playerTotals].sort((a,b)=>b.wickets-a.wickets)[0];
+        }
 
-const mostSixes =
-[...playerTotals].sort((a,b)=>b.sixes-a.sixes)[0];
 
-const mostFours =
-[...playerTotals].sort((a,b)=>b.fours-a.fours)[0];
+        const t = totals[name];
 
-const highestSR =
-[...playerTotals].sort((a,b)=>b.strikeRate-a.strikeRate)[0];
 
-const bestEconomy =
-[...playerTotals].sort((a,b)=>a.economy-b.economy)[0];
+        t.runs += Number(player.runs) || 0;
 
-orangeCapPlayer = mostRuns.name;
-purpleCapPlayer = mostWickets.name;
+        t.wickets += Number(player.wickets) || 0;
 
-document.getElementById("mostRuns").innerHTML =
-`${mostRuns.name}<br>${mostRuns.runs}`;
+        t.sixes += Number(player.sixes) || 0;
 
-document.getElementById("mostWickets").innerHTML =
-`${mostWickets.name}<br>${mostWickets.wickets}`;
+        t.fours += Number(player.fours) || 0;
 
-document.getElementById("mostSixes").innerHTML =
-`${mostSixes.name}<br>${mostSixes.sixes}`;
+        t.ballsFaced +=
+            Number(player.ballsFaced) || 0;
 
-document.getElementById("mostFours").innerHTML =
-`${mostFours.name}<br>${mostFours.fours}`;
+        t.ballsBowled +=
+            Number(player.ballsBowled) || 0;
 
-document.getElementById("highestSR").innerHTML =
-`${highestSR.name}<br>${highestSR.strikeRate.toFixed(1)}`;
+        t.runsConceded +=
+            Number(player.runsConceded) || 0;
 
-document.getElementById("bestEconomy").innerHTML =
-`${bestEconomy.name}<br>${bestEconomy.economy.toFixed(2)}`;
+        t.sixesGiven +=
+            Number(player.sixesGiven) || 0;
 
-}
-/* Records */
+    }
 
-function updateRecords(){
 
-const totals = {};
+    const playerTotals =
+        Object.entries(totals).map(
+            ([name, data]) => {
 
-players.forEach(player => {
+                const strikeRate =
+                    data.ballsFaced > 0
+                    ? (data.runs / data.ballsFaced) * 100
+                    : 0;
 
-if(!totals[player.name]){
 
-totals[player.name] = {
-runs:0,
-wickets:0,
-sixes:0,
-fours:0,
-ballsFaced:0,
-ballsBowled:0,
-runsConceded:0,
-sixesGiven:0
-};
+                const economy =
+                    data.ballsBowled > 0
+                    ? (data.runsConceded * 6) /
+                      data.ballsBowled
+                    : 999;
 
-}
 
-totals[player.name].runs += Number(player.runs || 0);
-totals[player.name].wickets += Number(player.wickets || 0);
-totals[player.name].sixes += Number(player.sixes || 0);
-totals[player.name].fours += Number(player.fours || 0);
+                return {
 
-totals[player.name].ballsFaced += Number(player.ballsFaced || 0);
-totals[player.name].ballsBowled += Number(player.ballsBowled || 0);
+                    name: name,
 
-totals[player.name].runsConceded += Number(player.runsConceded || 0);
-totals[player.name].sixesGiven += Number(player.sixesGiven || 0);
+                    runs: data.runs,
 
-});
+                    wickets: data.wickets,
 
-const playerTotals = Object.entries(totals).map(([name,data]) => {
+                    sixes: data.sixes,
 
-const strikeRate =
-data.ballsFaced > 0
-? ((data.runs / data.ballsFaced) * 100).toFixed(1)
-: 0;
+                    fours: data.fours,
 
-const economy =
-data.ballsBowled > 0
-? ((data.runsConceded * 6) / data.ballsBowled).toFixed(2)
-: 999;
+                    sixesGiven: data.sixesGiven,
 
-return{
-name:name,
-runs:data.runs,
-wickets:data.wickets,
-sixes:data.sixes,
-fours:data.fours,
-sixesGiven:data.sixesGiven,
-strikeRate:Number(strikeRate),
-economy:Number(economy)
-};
+                    strikeRate: strikeRate,
 
-});
+                    economy: economy
 
-const mostRuns =
-[...playerTotals].sort((a,b)=>b.runs-a.runs)[0];
+                };
 
-const mostWickets =
-[...playerTotals].sort((a,b)=>b.wickets-a.wickets)[0];
+            }
+        );
 
-const mostSixes =
-[...playerTotals].sort((a,b)=>b.sixes-a.sixes)[0];
 
-const mostFours =
-[...playerTotals].sort((a,b)=>b.fours-a.fours)[0];
+    if (!playerTotals.length) return;
 
-const highestSR =
-[...playerTotals].sort((a,b)=>b.strikeRate-a.strikeRate)[0];
 
-const bestEconomy =
-[...playerTotals].sort((a,b)=>a.economy-b.economy)[0];
+    /*
+     * Find records without repeatedly sorting
+     */
 
-document.getElementById("mostRuns").innerHTML =
-`${mostRuns.name}<br>${mostRuns.runs}`;
+    let mostRuns = playerTotals[0];
 
-document.getElementById("mostWickets").innerHTML =
-`${mostWickets.name}<br>${mostWickets.wickets}`;
+    let mostWickets = playerTotals[0];
 
-document.getElementById("mostSixes").innerHTML =
-`${mostSixes.name}<br>${mostSixes.sixes}`;
+    let mostSixes = playerTotals[0];
 
-document.getElementById("mostFours").innerHTML =
-`${mostFours.name}<br>${mostFours.fours}`;
+    let mostFours = playerTotals[0];
 
-document.getElementById("highestSR").innerHTML =
-`${highestSR.name}<br>${highestSR.strikeRate}`;
+    let highestSR = playerTotals[0];
 
-document.getElementById("bestEconomy").innerHTML =
-`${bestEconomy.name}<br>${bestEconomy.economy}`;
+    let bestEconomy = playerTotals[0];
+
+
+    for (let i = 1; i < playerTotals.length; i++) {
+
+        const player = playerTotals[i];
+
+
+        if (player.runs > mostRuns.runs) {
+            mostRuns = player;
+        }
+
+
+        if (player.wickets > mostWickets.wickets) {
+            mostWickets = player;
+        }
+
+
+        if (player.sixes > mostSixes.sixes) {
+            mostSixes = player;
+        }
+
+
+        if (player.fours > mostFours.fours) {
+            mostFours = player;
+        }
+
+
+        if (player.strikeRate > highestSR.strikeRate) {
+            highestSR = player;
+        }
+
+
+        if (player.economy < bestEconomy.economy) {
+            bestEconomy = player;
+        }
+
+    }
+
+
+    /* Cap holders */
+
+    orangeCapPlayer = mostRuns.name;
+
+    purpleCapPlayer = mostWickets.name;
+
+
+    /* Update Records UI */
+
+    document.getElementById("mostRuns").innerHTML =
+        `${mostRuns.name}<br>${mostRuns.runs}`;
+
+
+    document.getElementById("mostWickets").innerHTML =
+        `${mostWickets.name}<br>${mostWickets.wickets}`;
+
+
+    document.getElementById("mostSixes").innerHTML =
+        `${mostSixes.name}<br>${mostSixes.sixes}`;
+
+
+    document.getElementById("mostFours").innerHTML =
+        `${mostFours.name}<br>${mostFours.fours}`;
+
+
+    document.getElementById("highestSR").innerHTML =
+        `${highestSR.name}<br>${highestSR.strikeRate.toFixed(1)}`;
+
+
+    document.getElementById("bestEconomy").innerHTML =
+        `${bestEconomy.name}<br>${bestEconomy.economy.toFixed(2)}`;
 
 }
+```
+
 /* MVP */
 function calculateMVP(){
 
@@ -985,73 +1065,229 @@ document.getElementById(
 `;
 
 }
-function generateCapHolders(){
+```javascript
+function generateCapHolders() {
 
-const totals = {};
+    const totals = {};
 
-players.forEach(player=>{
 
-if(!totals[player.name]){
+    /* =========================
+       CALCULATE PLAYER TOTALS
+    ========================= */
 
-totals[player.name] = {
+    players.forEach(player => {
 
-runs:0,
-wickets:0,
-photo:playerPhotos[player.name]
+        const name =
+            String(player.name || "").trim();
 
-};
+        if (!name) return;
+
+
+        if (!totals[name]) {
+
+            totals[name] = {
+
+                runs: 0,
+
+                wickets: 0,
+
+                photo:
+                    playerPhotos[name] || ""
+
+            };
+
+        }
+
+
+        totals[name].runs +=
+            Number(player.runs) || 0;
+
+        totals[name].wickets +=
+            Number(player.wickets) || 0;
+
+    });
+
+
+    const allPlayers =
+        Object.entries(totals);
+
+
+    if (!allPlayers.length) return;
+
+
+    /* =========================
+       ORANGE CAP
+       FIND HIGHEST RUNS
+    ========================= */
+
+    const highestRuns =
+        Math.max(
+            ...allPlayers.map(
+                ([name, data]) => data.runs
+            )
+        );
+
+
+    const orangeHolders =
+        allPlayers.filter(
+            ([name, data]) =>
+                data.runs === highestRuns
+        );
+
+
+    /* =========================
+       PURPLE CAP
+       FIND HIGHEST WICKETS
+    ========================= */
+
+    const highestWickets =
+        Math.max(
+            ...allPlayers.map(
+                ([name, data]) => data.wickets
+            )
+        );
+
+
+    const purpleHolders =
+        allPlayers.filter(
+            ([name, data]) =>
+                data.wickets === highestWickets
+        );
+
+
+    /* =========================
+       ORANGE CAP DISPLAY
+    ========================= */
+
+    const orangePhoto =
+        document.getElementById(
+            "orangeCapPhoto"
+        );
+
+    const orangeName =
+        document.getElementById(
+            "orangeCapName"
+        );
+
+    const orangeRuns =
+        document.getElementById(
+            "orangeCapRuns"
+        );
+
+
+    if (orangeHolders.length === 1) {
+
+        orangePhoto.src =
+            orangeHolders[0][1].photo;
+
+        orangePhoto.style.display =
+            "block";
+
+    }
+    else {
+
+        /*
+         * More than one player tied.
+         * Hide single-player photo so
+         * one player is not shown as
+         * the only cap holder.
+         */
+
+        orangePhoto.style.display =
+            "none";
+
+    }
+
+
+    orangeName.innerHTML =
+        orangeHolders
+            .map(
+                ([name]) => name
+            )
+            .join(" & ");
+
+
+    orangeRuns.innerHTML =
+        highestRuns + " Runs";
+
+
+    /* =========================
+       PURPLE CAP DISPLAY
+    ========================= */
+
+    const purplePhoto =
+        document.getElementById(
+            "purpleCapPhoto"
+        );
+
+    const purpleName =
+        document.getElementById(
+            "purpleCapName"
+        );
+
+    const purpleWickets =
+        document.getElementById(
+            "purpleCapWickets"
+        );
+
+
+    if (purpleHolders.length === 1) {
+
+        purplePhoto.src =
+            purpleHolders[0][1].photo;
+
+        purplePhoto.style.display =
+            "block";
+
+    }
+    else {
+
+        /*
+         * More than one player tied.
+         */
+
+        purplePhoto.style.display =
+            "none";
+
+    }
+
+
+    purpleName.innerHTML =
+        purpleHolders
+            .map(
+                ([name]) => name
+            )
+            .join(" & ");
+
+
+    purpleWickets.innerHTML =
+        highestWickets + " Wickets";
+
+
+    /* =========================
+       GLOBAL CAP HOLDERS
+       USED BY OTHER FUNCTIONS
+    ========================= */
+
+    orangeCapPlayer =
+        orangeHolders
+            .map(
+                ([name]) => name
+            )
+            .join(" & ");
+
+
+    purpleCapPlayer =
+        purpleHolders
+            .map(
+                ([name]) => name
+            )
+            .join(" & ");
 
 }
+```
 
-totals[player.name].runs += player.runs;
 
-totals[player.name].wickets += player.wickets;
-
-});
-
-/* Orange Cap */
-
-const orangeCap =
-Object.entries(totals)
-.sort((a,b)=>b[1].runs-a[1].runs)[0];
-
-/* Purple Cap */
-
-const purpleCap =
-Object.entries(totals)
-.sort((a,b)=>b[1].wickets-a[1].wickets)[0];
-
-document.getElementById(
-"orangeCapPhoto"
-).src =
-orangeCap[1].photo;
-
-document.getElementById(
-"orangeCapName"
-).innerHTML =
-orangeCap[0];
-
-document.getElementById(
-"orangeCapRuns"
-).innerHTML =
-orangeCap[1].runs + " Runs";
-
-document.getElementById(
-"purpleCapPhoto"
-).src =
-purpleCap[1].photo;
-
-document.getElementById(
-"purpleCapName"
-).innerHTML =
-purpleCap[0];
-
-document.getElementById(
-"purpleCapWickets"
-).innerHTML =
-purpleCap[1].wickets + " Wickets";
-
-}
 function generateHallOfFame(){
 
 /* Highest Score */
