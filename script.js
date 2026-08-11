@@ -687,7 +687,6 @@ function setHTML(id, value) {
 
 function generateCapHolders() {
 
-```
 const totals = {};
 
 // Calculate tournament totals
@@ -994,7 +993,6 @@ purpleCapPlayer =
             return entry[0];
         })
         .join(" & ");
-```
 
 }
 
@@ -3414,7 +3412,7 @@ function logoHit() {
 
 function updateTrophyCabinet() {
 
-```
+
 const orangeWins = {};
 const purpleWins = {};
 const sixerWins = {};
@@ -3739,7 +3737,6 @@ if (table) {
     table.innerHTML = html;
 
 }
-```
 
 }
 
