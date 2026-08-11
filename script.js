@@ -1663,17 +1663,15 @@ ball.style.display = "none";
 },3000);
 
 }
-function updateTrophyCabinet(){
+
+function updateTrophyCabinet() {
 
     const orangeWins = {};
     const purpleWins = {};
     const sixerWins = {};
 
-    /*
-      Convert different possible date formats
-      into one common date key.
-    */
-    function getDateKey(player){
+    /* Get one consistent date value */
+    function getDateKey(player) {
 
         const rawDate =
             player.matchDate ||
@@ -1681,64 +1679,51 @@ function updateTrophyCabinet(){
             player.Date ||
             player.MatchDate;
 
-        if(!rawDate) return null;
+        if (!rawDate) return null;
 
         const d = new Date(rawDate);
 
-        if(!isNaN(d.getTime())){
-
+        if (!isNaN(d.getTime())) {
             return d.toISOString().split("T")[0];
-
         }
 
         return String(rawDate).trim();
-
     }
 
 
-    /*
-      Get every unique playing date
-    */
+    /* Get all unique dates */
     const dates = [
         ...new Set(
             players
-            .map(player => getDateKey(player))
-            .filter(date => date)
+                .map(player => getDateKey(player))
+                .filter(date => date)
         )
     ];
 
 
-    /*
-      Process ONE COMPLETE DATE at a time
-    */
+    /* Calculate awards for every complete date */
     dates.forEach(date => {
 
         const dayTotals = {};
 
-
         players.forEach(player => {
 
-            if(getDateKey(player) !== date)
-                return;
+            if (getDateKey(player) !== date) return;
 
+            const name =
+                String(player.name || "").trim();
 
-            const name = String(player.name || "").trim();
+            if (!name) return;
 
-            if(!name) return;
-
-
-            if(!dayTotals[name]){
+            if (!dayTotals[name]) {
 
                 dayTotals[name] = {
-
                     runs: 0,
                     wickets: 0,
                     sixes: 0
-
                 };
 
             }
-
 
             dayTotals[name].runs +=
                 Number(player.runs) || 0;
@@ -1752,18 +1737,15 @@ function updateTrophyCabinet(){
         });
 
 
-        const names =
-            Object.keys(dayTotals);
+        const names = Object.keys(dayTotals);
+
+        if (!names.length) return;
 
 
-        if(names.length === 0)
-            return;
-
-
-        /*
-          ORANGE CAP
-          Highest TOTAL RUNS on this date
-        */
+        /* =========================
+           ORANGE CAP
+           Highest runs on that date
+        ========================= */
 
         const highestRuns =
             Math.max(
@@ -1772,18 +1754,27 @@ function updateTrophyCabinet(){
                 )
             );
 
+        if (highestRuns > 0) {
 
-        const orangeWinners =
-            names.filter(
-                name =>
-                    dayTotals[name].runs === highestRuns
-            );
+            names
+                .filter(
+                    name =>
+                        dayTotals[name].runs === highestRuns
+                )
+                .forEach(name => {
+
+                    orangeWins[name] =
+                        (orangeWins[name] || 0) + 1;
+
+                });
+
+        }
 
 
-        /*
-          PURPLE CAP
-          Highest TOTAL WICKETS on this date
-        */
+        /* =========================
+           PURPLE CAP
+           Highest wickets on that date
+        ========================= */
 
         const highestWickets =
             Math.max(
@@ -1792,18 +1783,27 @@ function updateTrophyCabinet(){
                 )
             );
 
+        if (highestWickets > 0) {
 
-        const purpleWinners =
-            names.filter(
-                name =>
-                    dayTotals[name].wickets === highestWickets
-            );
+            names
+                .filter(
+                    name =>
+                        dayTotals[name].wickets === highestWickets
+                )
+                .forEach(name => {
+
+                    purpleWins[name] =
+                        (purpleWins[name] || 0) + 1;
+
+                });
+
+        }
 
 
-        /*
-          SIXER KING
-          Highest TOTAL SIXES on this date
-        */
+        /* =========================
+           SIXER KING
+           Highest sixes on that date
+        ========================= */
 
         const highestSixes =
             Math.max(
@@ -1812,77 +1812,39 @@ function updateTrophyCabinet(){
                 )
             );
 
+        if (highestSixes > 0) {
 
-        const sixerWinners =
-            names.filter(
-                name =>
-                    dayTotals[name].sixes === highestSixes
-            );
+            names
+                .filter(
+                    name =>
+                        dayTotals[name].sixes === highestSixes
+                )
+                .forEach(name => {
 
+                    sixerWins[name] =
+                        (sixerWins[name] || 0) + 1;
 
-        /*
-          Don't award a trophy when everyone
-          has zero for that category.
-        */
-
-        if(highestRuns > 0){
-
-            orangeWinners.forEach(name => {
-
-                orangeWins[name] =
-                    (orangeWins[name] || 0) + 1;
-
-            });
-
-        }
-
-
-        if(highestWickets > 0){
-
-            purpleWinners.forEach(name => {
-
-                purpleWins[name] =
-                    (purpleWins[name] || 0) + 1;
-
-            });
-
-        }
-
-
-        if(highestSixes > 0){
-
-            sixerWinners.forEach(name => {
-
-                sixerWins[name] =
-                    (sixerWins[name] || 0) + 1;
-
-            });
+                });
 
         }
 
     });
 
 
-    /*
-      Display every player
-    */
-
+    /* Get all players */
     const allPlayers = [
         ...new Set(
             players
-            .map(player =>
-                String(player.name || "").trim()
-            )
-            .filter(name => name)
+                .map(player =>
+                    String(player.name || "").trim()
+                )
+                .filter(name => name)
         )
     ];
 
 
-    /*
-      Sort players by total trophies
-    */
-
-    allPlayers.sort((a,b) => {
+    /* Sort by total trophies */
+    allPlayers.sort((a, b) => {
 
         const totalA =
             (orangeWins[a] || 0) +
@@ -1899,10 +1861,19 @@ function updateTrophyCabinet(){
     });
 
 
+    /* =========================
+       CREATE TABLE
+    ========================= */
+
     let html = "";
 
+    let totalOrange = 0;
+    let totalPurple = 0;
+    let totalSixes = 0;
+    let totalTrophies = 0;
 
-    allPlayers.forEach((name,index) => {
+
+    allPlayers.forEach(name => {
 
         const orange =
             orangeWins[name] || 0;
@@ -1919,51 +1890,78 @@ function updateTrophyCabinet(){
             sixes;
 
 
+        totalOrange += orange;
+        totalPurple += purple;
+        totalSixes += sixes;
+        totalTrophies += total;
+
+
         html += `
+            <tr>
 
-        <tr>
+                <td class="trophy-player">
+                    ${name}
+                </td>
 
-            <td>
-                ${index + 1}
-            </td>
+                <td class="orange-count">
+                    ${orange}
+                </td>
 
-            <td class="trophy-player">
-                ${name}
-            </td>
+                <td class="purple-count">
+                    ${purple}
+                </td>
 
-            <td class="orange-count">
-                ${orange}
-            </td>
+                <td class="sixes-count">
+                    ${sixes}
+                </td>
 
-            <td class="purple-count">
-                ${purple}
-            </td>
+                <td class="total-trophies">
+                    ${total}
+                </td>
 
-            <td class="sixes-count">
-                ${sixes}
-            </td>
-
-            <td class="total-trophies">
-                ${total}
-            </td>
-
-        </tr>
-
+            </tr>
         `;
 
     });
 
 
+    /* =========================
+       GRAND TOTAL
+    ========================= */
+
+    html += `
+        <tr class="trophy-total-row">
+
+            <td>
+                <strong>TOTAL</strong>
+            </td>
+
+            <td>
+                <strong>${totalOrange}</strong>
+            </td>
+
+            <td>
+                <strong>${totalPurple}</strong>
+            </td>
+
+            <td>
+                <strong>${totalSixes}</strong>
+            </td>
+
+            <td>
+                <strong>${totalTrophies}</strong>
+            </td>
+
+        </tr>
+    `;
+
+
+    /* Display */
     const table =
-        document.getElementById(
-            "trophyTableBody"
-        );
+        document.getElementById("trophyTableBody");
 
-
-    if(table){
-
+    if (table) {
         table.innerHTML = html;
-
     }
 
 }
