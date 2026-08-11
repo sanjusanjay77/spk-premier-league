@@ -261,6 +261,127 @@ async function loadPlayers() {
 }
 
 
+function generateLeaderboard() {
+
+```
+const tableBody =
+    document.getElementById("leaderboardBody");
+
+if (!tableBody) {
+    console.warn("leaderboardBody element not found");
+    return;
+}
+
+let html = "";
+
+players.forEach(function(player) {
+
+    const runs =
+        Number(player.runs) || 0;
+
+    const ballsFaced =
+        Number(player.ballsFaced) || 0;
+
+    const fours =
+        Number(player.fours) || 0;
+
+    const sixes =
+        Number(player.sixes) || 0;
+
+    const wickets =
+        Number(player.wickets) || 0;
+
+    const runsConceded =
+        Number(player.runsConceded) || 0;
+
+    const ballsBowled =
+        Number(player.ballsBowled) || 0;
+
+    const sixesGiven =
+        Number(player.sixesGiven) || 0;
+
+    const strikeRate =
+        ballsFaced > 0
+            ? ((runs / ballsFaced) * 100).toFixed(1)
+            : "-";
+
+    const economy =
+        ballsBowled > 0
+            ? ((runsConceded * 6) / ballsBowled).toFixed(2)
+            : "-";
+
+    html += `
+        <tr>
+
+            <td>
+                ${player.matchNo || "-"}
+            </td>
+
+            <td>
+                ${player.date || "-"}
+            </td>
+
+            <td
+                onclick="openPlayer('${player.name.replace(/'/g, "\\'")}')"
+                style="
+                    cursor:pointer;
+                    color:#00D4FF;
+                    font-weight:bold;
+                "
+            >
+                ${player.name}
+            </td>
+
+            <td>
+                ${runs}
+            </td>
+
+            <td>
+                ${ballsFaced}
+            </td>
+
+            <td>
+                ${sixes}
+            </td>
+
+            <td>
+                ${fours}
+            </td>
+
+            <td>
+                ${strikeRate}
+            </td>
+
+            <td>
+                ${wickets}
+            </td>
+
+            <td>
+                ${runsConceded}
+            </td>
+
+            <td>
+                ${ballsBowled}
+            </td>
+
+            <td>
+                ${sixesGiven}
+            </td>
+
+            <td>
+                ${economy}
+            </td>
+
+        </tr>
+    `;
+});
+
+tableBody.innerHTML = html;
+```
+
+}
+
+
 /* =========================================================
    GET PLAYER TOTALS
    ========================================================= */
