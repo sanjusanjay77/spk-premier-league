@@ -142,7 +142,8 @@ async function loadPlayers() {
     }
 
 }
-```javascript
+
+
 function generateCapHolders() {
 
     const totals = {};
@@ -163,48 +164,71 @@ function generateCapHolders() {
 
         totals[name].runs += Number(player.runs) || 0;
         totals[name].wickets += Number(player.wickets) || 0;
+
     });
 
 
-    const entries = Object.entries(totals);
+    const names = Object.keys(totals);
 
-    if (entries.length === 0) {
+    if (names.length === 0) {
         return;
     }
 
 
     /* =========================
+       FIND HIGHEST RUNS
+    ========================= */
+
+    let highestRuns = 0;
+
+    names.forEach(function(name) {
+
+        if (totals[name].runs > highestRuns) {
+            highestRuns = totals[name].runs;
+        }
+
+    });
+
+
+    /* =========================
+       FIND ALL ORANGE HOLDERS
+    ========================= */
+
+    const orangeHolders = names.filter(function(name) {
+
+        return totals[name].runs === highestRuns;
+
+    });
+
+
+    /* =========================
+       FIND HIGHEST WICKETS
+    ========================= */
+
+    let highestWickets = 0;
+
+    names.forEach(function(name) {
+
+        if (totals[name].wickets > highestWickets) {
+            highestWickets = totals[name].wickets;
+        }
+
+    });
+
+
+    /* =========================
+       FIND ALL PURPLE HOLDERS
+    ========================= */
+
+    const purpleHolders = names.filter(function(name) {
+
+        return totals[name].wickets === highestWickets;
+
+    });
+
+
+    /* =========================
        ORANGE CAP
-    ========================= */
-
-    const highestRuns = Math.max(
-        ...entries.map(function(entry) {
-            return entry[1].runs;
-        })
-    );
-
-    const orangeHolders = entries.filter(function(entry) {
-        return entry[1].runs === highestRuns;
-    });
-
-
-    /* =========================
-       PURPLE CAP
-    ========================= */
-
-    const highestWickets = Math.max(
-        ...entries.map(function(entry) {
-            return entry[1].wickets;
-        })
-    );
-
-    const purpleHolders = entries.filter(function(entry) {
-        return entry[1].wickets === highestWickets;
-    });
-
-
-    /* =========================
-       ORANGE CAP DISPLAY
     ========================= */
 
     const orangePhoto =
@@ -220,22 +244,19 @@ function generateCapHolders() {
     if (orangeHolders.length === 1) {
 
         orangePhoto.src =
-            orangeHolders[0][1].photo;
+            totals[orangeHolders[0]].photo;
 
         orangePhoto.style.display = "block";
 
     } else {
 
         orangePhoto.style.display = "none";
+
     }
 
 
     orangeName.innerHTML =
-        orangeHolders
-            .map(function(entry) {
-                return entry[0];
-            })
-            .join(" & ");
+        orangeHolders.join(" & ");
 
 
     orangeRuns.innerHTML =
@@ -243,7 +264,7 @@ function generateCapHolders() {
 
 
     /* =========================
-       PURPLE CAP DISPLAY
+       PURPLE CAP
     ========================= */
 
     const purplePhoto =
@@ -259,22 +280,19 @@ function generateCapHolders() {
     if (purpleHolders.length === 1) {
 
         purplePhoto.src =
-            purpleHolders[0][1].photo;
+            totals[purpleHolders[0]].photo;
 
         purplePhoto.style.display = "block";
 
     } else {
 
         purplePhoto.style.display = "none";
+
     }
 
 
     purpleName.innerHTML =
-        purpleHolders
-            .map(function(entry) {
-                return entry[0];
-            })
-            .join(" & ");
+        purpleHolders.join(" & ");
 
 
     purpleWickets.innerHTML =
@@ -282,25 +300,18 @@ function generateCapHolders() {
 
 
     /* =========================
-       SAVE CAP HOLDER NAMES
+       SAVE HOLDERS
     ========================= */
 
     orangeCapPlayer =
-        orangeHolders
-            .map(function(entry) {
-                return entry[0];
-            })
-            .join(" & ");
-
+        orangeHolders.join(" & ");
 
     purpleCapPlayer =
-        purpleHolders
-            .map(function(entry) {
-                return entry[0];
-            })
-            .join(" & ");
+        purpleHolders.join(" & ");
+
 }
 ```
+
 
 
 /* MVP */
