@@ -1665,79 +1665,305 @@ ball.style.display = "none";
 }
 function updateTrophyCabinet(){
 
-const orangeCount = {};
-const purpleCount = {};
-const sixesCount = {};
+    const orangeWins = {};
+    const purpleWins = {};
+    const sixerWins = {};
 
-const dates =
-[...new Set(players.map(p => p.matchDate || p.date))];
+    /*
+      Convert different possible date formats
+      into one common date key.
+    */
+    function getDateKey(player){
 
-dates.forEach(date=>{
+        const rawDate =
+            player.matchDate ||
+            player.date ||
+            player.Date ||
+            player.MatchDate;
 
-const dayPlayers =
-players.filter(p =>
-(p.matchDate || p.date) === date
-);
+        if(!rawDate) return null;
 
-if(dayPlayers.length === 0) return;
+        const d = new Date(rawDate);
 
-const topRuns =
-[...dayPlayers].sort((a,b)=>
-Number(b.runs)-Number(a.runs)
-)[0];
+        if(!isNaN(d.getTime())){
 
-const topWickets =
-[...dayPlayers].sort((a,b)=>
-Number(b.wickets)-Number(a.wickets)
-)[0];
+            return d.toISOString().split("T")[0];
 
-const topSixes =
-[...dayPlayers].sort((a,b)=>
-Number(b.sixes)-Number(a.sixes)
-)[0];
+        }
 
-orangeCount[topRuns.name] =
-(orangeCount[topRuns.name] || 0) + 1;
+        return String(rawDate).trim();
 
-purpleCount[topWickets.name] =
-(purpleCount[topWickets.name] || 0) + 1;
+    }
 
-sixesCount[topSixes.name] =
-(sixesCount[topSixes.name] || 0) + 1;
 
-});
+    /*
+      Get every unique playing date
+    */
+    const dates = [
+        ...new Set(
+            players
+            .map(player => getDateKey(player))
+            .filter(date => date)
+        )
+    ];
 
-const allPlayers =
-[...new Set(players.map(p => p.name))];
 
-let html = "";
+    /*
+      Process ONE COMPLETE DATE at a time
+    */
+    dates.forEach(date => {
 
-allPlayers.forEach(player=>{
+        const dayTotals = {};
 
-const orange =
-orangeCount[player] || 0;
 
-const purple =
-purpleCount[player] || 0;
+        players.forEach(player => {
 
-const sixes =
-sixesCount[player] || 0;
+            if(getDateKey(player) !== date)
+                return;
 
-const total =
-orange + purple + sixes;
 
-html += `
-<tr>
-<td> ${player}</td>
-<td> ${orange}</td>
-<td> ${purple}</td>
-<td> ${sixes}</td>
-<td class="gold-cell">🏆 ${total}</td>
-</tr>
-`;
+            const name = String(player.name || "").trim();
 
-});
+            if(!name) return;
 
-document.getElementById("trophyTableBody").innerHTML = html;
+
+            if(!dayTotals[name]){
+
+                dayTotals[name] = {
+
+                    runs: 0,
+                    wickets: 0,
+                    sixes: 0
+
+                };
+
+            }
+
+
+            dayTotals[name].runs +=
+                Number(player.runs) || 0;
+
+            dayTotals[name].wickets +=
+                Number(player.wickets) || 0;
+
+            dayTotals[name].sixes +=
+                Number(player.sixes) || 0;
+
+        });
+
+
+        const names =
+            Object.keys(dayTotals);
+
+
+        if(names.length === 0)
+            return;
+
+
+        /*
+          ORANGE CAP
+          Highest TOTAL RUNS on this date
+        */
+
+        const highestRuns =
+            Math.max(
+                ...names.map(
+                    name => dayTotals[name].runs
+                )
+            );
+
+
+        const orangeWinners =
+            names.filter(
+                name =>
+                    dayTotals[name].runs === highestRuns
+            );
+
+
+        /*
+          PURPLE CAP
+          Highest TOTAL WICKETS on this date
+        */
+
+        const highestWickets =
+            Math.max(
+                ...names.map(
+                    name => dayTotals[name].wickets
+                )
+            );
+
+
+        const purpleWinners =
+            names.filter(
+                name =>
+                    dayTotals[name].wickets === highestWickets
+            );
+
+
+        /*
+          SIXER KING
+          Highest TOTAL SIXES on this date
+        */
+
+        const highestSixes =
+            Math.max(
+                ...names.map(
+                    name => dayTotals[name].sixes
+                )
+            );
+
+
+        const sixerWinners =
+            names.filter(
+                name =>
+                    dayTotals[name].sixes === highestSixes
+            );
+
+
+        /*
+          Don't award a trophy when everyone
+          has zero for that category.
+        */
+
+        if(highestRuns > 0){
+
+            orangeWinners.forEach(name => {
+
+                orangeWins[name] =
+                    (orangeWins[name] || 0) + 1;
+
+            });
+
+        }
+
+
+        if(highestWickets > 0){
+
+            purpleWinners.forEach(name => {
+
+                purpleWins[name] =
+                    (purpleWins[name] || 0) + 1;
+
+            });
+
+        }
+
+
+        if(highestSixes > 0){
+
+            sixerWinners.forEach(name => {
+
+                sixerWins[name] =
+                    (sixerWins[name] || 0) + 1;
+
+            });
+
+        }
+
+    });
+
+
+    /*
+      Display every player
+    */
+
+    const allPlayers = [
+        ...new Set(
+            players
+            .map(player =>
+                String(player.name || "").trim()
+            )
+            .filter(name => name)
+        )
+    ];
+
+
+    /*
+      Sort players by total trophies
+    */
+
+    allPlayers.sort((a,b) => {
+
+        const totalA =
+            (orangeWins[a] || 0) +
+            (purpleWins[a] || 0) +
+            (sixerWins[a] || 0);
+
+        const totalB =
+            (orangeWins[b] || 0) +
+            (purpleWins[b] || 0) +
+            (sixerWins[b] || 0);
+
+        return totalB - totalA;
+
+    });
+
+
+    let html = "";
+
+
+    allPlayers.forEach((name,index) => {
+
+        const orange =
+            orangeWins[name] || 0;
+
+        const purple =
+            purpleWins[name] || 0;
+
+        const sixes =
+            sixerWins[name] || 0;
+
+        const total =
+            orange +
+            purple +
+            sixes;
+
+
+        html += `
+
+        <tr>
+
+            <td>
+                ${index + 1}
+            </td>
+
+            <td class="trophy-player">
+                ${name}
+            </td>
+
+            <td class="orange-count">
+                ${orange}
+            </td>
+
+            <td class="purple-count">
+                ${purple}
+            </td>
+
+            <td class="sixes-count">
+                ${sixes}
+            </td>
+
+            <td class="total-trophies">
+                ${total}
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+
+    const table =
+        document.getElementById(
+            "trophyTableBody"
+        );
+
+
+    if(table){
+
+        table.innerHTML = html;
+
+    }
 
 }
