@@ -685,321 +685,316 @@ function setHTML(id, value) {
 }
 
 
-/* =========================================================
-   ORANGE CAP + PURPLE CAP
-   TIE SUPPORT
-   ========================================================= */
-
 function generateCapHolders() {
 
-    const totals =
-        getPlayerTotals();
+```
+const totals = {};
 
+// Calculate tournament totals
+players.forEach(function(player) {
 
-    if (!totals.length) {
+    const name = String(player.name || "").trim();
+
+    if (!name) {
         return;
     }
 
-
-    /* =========================================
-       ORANGE CAP
-       ========================================= */
-
-    const highestRuns =
-        Math.max.apply(
-            null,
-            totals.map(function(player) {
-                return player.runs;
-            })
-        );
-
-
-    const orangeHolders =
-        totals.filter(function(player) {
-
-            return player.runs === highestRuns;
-
-        });
-
-
-    /* =========================================
-       PURPLE CAP
-       ========================================= */
-
-    const highestWickets =
-        Math.max.apply(
-            null,
-            totals.map(function(player) {
-                return player.wickets;
-            })
-        );
-
-
-    const purpleHolders =
-        totals.filter(function(player) {
-
-            return player.wickets === highestWickets;
-
-        });
-
-
-    /* =========================================
-       ORANGE CAP DISPLAY
-       ========================================= */
-
-    const orangePhoto =
-        document.getElementById(
-            "orangeCapPhoto"
-        );
-
-
-    const orangeName =
-        document.getElementById(
-            "orangeCapName"
-        );
-
-
-    const orangeRuns =
-        document.getElementById(
-            "orangeCapRuns"
-        );
-
-
-    if (orangeName) {
-
-        orangeName.innerHTML =
-            orangeHolders
-                .map(function(player) {
-                    return player.name;
-                })
-                .join(" & ");
-
+    if (!totals[name]) {
+        totals[name] = {
+            runs: 0,
+            wickets: 0,
+            photo: playerPhotos[name] || ""
+        };
     }
 
+    totals[name].runs += Number(player.runs) || 0;
+    totals[name].wickets += Number(player.wickets) || 0;
 
-    if (orangeRuns) {
+});
 
-        orangeRuns.innerHTML =
-            highestRuns +
-            " Runs";
+const allPlayers = Object.entries(totals);
 
+if (allPlayers.length === 0) {
+    return;
+}
+
+
+// ==========================================
+// ORANGE CAP - HIGHEST RUNS
+// ==========================================
+
+const highestRuns = Math.max(
+    ...allPlayers.map(function(entry) {
+        return entry[1].runs;
+    })
+);
+
+const orangeHolders = allPlayers.filter(function(entry) {
+    return entry[1].runs === highestRuns;
+});
+
+
+// ==========================================
+// PURPLE CAP - HIGHEST WICKETS
+// ==========================================
+
+const highestWickets = Math.max(
+    ...allPlayers.map(function(entry) {
+        return entry[1].wickets;
+    })
+);
+
+const purpleHolders = allPlayers.filter(function(entry) {
+    return entry[1].wickets === highestWickets;
+});
+
+
+// ==========================================
+// ORANGE CAP ELEMENTS
+// ==========================================
+
+const orangePhoto = document.getElementById("orangeCapPhoto");
+const orangeName = document.getElementById("orangeCapName");
+const orangeRuns = document.getElementById("orangeCapRuns");
+
+
+// Create holder photos
+if (orangePhoto) {
+
+    if (orangeHolders.length === 1) {
+
+        orangePhoto.src = orangeHolders[0][1].photo;
+        orangePhoto.style.display = "block";
+
+    } else {
+
+        orangePhoto.style.display = "none";
     }
+}
 
 
-    /*
-       If only one player holds the cap,
-       show their photo.
+// Names
+if (orangeName) {
 
-       If two or more players are tied,
-       hide the single-player photo so
-       one player is not incorrectly shown
-       as the only cap holder.
-    */
+    orangeName.innerHTML = orangeHolders
+        .map(function(entry) {
+            return entry[0];
+        })
+        .join(" & ");
+
+}
+
+
+// Runs
+if (orangeRuns) {
+
+    orangeRuns.textContent =
+        highestRuns + " Runs";
+
+}
+
+
+// ==========================================
+// CREATE MULTIPLE ORANGE CAP PHOTOS
+// ==========================================
+
+let orangePhotoContainer =
+    document.getElementById("orangeCapPhotoContainer");
+
+if (!orangePhotoContainer) {
+
+    orangePhotoContainer =
+        document.createElement("div");
+
+    orangePhotoContainer.id =
+        "orangeCapPhotoContainer";
+
+    orangePhotoContainer.className =
+        "cap-photo-container";
 
     if (orangePhoto) {
-
-        if (
-            orangeHolders.length === 1
-        ) {
-
-            orangePhoto.src =
-                orangeHolders[0].photo;
-
-            orangePhoto.style.display =
-                "block";
-
-        }
-        else {
-
-            orangePhoto.style.display =
-                "none";
-
-        }
-
+        orangePhoto.parentNode.insertBefore(
+            orangePhotoContainer,
+            orangePhoto
+        );
     }
 
+}
 
-    /* =========================================
-       PURPLE CAP DISPLAY
-       ========================================= */
+orangePhotoContainer.innerHTML = "";
 
-    const purplePhoto =
-        document.getElementById(
-            "purpleCapPhoto"
-        );
+orangeHolders.forEach(function(entry) {
+
+    const name = entry[0];
+    const photo = entry[1].photo;
+
+    const holder = document.createElement("div");
+
+    holder.className = "cap-holder";
+
+    holder.innerHTML = `
+        <img
+            src="${photo}"
+            class="cap-holder-photo"
+            alt="${name}"
+        >
+
+        <div class="cap-holder-name">
+            ${name}
+        </div>
+    `;
+
+    orangePhotoContainer.appendChild(holder);
+
+});
 
 
-    const purpleName =
-        document.getElementById(
-            "purpleCapName"
-        );
+// Hide original image because container handles photos
+if (orangePhoto) {
+    orangePhoto.style.display = "none";
+}
 
 
-    const purpleWickets =
-        document.getElementById(
-            "purpleCapWickets"
-        );
+// ==========================================
+// PURPLE CAP ELEMENTS
+// ==========================================
+
+const purplePhoto =
+    document.getElementById("purpleCapPhoto");
+
+const purpleName =
+    document.getElementById("purpleCapName");
+
+const purpleWickets =
+    document.getElementById("purpleCapWickets");
 
 
-    if (purpleName) {
+if (purplePhoto) {
 
-        purpleName.innerHTML =
-            purpleHolders
-                .map(function(player) {
-                    return player.name;
-                })
-                .join(" & ");
+    if (purpleHolders.length === 1) {
+
+        purplePhoto.src =
+            purpleHolders[0][1].photo;
+
+        purplePhoto.style.display =
+            "block";
+
+    } else {
+
+        purplePhoto.style.display =
+            "none";
 
     }
+}
 
 
-    if (purpleWickets) {
+if (purpleName) {
 
-        purpleWickets.innerHTML =
-            highestWickets +
-            " Wickets";
+    purpleName.innerHTML =
+        purpleHolders
+            .map(function(entry) {
+                return entry[0];
+            })
+            .join(" & ");
 
-    }
+}
 
+
+if (purpleWickets) {
+
+    purpleWickets.textContent =
+        highestWickets + " Wickets";
+
+}
+
+
+// ==========================================
+// CREATE MULTIPLE PURPLE CAP PHOTOS
+// ==========================================
+
+let purplePhotoContainer =
+    document.getElementById(
+        "purpleCapPhotoContainer"
+    );
+
+if (!purplePhotoContainer) {
+
+    purplePhotoContainer =
+        document.createElement("div");
+
+    purplePhotoContainer.id =
+        "purpleCapPhotoContainer";
+
+    purplePhotoContainer.className =
+        "cap-photo-container";
 
     if (purplePhoto) {
 
-        if (
-            purpleHolders.length === 1
-        ) {
-
-            purplePhoto.src =
-                purpleHolders[0].photo;
-
-            purplePhoto.style.display =
-                "block";
-
-        }
-        else {
-
-            purplePhoto.style.display =
-                "none";
-
-        }
+        purplePhoto.parentNode.insertBefore(
+            purplePhotoContainer,
+            purplePhoto
+        );
 
     }
 
+}
 
-    /* =========================================
-       SAVE CAP HOLDER NAMES
-       ========================================= */
-
-    orangeCapPlayer =
-        orangeHolders
-            .map(function(player) {
-                return player.name;
-            })
-            .join(" & ");
+purplePhotoContainer.innerHTML = "";
 
 
-    purpleCapPlayer =
-        purpleHolders
-            .map(function(player) {
-                return player.name;
-            })
-            .join(" & ");
+purpleHolders.forEach(function(entry) {
 
+    const name = entry[0];
+    const photo = entry[1].photo;
+
+    const holder =
+        document.createElement("div");
+
+    holder.className =
+        "cap-holder";
+
+    holder.innerHTML = `
+        <img
+            src="${photo}"
+            class="cap-holder-photo"
+            alt="${name}"
+        >
+
+        <div class="cap-holder-name">
+            ${name}
+        </div>
+    `;
+
+    purplePhotoContainer.appendChild(holder);
+
+});
+
+
+// Hide original image
+if (purplePhoto) {
+    purplePhoto.style.display = "none";
 }
 
 
-/* =========================================================
-   PLAYER LEADERBOARD
-   ========================================================= */
+// ==========================================
+// SAVE CAP HOLDERS
+// ==========================================
 
-function generateLeaderboard() {
-
-    let html = "";
-
-
-    players.forEach(function(player) {
-
-        const strikeRate =
-            player.ballsFaced > 0
-                ? (
-                    player.runs /
-                    player.ballsFaced
-                ) * 100
-                : 0;
+orangeCapPlayer =
+    orangeHolders
+        .map(function(entry) {
+            return entry[0];
+        })
+        .join(" & ");
 
 
-        const economy =
-            player.ballsBowled > 0
-                ? (
-                    player.runsConceded * 6
-                ) /
-                player.ballsBowled
-                : 0;
-
-
-        html += `
-            <tr>
-
-                <td>${player.matchNo}</td>
-
-                <td>${player.date}</td>
-
-                <td
-                    onclick="openPlayer('${escapeHTML(player.name)}')"
-                    style="
-                        cursor:pointer;
-                        color:#00D4FF;
-                        font-weight:bold;
-                    "
-                >
-                    ${escapeHTML(player.name)}
-                </td>
-
-                <td>${player.runs}</td>
-
-                <td>${player.ballsFaced}</td>
-
-                <td>${player.sixes}</td>
-
-                <td>${player.fours}</td>
-
-                <td>${strikeRate.toFixed(1)}</td>
-
-                <td>${player.wickets}</td>
-
-                <td>${player.runsConceded}</td>
-
-                <td>${player.ballsBowled}</td>
-
-                <td>${player.sixesGiven}</td>
-
-                <td>${economy.toFixed(2)}</td>
-
-            </tr>
-        `;
-
-    });
-
-
-    setHTML(
-        "leaderboardBody",
-        html
-    );
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-   ========================================================= */
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+purpleCapPlayer =
+    purpleHolders
+        .map(function(entry) {
+            return entry[0];
+        })
+        .join(" & ");
+```
 
 }
 
@@ -3417,459 +3412,334 @@ function logoHit() {
 }
 
 
-/* =========================================================
-   TROPHY CABINET
-   ========================================================= */
-
 function updateTrophyCabinet() {
 
-    const orangeWins = {};
-    const purpleWins = {};
-    const sixerWins = {};
+```
+const orangeWins = {};
+const purpleWins = {};
+const sixerWins = {};
 
 
-    function getDateKey(player) {
+// ==========================================
+// GET DATE
+// ==========================================
 
-        const rawDate =
-            player.matchDate ||
-            player.date ||
-            player.Date ||
-            player.MatchDate;
+function getDateKey(player) {
 
+    const rawDate =
+        player.matchDate ||
+        player.date ||
+        player.Date ||
+        player.MatchDate;
 
-        if (!rawDate) {
-            return null;
-        }
+    if (!rawDate) {
+        return null;
+    }
 
+    const date = new Date(rawDate);
 
-        const d =
-            new Date(rawDate);
+    if (!isNaN(date.getTime())) {
 
-
-        if (
-            !isNaN(
-                d.getTime()
-            )
-        ) {
-
-            return d
-                .toISOString()
-                .split("T")[0];
-
-        }
-
-
-        return String(
-            rawDate
-        ).trim();
+        return date
+            .toISOString()
+            .split("T")[0];
 
     }
 
-
-    const dates =
-        [
-            ...new Set(
-                players
-                    .map(function(player) {
-                        return getDateKey(player);
-                    })
-                    .filter(function(date) {
-                        return date;
-                    })
-            )
-        ];
+    return String(rawDate).trim();
+}
 
 
-    dates.forEach(
-        function(date) {
+// ==========================================
+// GET UNIQUE DATES
+// ==========================================
 
-            const dayTotals = {};
-
-
-            players.forEach(
-                function(player) {
-
-                    if (
-                        getDateKey(player) !==
-                        date
-                    ) {
-                        return;
-                    }
-
-
-                    const name =
-                        String(
-                            player.name || ""
-                        ).trim();
+const dates = [
+    ...new Set(
+        players
+            .map(function(player) {
+                return getDateKey(player);
+            })
+            .filter(function(date) {
+                return date;
+            })
+    )
+];
 
 
-                    if (!name) {
-                        return;
-                    }
+// ==========================================
+// CALCULATE DAILY TROPHIES
+// ==========================================
+
+dates.forEach(function(date) {
+
+    const dayTotals = {};
 
 
-                    if (
-                        !dayTotals[name]
-                    ) {
+    players.forEach(function(player) {
 
-                        dayTotals[name] = {
+        if (getDateKey(player) !== date) {
+            return;
+        }
 
-                            runs: 0,
-                            wickets: 0,
-                            sixes: 0
+        const name =
+            String(player.name || "").trim();
 
-                        };
-
-                    }
-
-
-                    dayTotals[name].runs +=
-                        num(player.runs);
+        if (!name) {
+            return;
+        }
 
 
-                    dayTotals[name].wickets +=
-                        num(player.wickets);
+        if (!dayTotals[name]) {
 
-
-                    dayTotals[name].sixes +=
-                        num(player.sixes);
-
-                }
-            );
-
-
-            const names =
-                Object.keys(
-                    dayTotals
-                );
-
-
-            if (!names.length) {
-                return;
-            }
-
-
-            /* =================================
-               ORANGE CAP
-               ================================= */
-
-            const highestRuns =
-                Math.max.apply(
-                    null,
-                    names.map(
-                        function(name) {
-                            return dayTotals[name]
-                                .runs;
-                        }
-                    )
-                );
-
-
-            if (
-                highestRuns > 0
-            ) {
-
-                names
-                    .filter(
-                        function(name) {
-
-                            return (
-                                dayTotals[name]
-                                    .runs ===
-                                highestRuns
-                            );
-
-                        }
-                    )
-                    .forEach(
-                        function(name) {
-
-                            orangeWins[name] =
-                                (
-                                    orangeWins[name] ||
-                                    0
-                                ) + 1;
-
-                        }
-                    );
-
-            }
-
-
-            /* =================================
-               PURPLE CAP
-               ================================= */
-
-            const highestWickets =
-                Math.max.apply(
-                    null,
-                    names.map(
-                        function(name) {
-                            return dayTotals[name]
-                                .wickets;
-                        }
-                    )
-                );
-
-
-            if (
-                highestWickets > 0
-            ) {
-
-                names
-                    .filter(
-                        function(name) {
-
-                            return (
-                                dayTotals[name]
-                                    .wickets ===
-                                highestWickets
-                            );
-
-                        }
-                    )
-                    .forEach(
-                        function(name) {
-
-                            purpleWins[name] =
-                                (
-                                    purpleWins[name] ||
-                                    0
-                                ) + 1;
-
-                        }
-                    );
-
-            }
-
-
-            /* =================================
-               SIXER KING
-               ================================= */
-
-            const highestSixes =
-                Math.max.apply(
-                    null,
-                    names.map(
-                        function(name) {
-                            return dayTotals[name]
-                                .sixes;
-                        }
-                    )
-                );
-
-
-            if (
-                highestSixes > 0
-            ) {
-
-                names
-                    .filter(
-                        function(name) {
-
-                            return (
-                                dayTotals[name]
-                                    .sixes ===
-                                highestSixes
-                            );
-
-                        }
-                    )
-                    .forEach(
-                        function(name) {
-
-                            sixerWins[name] =
-                                (
-                                    sixerWins[name] ||
-                                    0
-                                ) + 1;
-
-                        }
-                    );
-
-            }
+            dayTotals[name] = {
+                runs: 0,
+                wickets: 0,
+                sixes: 0
+            };
 
         }
-    );
 
 
-    const allPlayers =
-        [
-            ...new Set(
-                players
-                    .map(function(player) {
+        dayTotals[name].runs +=
+            Number(player.runs) || 0;
 
-                        return String(
-                            player.name || ""
-                        ).trim();
+        dayTotals[name].wickets +=
+            Number(player.wickets) || 0;
 
-                    })
-                    .filter(function(name) {
-                        return name;
-                    })
-            )
-        ];
+        dayTotals[name].sixes +=
+            Number(player.sixes) || 0;
+
+    });
 
 
-    allPlayers.sort(
-        function(a, b) {
-
-            const totalA =
-                (
-                    orangeWins[a] || 0
-                ) +
-                (
-                    purpleWins[a] || 0
-                ) +
-                (
-                    sixerWins[a] || 0
-                );
+    const names =
+        Object.keys(dayTotals);
 
 
-            const totalB =
-                (
-                    orangeWins[b] || 0
-                ) +
-                (
-                    purpleWins[b] || 0
-                ) +
-                (
-                    sixerWins[b] || 0
-                );
+    if (names.length === 0) {
+        return;
+    }
 
 
-            return totalB - totalA;
+    // ======================================
+    // ORANGE CAP
+    // ======================================
 
-        }
-    );
-
-
-    let html = "";
-
-    let totalOrange = 0;
-    let totalPurple = 0;
-    let totalSixes = 0;
-    let totalTrophies = 0;
-
-
-    allPlayers.forEach(
-        function(name) {
-
-            const orange =
-                orangeWins[name] || 0;
-
-
-            const purple =
-                purpleWins[name] || 0;
-
-
-            const sixes =
-                sixerWins[name] || 0;
-
-
-            const total =
-                orange +
-                purple +
-                sixes;
-
-
-            totalOrange +=
-                orange;
-
-
-            totalPurple +=
-                purple;
-
-
-            totalSixes +=
-                sixes;
-
-
-            totalTrophies +=
-                total;
-
-
-            html += `
-
-                <tr>
-
-                    <td class="trophy-player">
-                        ${escapeHTML(name)}
-                    </td>
-
-                    <td class="orange-count">
-                        ${orange}
-                    </td>
-
-                    <td class="purple-count">
-                        ${purple}
-                    </td>
-
-                    <td class="sixes-count">
-                        ${sixes}
-                    </td>
-
-                    <td class="total-trophies">
-                        ${total}
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-    );
-
-
-    html += `
-
-        <tr class="trophy-total-row">
-
-            <td>
-                <strong>TOTAL</strong>
-            </td>
-
-            <td>
-                <strong>
-                    ${totalOrange}
-                </strong>
-            </td>
-
-            <td>
-                <strong>
-                    ${totalPurple}
-                </strong>
-            </td>
-
-            <td>
-                <strong>
-                    ${totalSixes}
-                </strong>
-            </td>
-
-            <td>
-                <strong>
-                    ${totalTrophies}
-                </strong>
-            </td>
-
-        </tr>
-
-    `;
-
-
-    const table =
-        document.getElementById(
-            "trophyTableBody"
+    const highestRuns =
+        Math.max(
+            ...names.map(function(name) {
+                return dayTotals[name].runs;
+            })
         );
 
 
-    if (table) {
+    if (highestRuns > 0) {
 
-        table.innerHTML =
-            html;
+        names
+            .filter(function(name) {
+
+                return (
+                    dayTotals[name].runs ===
+                    highestRuns
+                );
+
+            })
+            .forEach(function(name) {
+
+                orangeWins[name] =
+                    (orangeWins[name] || 0) + 1;
+
+            });
 
     }
+
+
+    // ======================================
+    // PURPLE CAP
+    // ======================================
+
+    const highestWickets =
+        Math.max(
+            ...names.map(function(name) {
+
+                return dayTotals[name].wickets;
+
+            })
+        );
+
+
+    if (highestWickets > 0) {
+
+        names
+            .filter(function(name) {
+
+                return (
+                    dayTotals[name].wickets ===
+                    highestWickets
+                );
+
+            })
+            .forEach(function(name) {
+
+                purpleWins[name] =
+                    (purpleWins[name] || 0) + 1;
+
+            });
+
+    }
+
+
+    // ======================================
+    // SIXER KING
+    // ======================================
+
+    const highestSixes =
+        Math.max(
+            ...names.map(function(name) {
+
+                return dayTotals[name].sixes;
+
+            })
+        );
+
+
+    if (highestSixes > 0) {
+
+        names
+            .filter(function(name) {
+
+                return (
+                    dayTotals[name].sixes ===
+                    highestSixes
+                );
+
+            })
+            .forEach(function(name) {
+
+                sixerWins[name] =
+                    (sixerWins[name] || 0) + 1;
+
+            });
+
+    }
+
+});
+
+
+// ==========================================
+// GET ALL PLAYERS
+// ==========================================
+
+const allPlayers = [
+    ...new Set(
+        players
+            .map(function(player) {
+
+                return String(
+                    player.name || ""
+                ).trim();
+
+            })
+            .filter(function(name) {
+                return name;
+            })
+    )
+];
+
+
+// ==========================================
+// SORT PLAYERS
+// ==========================================
+
+allPlayers.sort(function(a, b) {
+
+    const totalA =
+        (orangeWins[a] || 0) +
+        (purpleWins[a] || 0) +
+        (sixerWins[a] || 0);
+
+
+    const totalB =
+        (orangeWins[b] || 0) +
+        (purpleWins[b] || 0) +
+        (sixerWins[b] || 0);
+
+
+    return totalB - totalA;
+
+});
+
+
+// ==========================================
+// CREATE TABLE
+// ==========================================
+
+let html = "";
+
+
+allPlayers.forEach(function(name) {
+
+    const orange =
+        orangeWins[name] || 0;
+
+    const purple =
+        purpleWins[name] || 0;
+
+    const sixes =
+        sixerWins[name] || 0;
+
+    const total =
+        orange +
+        purple +
+        sixes;
+
+
+    html += `
+        <tr>
+
+            <td class="trophy-player">
+                ${name}
+            </td>
+
+            <td class="orange-count">
+                ${orange}
+            </td>
+
+            <td class="purple-count">
+                ${purple}
+            </td>
+
+            <td class="sixes-count">
+                ${sixes}
+            </td>
+
+            <td class="total-trophies">
+                ${total}
+            </td>
+
+        </tr>
+    `;
+
+});
+
+
+// ==========================================
+// DISPLAY
+// ==========================================
+
+const table =
+    document.getElementById(
+        "trophyTableBody"
+    );
+
+
+if (table) {
+
+    table.innerHTML = html;
+
+}
+```
 
 }
 
