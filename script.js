@@ -21,7 +21,16 @@ const playerPhotos = {
     "Karthick": "images/WhatsApp Image 2026-08-05 at 3.18.47 PM.jpeg"
 };
 
+function escapeHTML(str) {
 
+    return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}   
 /* =========================================================
    SAFE NUMBER
    ========================================================= */
