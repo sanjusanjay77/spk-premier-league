@@ -356,7 +356,6 @@ function getPlayerTotals() {
             return;
         }
 
-
         if (!totals[name]) {
 
             totals[name] = {
@@ -367,6 +366,7 @@ function getPlayerTotals() {
                 wickets: 0,
                 sixes: 0,
                 fours: 0,
+                ducks: 0,
 
                 ballsFaced: 0,
                 ballsBowled: 0,
@@ -382,7 +382,6 @@ function getPlayerTotals() {
             };
 
         }
-
 
         totals[name].runs +=
             num(player.runs);
@@ -410,10 +409,18 @@ function getPlayerTotals() {
 
         totals[name].matches++;
 
+        /* Duck Count */
+        if (
+            num(player.runs) === 0 &&
+            num(player.ballsFaced) > 0
+        ) {
+            totals[name].ducks++;
+        }
+
     });
 
-
     return Object.values(totals);
+
 }
 
 
@@ -528,6 +535,9 @@ function updateRecords() {
     const highestFours =
         Math.max(...totals.map(p => p.fours));
 
+    const highestDucks =
+        Math.max(...totals.map(p => p.ducks));
+
     const highestSR =
         Math.max(...totals.map(p => p.strikeRate));
 
@@ -550,6 +560,9 @@ function updateRecords() {
 
     const mostFours =
         totals.filter(p => p.fours === highestFours);
+
+    const mostDucks =
+        totals.filter(p => p.ducks === highestDucks);
 
     const highestStrikeRate =
         totals.filter(p => p.strikeRate === highestSR);
@@ -577,6 +590,9 @@ function updateRecords() {
     document.getElementById("mostFours").innerHTML =
         `${mostFours.map(p => p.name).join(" & ")}<br>${highestFours}`;
 
+    document.getElementById("mostDucks").innerHTML =
+        `${mostDucks.map(p => p.name).join(" & ")}<br>${highestDucks}`;
+
     document.getElementById("highestSR").innerHTML =
         `${highestStrikeRate.map(p => p.name).join(" & ")}<br>${highestSR.toFixed(1)}`;
 
@@ -584,8 +600,8 @@ function updateRecords() {
         bestEconomyPlayers.length
             ? `${bestEconomyPlayers.map(p => p.name).join(" & ")}<br>${bestEconomy.toFixed(2)}`
             : "-";
-}
 
+}
 
 /* =========================================================
    SAFE HTML SETTER
