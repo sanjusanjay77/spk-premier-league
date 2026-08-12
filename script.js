@@ -498,252 +498,92 @@ function updateDashboard() {
 
 function updateRecords() {
 
-    const totals =
-        getPlayerTotals();
+    const totals = getPlayerTotals();
 
+    if (!totals || totals.length === 0) return;
 
-    if (!totals.length) {
-        return;
-    }
-
-
-    totals.forEach(function(player) {
+    totals.forEach(player => {
 
         player.strikeRate =
             player.ballsFaced > 0
-                ? (
-                    player.runs /
-                    player.ballsFaced
-                ) * 100
+                ? (player.runs / player.ballsFaced) * 100
                 : 0;
-
 
         player.economy =
             player.ballsBowled > 0
-                ? (
-                    player.runsConceded * 6
-                ) /
-                player.ballsBowled
+                ? (player.runsConceded * 6) / player.ballsBowled
                 : null;
 
     });
 
-
-    /* =========================================
-       FIND MAXIMUM
-       ========================================= */
-
     const highestRuns =
-        Math.max.apply(
-            null,
-            totals.map(function(p) {
-                return p.runs;
-            })
-        );
-
+        Math.max(...totals.map(p => p.runs));
 
     const highestWickets =
-        Math.max.apply(
-            null,
-            totals.map(function(p) {
-                return p.wickets;
-            })
-        );
-
+        Math.max(...totals.map(p => p.wickets));
 
     const highestSixes =
-        Math.max.apply(
-            null,
-            totals.map(function(p) {
-                return p.sixes;
-            })
-        );
-
+        Math.max(...totals.map(p => p.sixes));
 
     const highestFours =
-        Math.max.apply(
-            null,
-            totals.map(function(p) {
-                return p.fours;
-            })
-        );
-
+        Math.max(...totals.map(p => p.fours));
 
     const highestSR =
-        Math.max.apply(
-            null,
-            totals.map(function(p) {
-                return p.strikeRate;
-            })
-        );
-
+        Math.max(...totals.map(p => p.strikeRate));
 
     const bowlingPlayers =
-        totals.filter(function(p) {
-            return p.ballsBowled > 0;
-        });
-
+        totals.filter(p => p.ballsBowled > 0);
 
     const bestEconomy =
         bowlingPlayers.length
-            ? Math.min.apply(
-                null,
-                bowlingPlayers.map(
-                    function(p) {
-                        return p.economy;
-                    }
-                )
-            )
+            ? Math.min(...bowlingPlayers.map(p => p.economy))
             : null;
 
-
-    /* =========================================
-       GET ALL TIED PLAYERS
-       ========================================= */
-
     const mostRuns =
-        totals.filter(function(p) {
-            return p.runs === highestRuns;
-        });
-
+        totals.filter(p => p.runs === highestRuns);
 
     const mostWickets =
-        totals.filter(function(p) {
-            return p.wickets === highestWickets;
-        });
-
+        totals.filter(p => p.wickets === highestWickets);
 
     const mostSixes =
-        totals.filter(function(p) {
-            return p.sixes === highestSixes;
-        });
-
+        totals.filter(p => p.sixes === highestSixes);
 
     const mostFours =
-        totals.filter(function(p) {
-            return p.fours === highestFours;
-        });
-
+        totals.filter(p => p.fours === highestFours);
 
     const highestStrikeRate =
-        totals.filter(function(p) {
-            return p.strikeRate === highestSR;
-        });
-
+        totals.filter(p => p.strikeRate === highestSR);
 
     const bestEconomyPlayers =
-        bowlingPlayers.filter(function(p) {
-            return p.economy === bestEconomy;
-        });
-
-
-    /* =========================================
-       SAVE CAP HOLDERS
-       ========================================= */
+        bowlingPlayers.filter(
+            p => p.economy === bestEconomy
+        );
 
     orangeCapPlayer =
-        mostRuns
-            .map(function(p) {
-                return p.name;
-            })
-            .join(" & ");
-
+        mostRuns.map(p => p.name).join(" & ");
 
     purpleCapPlayer =
-        mostWickets
-            .map(function(p) {
-                return p.name;
-            })
-            .join(" & ");
+        mostWickets.map(p => p.name).join(" & ");
 
+    document.getElementById("mostRuns").innerHTML =
+        `${mostRuns.map(p => p.name).join(" & ")}<br>${highestRuns}`;
 
-    /* =========================================
-       DISPLAY RECORDS
-       ========================================= */
+    document.getElementById("mostWickets").innerHTML =
+        `${mostWickets.map(p => p.name).join(" & ")}<br>${highestWickets}`;
 
-    setHTML(
-        "mostRuns",
-        mostRuns
-            .map(function(p) {
-                return p.name;
-            })
-            .join(" & ") +
-        "<br>" +
-        highestRuns
-    );
+    document.getElementById("mostSixes").innerHTML =
+        `${mostSixes.map(p => p.name).join(" & ")}<br>${highestSixes}`;
 
+    document.getElementById("mostFours").innerHTML =
+        `${mostFours.map(p => p.name).join(" & ")}<br>${highestFours}`;
 
-    setHTML(
-        "mostWickets",
-        mostWickets
-            .map(function(p) {
-                return p.name;
-            })
-            .join(" & ") +
-        "<br>" +
-        highestWickets
-    );
+    document.getElementById("highestSR").innerHTML =
+        `${highestStrikeRate.map(p => p.name).join(" & ")}<br>${highestSR.toFixed(1)}`;
 
-
-    setHTML(
-        "mostSixes",
-        mostSixes
-            .map(function(p) {
-                return p.name;
-            })
-            .join(" & ") +
-        "<br>" +
-        highestSixes
-    );
-
-
-    setHTML(
-        "mostFours",
-        mostFours
-            .map(function(p) {
-                return p.name;
-            })
-            .join(" & ") +
-        "<br>" +
-        highestFours
-    );
-
-
-    setHTML(
-        "highestSR",
-        highestStrikeRate
-            .map(function(p) {
-                return p.name;
-            })
-            .join(" & ") +
-        "<br>" +
-        highestSR.toFixed(1)
-    );
-
-
-    if (bestEconomyPlayers.length) {
-
-        setHTML(
-            "bestEconomy",
-            bestEconomyPlayers
-                .map(function(p) {
-                    return p.name;
-                })
-                .join(" & ") +
-            "<br>" +
-            bestEconomy.toFixed(2)
-        );
-
-    }
-    else {
-
-        setHTML(
-            "bestEconomy",
-            "-"
-        );
-
-    }
-
+    document.getElementById("bestEconomy").innerHTML =
+        bestEconomyPlayers.length
+            ? `${bestEconomyPlayers.map(p => p.name).join(" & ")}<br>${bestEconomy.toFixed(2)}`
+            : "-";
 }
 
 
