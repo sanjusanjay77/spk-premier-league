@@ -178,35 +178,21 @@ async function loadPlayers() {
 
         const tasks = [
 
-            updateDashboard,
+    updateDashboard,
+    updateRecords,
+    generateLeaderboard,
+    generateCapHolders,
+    generatePlayerCards,
+    calculateMVP,
+    generateWinPercentage,
+    loadComparisonPlayers,
+    generateRecentForm,
+    generateHallOfFame,
+    generateLatestMatch,
+    generateCharts,
+    updateTrophyCabinet
 
-            updateRecords,
-
-            generateLeaderboard,
-
-            generateCapHolders,
-
-            generatePlayerCards,
-
-            calculateMVP,
-
-            generateWinPercentage,
-
-            loadComparisonPlayers,
-
-            generateRecentForm,
-
-            generateHallOfFame,
-
-            generateLatestMatch,
-
-            generateCharts,
-
-            generateAwardHistory,
-
-            updateTrophyCabinet
-
-        ];
+];
 
 
         let index = 0;
