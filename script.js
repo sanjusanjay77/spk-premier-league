@@ -2943,106 +2943,61 @@ function generateAwardHistory() {
 /* =========================================================
    BEST BATSMAN HISTORY
    ========================================================= */
-
 function showBestBatsmanHistory() {
 
-    const matches = {};
+    const dateTotals = {};
 
+    players.forEach(player => {
 
-    players.forEach(
-        function(player) {
+        const date = player.date;
 
-            if (
-                !matches[player.date]
-            ) {
-
-                matches[player.date] =
-                    [];
-
-            }
-
-
-            matches[player.date]
-                .push(player);
-
+        if (!dateTotals[date]) {
+            dateTotals[date] = {};
         }
-    );
 
+        if (!dateTotals[date][player.name]) {
+            dateTotals[date][player.name] = 0;
+        }
 
-    let html = `
-        <h3>
-            🏏 Best Batsman History
-        </h3>
-    `;
+        dateTotals[date][player.name] += Number(player.runs || 0);
 
+    });
 
-    Object.keys(matches)
+    let html = "<h3>🏏 Best Batsman History</h3>";
+
+    Object.keys(dateTotals)
         .reverse()
-        .forEach(function(date) {
+        .forEach(date => {
 
-            const highestRuns =
-                Math.max.apply(
-                    null,
-                    matches[date].map(
-                        function(player) {
-                            return num(player.runs);
-                        }
-                    )
-                );
+            let bestPlayer = "";
+            let highestRuns = 0;
 
+            Object.keys(dateTotals[date]).forEach(name => {
 
-            const bestBatsmen =
-                matches[date].filter(
-                    function(player) {
+                if (dateTotals[date][name] > highestRuns) {
 
-                        return (
-                            num(player.runs) ===
-                            highestRuns
-                        );
+                    highestRuns = dateTotals[date][name];
+                    bestPlayer = name;
 
-                    }
-                );
+                }
 
+            });
 
             html += `
+            <div class="award-history-card">
 
-                <div
-                    class="award-history-card"
-                >
+                <p>📅 ${date}</p>
 
-                    <p>
-                        📅 ${date}
-                    </p>
+                <p>🏏 ${bestPlayer}</p>
 
-                    <p>
-                        🏏
-                        ${
-                            bestBatsmen
-                                .map(
-                                    function(p) {
-                                        return p.name;
-                                    }
-                                )
-                                .join(" & ")
-                        }
-                    </p>
+                <p>${highestRuns} Runs</p>
 
-                    <p>
-                        ${highestRuns} Runs
-                    </p>
-
-                </div>
-
+            </div>
             `;
 
         });
 
-
-    setHTML(
-        "awardHistory",
-        html
-    );
-
+    document.getElementById("awardHistory").innerHTML = html;
 }
 
 
@@ -3052,104 +3007,59 @@ function showBestBatsmanHistory() {
 
 function showBestBowlerHistory() {
 
-    const matches = {};
+    const dateTotals = {};
 
+    players.forEach(player => {
 
-    players.forEach(
-        function(player) {
+        const date = player.date;
 
-            if (
-                !matches[player.date]
-            ) {
-
-                matches[player.date] =
-                    [];
-
-            }
-
-
-            matches[player.date]
-                .push(player);
-
+        if (!dateTotals[date]) {
+            dateTotals[date] = {};
         }
-    );
 
+        if (!dateTotals[date][player.name]) {
+            dateTotals[date][player.name] = 0;
+        }
 
-    let html = `
-        <h3>
-            🎯 Best Bowler History
-        </h3>
-    `;
+        dateTotals[date][player.name] += Number(player.wickets || 0);
 
+    });
 
-    Object.keys(matches)
+    let html = "<h3>🎯 Best Bowler History</h3>";
+
+    Object.keys(dateTotals)
         .reverse()
-        .forEach(function(date) {
+        .forEach(date => {
 
-            const highestWickets =
-                Math.max.apply(
-                    null,
-                    matches[date].map(
-                        function(player) {
-                            return num(player.wickets);
-                        }
-                    )
-                );
+            let bestPlayer = "";
+            let highestWickets = 0;
 
+            Object.keys(dateTotals[date]).forEach(name => {
 
-            const bestBowlers =
-                matches[date].filter(
-                    function(player) {
+                if (dateTotals[date][name] > highestWickets) {
 
-                        return (
-                            num(player.wickets) ===
-                            highestWickets
-                        );
+                    highestWickets = dateTotals[date][name];
+                    bestPlayer = name;
 
-                    }
-                );
+                }
 
+            });
 
             html += `
+            <div class="award-history-card">
 
-                <div
-                    class="award-history-card"
-                >
+                <p>📅 ${date}</p>
 
-                    <p>
-                        📅 ${date}
-                    </p>
+                <p>🎯 ${bestPlayer}</p>
 
-                    <p>
-                        🎯
-                        ${
-                            bestBowlers
-                                .map(
-                                    function(p) {
-                                        return p.name;
-                                    }
-                                )
-                                .join(" & ")
-                        }
-                    </p>
+                <p>${highestWickets} Wickets</p>
 
-                    <p>
-                        ${highestWickets}
-                        Wickets
-                    </p>
-
-                </div>
-
+            </div>
             `;
 
         });
 
-
-    setHTML(
-        "awardHistory",
-        html
-    );
-
+    document.getElementById("awardHistory").innerHTML = html;
 }
 
 
