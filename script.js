@@ -190,6 +190,7 @@ async function loadPlayers() {
     generateHallOfFame,
     generateLatestMatch,
     generateCharts,
+    generateAwardHistory,
     updateTrophyCabinet
 
 ];
