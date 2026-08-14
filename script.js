@@ -3221,93 +3221,78 @@ function generateAwardHistory() {
    ========================================================= */
 function showBestBatsmanHistory() {
 
-    const matches = {};
+    const totals = {};
 
+    // Calculate TOTAL runs for every player
     players.forEach(function(player) {
 
-        const matchNo = String(player.matchNo || "").trim();
+        const name = String(player.name || "").trim();
 
-        if (!matchNo) return;
+        if (!name) return;
 
-        if (!matches[matchNo]) {
-            matches[matchNo] = [];
+        if (!totals[name]) {
+            totals[name] = 0;
         }
 
-        matches[matchNo].push(player);
+        totals[name] += Number(player.runs) || 0;
     });
 
-    let html = `
+
+    const entries = Object.entries(totals);
+
+    if (!entries.length) return;
+
+
+    // Find highest TOTAL tournament runs
+    const highestRuns = Math.max.apply(
+        null,
+        entries.map(function(entry) {
+            return entry[1];
+        })
+    );
+
+
+    // Get ALL players having the same total
+    const bestBatsmen = entries.filter(function(entry) {
+
+        return entry[1] === highestRuns;
+
+    });
+
+
+    const names = bestBatsmen.map(function(entry) {
+
+        return entry[0];
+
+    });
+
+
+    const html = `
+
         <div class="award-history-card">
-            <h3>🏏 Best Batsman History</h3>
+
+            <h3>🏏 Tournament Best Batsman</h3>
+
+            <p>
+                🔥 <strong>${names.join(" & ")}</strong>
+            </p>
+
+            <p>
+                🏏 <strong>${highestRuns} Total Runs</strong>
+            </p>
+
+        </div>
+
     `;
 
-    const sortedMatches = Object.keys(matches).sort(function(a, b) {
 
-        const numA = parseInt(a.replace(/\D/g, "")) || 0;
-        const numB = parseInt(b.replace(/\D/g, "")) || 0;
-
-        return numB - numA;
-    });
-
-    sortedMatches.forEach(function(matchNo) {
-
-        const matchPlayers = matches[matchNo];
-
-        let highestRuns = 0;
-
-        matchPlayers.forEach(function(player) {
-
-            const runs = Number(player.runs) || 0;
-
-            if (runs > highestRuns) {
-                highestRuns = runs;
-            }
-
-        });
-
-        if (highestRuns <= 0) return;
-
-        const bestBatsmen = matchPlayers.filter(function(player) {
-
-            return Number(player.runs) === highestRuns;
-
-        });
-
-        const names = bestBatsmen.map(function(player) {
-
-            return String(player.name).trim();
-
-        });
-
-        html += `
-            <div class="award-history-card">
-
-                <h4>🏏 Match ${matchNo}</h4>
-
-                <p>
-                    📅 ${matchPlayers[0].date || ""}
-                </p>
-
-                <p>
-                    🔥 <strong>${names.join(" & ")}</strong>
-                </p>
-
-                <p>
-                    🏏 ${highestRuns} Runs
-                </p>
-
-            </div>
-        `;
-    });
-
-    html += `</div>`;
-
-    const awardHistory =
+    const container =
         document.getElementById("awardHistory");
 
-    if (awardHistory) {
-        awardHistory.innerHTML = html;
+    if (container) {
+        container.innerHTML = html;
     }
+
 }
 /* =========================================================
    BEST BOWLER HISTORY
@@ -3315,95 +3300,79 @@ function showBestBatsmanHistory() {
 
 function showBestBowlerHistory() {
 
-    const matches = {};
+    const totals = {};
 
+    // Calculate TOTAL wickets for every player
     players.forEach(function(player) {
 
-        const matchNo = String(player.matchNo || "").trim();
+        const name = String(player.name || "").trim();
 
-        if (!matchNo) return;
+        if (!name) return;
 
-        if (!matches[matchNo]) {
-            matches[matchNo] = [];
+        if (!totals[name]) {
+            totals[name] = 0;
         }
 
-        matches[matchNo].push(player);
+        totals[name] += Number(player.wickets) || 0;
     });
 
-    let html = `
+
+    const entries = Object.entries(totals);
+
+    if (!entries.length) return;
+
+
+    // Find highest TOTAL wickets
+    const highestWickets = Math.max.apply(
+        null,
+        entries.map(function(entry) {
+            return entry[1];
+        })
+    );
+
+
+    // Get ALL players having the same total
+    const bestBowlers = entries.filter(function(entry) {
+
+        return entry[1] === highestWickets;
+
+    });
+
+
+    const names = bestBowlers.map(function(entry) {
+
+        return entry[0];
+
+    });
+
+
+    const html = `
+
         <div class="award-history-card">
-            <h3>🎯 Best Bowler History</h3>
+
+            <h3>🎯 Tournament Best Bowler</h3>
+
+            <p>
+                🎯 <strong>${names.join(" & ")}</strong>
+            </p>
+
+            <p>
+                🏆 <strong>${highestWickets} Total Wickets</strong>
+            </p>
+
+        </div>
+
     `;
 
-    const sortedMatches = Object.keys(matches).sort(function(a, b) {
 
-        const numA = parseInt(a.replace(/\D/g, "")) || 0;
-        const numB = parseInt(b.replace(/\D/g, "")) || 0;
-
-        return numB - numA;
-    });
-
-    sortedMatches.forEach(function(matchNo) {
-
-        const matchPlayers = matches[matchNo];
-
-        let highestWickets = 0;
-
-        matchPlayers.forEach(function(player) {
-
-            const wickets = Number(player.wickets) || 0;
-
-            if (wickets > highestWickets) {
-                highestWickets = wickets;
-            }
-
-        });
-
-        if (highestWickets <= 0) return;
-
-        const bestBowlers = matchPlayers.filter(function(player) {
-
-            return Number(player.wickets) === highestWickets;
-
-        });
-
-        const names = bestBowlers.map(function(player) {
-
-            return String(player.name).trim();
-
-        });
-
-        html += `
-            <div class="award-history-card">
-
-                <h4>🎯 Match ${matchNo}</h4>
-
-                <p>
-                    📅 ${matchPlayers[0].date || ""}
-                </p>
-
-                <p>
-                    🎯 <strong>${names.join(" & ")}</strong>
-                </p>
-
-                <p>
-                    🏆 ${highestWickets} Wickets
-                </p>
-
-            </div>
-        `;
-    });
-
-    html += `</div>`;
-
-    const awardHistory =
+    const container =
         document.getElementById("awardHistory");
 
-    if (awardHistory) {
-        awardHistory.innerHTML = html;
+    if (container) {
+        container.innerHTML = html;
     }
-}
 
+}
 /* =========================================================
    CLOSE PLAYER MODAL
    ========================================================= */
