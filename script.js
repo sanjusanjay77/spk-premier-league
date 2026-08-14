@@ -1059,18 +1059,23 @@ function generatePlayerCards() {
 
 function openPlayer(name) {
 
-    const records =
-        players.filter(function(player) {
+    /* =========================================
+       GET ALL RECORDS FOR SELECTED PLAYER
+       ========================================= */
 
-            return player.name === name;
-
-        });
-
+    const records = players.filter(function(player) {
+        return String(player.name || "").trim() === String(name).trim();
+    });
 
     if (!records.length) {
+        console.warn("No records found for:", name);
         return;
     }
 
+
+    /* =========================================
+       TOTAL STATISTICS
+       ========================================= */
 
     let totalRuns = 0;
     let totalWickets = 0;
@@ -1086,75 +1091,58 @@ function openPlayer(name) {
 
     records.forEach(function(record) {
 
-        totalRuns +=
-            num(record.runs);
+        totalRuns += num(record.runs);
 
-        totalWickets +=
-            num(record.wickets);
+        totalWickets += num(record.wickets);
 
-        totalSixes +=
-            num(record.sixes);
+        totalSixes += num(record.sixes);
 
-        totalFours +=
-            num(record.fours);
+        totalFours += num(record.fours);
 
-        totalBallsFaced +=
-            num(record.ballsFaced);
+        totalBallsFaced += num(record.ballsFaced);
 
-        totalBallsBowled +=
-            num(record.ballsBowled);
+        totalBallsBowled += num(record.ballsBowled);
 
-        totalRunsConceded +=
-            num(record.runsConceded);
+        totalRunsConceded += num(record.runsConceded);
 
-        totalSixesGiven +=
-            num(record.sixesGiven);
+        totalSixesGiven += num(record.sixesGiven);
 
     });
 
 
+    /* =========================================
+       STRIKE RATE
+       ========================================= */
+
     const strikeRate =
         totalBallsFaced > 0
-            ? (
-                totalRuns /
-                totalBallsFaced
-            ) * 100
+            ? (totalRuns / totalBallsFaced) * 100
             : 0;
 
+
+    /* =========================================
+       ECONOMY
+       ========================================= */
 
     const economy =
         totalBallsBowled > 0
-            ? (
-                totalRunsConceded * 6
-            ) /
-            totalBallsBowled
+            ? (totalRunsConceded * 6) / totalBallsBowled
             : 0;
 
 
-    setText(
-        "modalName",
-        name
-    );
+    /* =========================================
+       UPDATE POPUP
+       ========================================= */
 
-    setText(
-        "modalRuns",
-        totalRuns
-    );
+    setText("modalName", name);
 
-    setText(
-        "modalWickets",
-        totalWickets
-    );
+    setText("modalRuns", totalRuns);
 
-    setText(
-        "modalFours",
-        totalFours
-    );
+    setText("modalWickets", totalWickets);
 
-    setText(
-        "modalSixes",
-        totalSixes
-    );
+    setText("modalFours", totalFours);
+
+    setText("modalSixes", totalSixes);
 
     setText(
         "modalSR",
@@ -1176,6 +1164,17 @@ function openPlayer(name) {
         totalBallsBowled
     );
 
+
+    /* =========================================
+       NEW: RUNS CONCEDED
+       ========================================= */
+
+    setText(
+        "modalRunsConceded",
+        totalRunsConceded
+    );
+
+
     setText(
         "modalSixesGiven",
         totalSixesGiven
@@ -1187,82 +1186,116 @@ function openPlayer(name) {
     );
 
 
-    const modalImg =
-        document.getElementById(
-            "modalImg"
-        );
+    /* =========================================
+       PLAYER PHOTO
+       ========================================= */
 
+    const modalImg =
+        document.getElementById("modalImg");
 
     if (modalImg) {
 
-        modalImg.src =
+        const photo =
             playerPhotos[name] || "";
+
+        modalImg.src = photo;
+
+        modalImg.alt = name + " Player Photo";
+
+        modalImg.style.display =
+            photo ? "block" : "none";
+    }
+
+
+    /* =========================================
+       ORANGE CAP HOLDERS
+       SUPPORTS TIED PLAYERS
+       ========================================= */
+
+    const orangeHolders =
+        String(orangeCapPlayer || "")
+            .split(" & ")
+            .map(function(value) {
+                return value.trim();
+            })
+            .filter(function(value) {
+                return value !== "";
+            });
+
+
+    /* =========================================
+       PURPLE CAP HOLDERS
+       SUPPORTS TIED PLAYERS
+       ========================================= */
+
+    const purpleHolders =
+        String(purpleCapPlayer || "")
+            .split(" & ")
+            .map(function(value) {
+                return value.trim();
+            })
+            .filter(function(value) {
+                return value !== "";
+            });
+
+
+    /* =========================================
+       ORANGE CAP FIREWORKS
+       ========================================= */
+
+    if (orangeHolders.includes(name)) {
+
+        showFireworks("#ff9800");
+
+        if (typeof playFireworkSound === "function") {
+            playFireworkSound();
+        }
+    }
+
+
+    /* =========================================
+       PURPLE CAP FIREWORKS
+       ========================================= */
+
+    if (purpleHolders.includes(name)) {
+
+        showFireworks("#9c27b0");
+
+        if (typeof playFireworkSound === "function") {
+            playFireworkSound();
+        }
+    }
+
+
+    /* =========================================
+       SHOW MODAL
+       ========================================= */
+
+    const modal =
+        document.getElementById("playerModal");
+
+    if (modal) {
+
+        modal.style.display = "flex";
 
     }
 
 
     /* =========================================
-       CAP HOLDER FIREWORKS
-       Supports tied players
+       DOWNLOAD DATE & TIME
        ========================================= */
-
-    const orangeHolders =
-        orangeCapPlayer
-            .split(" & ")
-            .map(function(value) {
-                return value.trim();
-            });
-
-
-    const purpleHolders =
-        purpleCapPlayer
-            .split(" & ")
-            .map(function(value) {
-                return value.trim();
-            });
-
-
-    if (
-        orangeHolders.includes(name)
-    ) {
-
-        showFireworks("#ff9800");
-
-        playFireworkSound();
-
-    }
-
-
-    if (
-        purpleHolders.includes(name)
-    ) {
-
-        showFireworks("#9c27b0");
-
-        playFireworkSound();
-
-    }
-
-
-    const modal =
-        document.getElementById(
-            "playerModal"
-        );
-
-
-    if (modal) {
-
-        modal.style.display =
-            "flex";
-
-    }
-
 
     setText(
         "downloadDateTime",
-        new Date().toLocaleString(
-            "en-IN"
-        )
+        new Date().toLocaleString("en-IN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true
+        })
     );
 
 }
