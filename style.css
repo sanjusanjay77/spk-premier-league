@@ -3118,3 +3118,13 @@ padding:10px 14px;
 }
 
 }
+
+
+
+#downloadDateTime {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 13px;
+    color: #b8c1cc;
+    font-weight: 500;
+}
