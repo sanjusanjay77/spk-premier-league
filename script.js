@@ -2924,6 +2924,10 @@ function generateAwardHistory() {
 
     const matches = {};
 
+    /* ================================
+       GROUP DATA BY MATCH
+    ================================= */
+
     players.forEach(function(player) {
 
         const matchNo =
@@ -2936,28 +2940,33 @@ function generateAwardHistory() {
         }
 
         matches[matchNo].push(player);
+
     });
 
 
     let html = "";
 
 
+    /* ================================
+       SORT MATCHES
+    ================================= */
+
     Object.keys(matches)
         .sort(function(a, b) {
 
-            const aNum =
+            const numA =
                 parseInt(
                     String(a).replace(/\D/g, ""),
                     10
                 ) || 0;
 
-            const bNum =
+            const numB =
                 parseInt(
                     String(b).replace(/\D/g, ""),
                     10
                 ) || 0;
 
-            return bNum - aNum;
+            return numB - numA;
 
         })
         .forEach(function(matchNo) {
@@ -2966,83 +2975,154 @@ function generateAwardHistory() {
                 matches[matchNo];
 
 
-            /* ============================
-               BEST BATSMAN
-            ============================ */
-
-            const highestRuns =
-                Math.max.apply(
-                    null,
-                    matchPlayers.map(function(player) {
-                        return Number(player.runs) || 0;
-                    })
-                );
+            if (!matchPlayers.length) {
+                return;
+            }
 
 
-            const bestBatsmen =
-                matchPlayers.filter(function(player) {
+            /* ================================
+               HIGHEST RUNS
+            ================================= */
 
-                    return (
-                        Number(player.runs) || 0
-                    ) === highestRuns;
+            let highestRuns = 0;
 
-                });
+            matchPlayers.forEach(function(player) {
 
+                const runs =
+                    Number(player.runs) || 0;
 
-            /* ============================
-               BEST BOWLER
-            ============================ */
+                if (runs > highestRuns) {
+                    highestRuns = runs;
+                }
 
-            const highestWickets =
-                Math.max.apply(
-                    null,
-                    matchPlayers.map(function(player) {
-                        return Number(player.wickets) || 0;
-                    })
-                );
+            });
 
 
-            const bestBowlers =
-                matchPlayers.filter(function(player) {
+            /* ================================
+               ALL BEST BATSMEN
+            ================================= */
 
-                    return (
-                        Number(player.wickets) || 0
-                    ) === highestWickets;
+            const bestBatsmen = [];
 
-                });
+            matchPlayers.forEach(function(player) {
 
+                const runs =
+                    Number(player.runs) || 0;
 
-            /*
-            Remove duplicate names
-            */
+                if (runs === highestRuns) {
 
-            const batsmen =
-                [...new Set(
-                    bestBatsmen.map(function(player) {
-                        return String(
+                    const name =
+                        String(
                             player.name || ""
                         ).trim();
-                    })
-                )].filter(Boolean);
+
+                    if (
+                        name &&
+                        !bestBatsmen.includes(name)
+                    ) {
+                        bestBatsmen.push(name);
+                    }
+
+                }
+
+            });
 
 
-            const bowlers =
-                [...new Set(
-                    bestBowlers.map(function(player) {
-                        return String(
+            /* ================================
+               HIGHEST WICKETS
+            ================================= */
+
+            let highestWickets = 0;
+
+            matchPlayers.forEach(function(player) {
+
+                const wickets =
+                    Number(player.wickets) || 0;
+
+                if (wickets > highestWickets) {
+                    highestWickets = wickets;
+                }
+
+            });
+
+
+            /* ================================
+               ALL BEST BOWLERS
+            ================================= */
+
+            const bestBowlers = [];
+
+            matchPlayers.forEach(function(player) {
+
+                const wickets =
+                    Number(player.wickets) || 0;
+
+                if (wickets === highestWickets) {
+
+                    const name =
+                        String(
                             player.name || ""
                         ).trim();
-                    })
-                )].filter(Boolean);
+
+                    if (
+                        name &&
+                        !bestBowlers.includes(name)
+                    ) {
+                        bestBowlers.push(name);
+                    }
+
+                }
+
+            });
 
 
-            const date =
-                matchPlayers[0].date || "-";
+            /* ================================
+               DATE
+            ================================= */
+
+            const matchDate =
+                String(
+                    matchPlayers[0].date || "-"
+                ).trim();
 
 
-            /* ============================
-               BUILD CARD
-            ============================ */
+            /* ================================
+               BATSMEN DISPLAY
+            ================================= */
+
+            let batsmanDisplay = "";
+
+            bestBatsmen.forEach(function(name) {
+
+                batsmanDisplay += `
+                    <span class="award-holder">
+                        ${name}
+                    </span>
+                `;
+
+            });
+
+
+            /* ================================
+               BOWLERS DISPLAY
+            ================================= */
+
+            let bowlerDisplay = "";
+
+            bestBowlers.forEach(function(name) {
+
+                bowlerDisplay += `
+                    <span class="award-holder">
+                        ${name}
+                    </span>
+                `;
+
+            });
+
+
+            /* ================================
+               CREATE AWARD CARD
+            ================================= */
 
             html += `
 
@@ -3053,12 +3133,14 @@ function generateAwardHistory() {
                     </h3>
 
                     <p>
-                        📅 ${date}
+                        📅 ${matchDate}
                     </p>
 
 
                     <div class="award-row">
 
+
+                        <!-- BEST BATSMAN -->
 
                         <div class="award-box">
 
@@ -3066,16 +3148,20 @@ function generateAwardHistory() {
                                 🔥 Best Batsman
                             </h4>
 
-                            <p>
-                                ${batsmen.join(" & ")}
-                            </p>
+                            <div class="award-names">
+                                ${batsmanDisplay}
+                            </div>
 
-                            <strong>
-                                ${highestRuns} Runs
-                            </strong>
+                            <p>
+                                <strong>
+                                    ${highestRuns} Runs
+                                </strong>
+                            </p>
 
                         </div>
 
+
+                        <!-- BEST BOWLER -->
 
                         <div class="award-box">
 
@@ -3083,13 +3169,15 @@ function generateAwardHistory() {
                                 🎯 Best Bowler
                             </h4>
 
-                            <p>
-                                ${bowlers.join(" & ")}
-                            </p>
+                            <div class="award-names">
+                                ${bowlerDisplay}
+                            </div>
 
-                            <strong>
-                                ${highestWickets} Wickets
-                            </strong>
+                            <p>
+                                <strong>
+                                    ${highestWickets} Wickets
+                                </strong>
+                            </p>
 
                         </div>
 
@@ -3103,15 +3191,27 @@ function generateAwardHistory() {
         });
 
 
-    const awardHistory =
-        document.getElementById("awardHistory");
+    /* ================================
+       SHOW AWARDS
+    ================================= */
 
+    const awardHistory =
+        document.getElementById(
+            "awardHistory"
+        );
 
     if (awardHistory) {
 
-        awardHistory.innerHTML = html;
+        awardHistory.innerHTML =
+            html;
 
     }
+
+
+    console.log(
+        "Award history generated:",
+        matches
+    );
 
 }
 
@@ -3270,29 +3370,32 @@ function downloadPlayerCard() {
         document.getElementById("downloadCard");
 
     if (!card) {
-        alert("Player card not found.");
+        console.error("downloadCard not found");
+        alert("Player card not found");
         return;
     }
 
-    const dateTime =
-        document.getElementById("downloadDateTime");
 
     /*
-    ==============================
-    CURRENT DATE + TIME
-    ==============================
+    =========================================
+    SET DATE + TIME BEFORE CAPTURE
+    =========================================
     */
+
+    const dateTime =
+        document.getElementById(
+            "downloadDateTime"
+        );
 
     const now = new Date();
 
-    const formattedDate =
+    const formattedDateTime =
         now.toLocaleDateString("en-IN", {
             day: "2-digit",
             month: "2-digit",
             year: "numeric"
-        });
-
-    const formattedTime =
+        }) +
+        " | " +
         now.toLocaleTimeString("en-IN", {
             hour: "2-digit",
             minute: "2-digit",
@@ -3300,100 +3403,108 @@ function downloadPlayerCard() {
             hour12: true
         });
 
-    /*
-    ==============================
-    PUT DATE/TIME INSIDE CARD
-    ==============================
-    */
 
     if (dateTime) {
 
         dateTime.textContent =
-            formattedDate +
-            " | " +
-            formattedTime;
+            formattedDateTime;
+
+        /*
+        Make sure html2canvas sees it
+        */
+
+        dateTime.style.display =
+            "inline";
+
+        dateTime.style.visibility =
+            "visible";
+
+        dateTime.style.opacity =
+            "1";
 
     }
+
 
     /*
-    ==============================
-    CAPTURE CARD
-    ==============================
+    =========================================
+    WAIT FOR DOM TO UPDATE
+    =========================================
     */
 
-    html2canvas(card, {
+    setTimeout(function() {
 
-        scale: 2,
+        html2canvas(card, {
 
-        useCORS: true,
+            scale: 2,
 
-        backgroundColor: "#111827"
+            useCORS: true,
 
-    })
-    .then(function(canvas) {
+            allowTaint: false,
 
-        const playerName =
-            document.getElementById("modalName")
-                ?.textContent
-                ?.trim() || "Player";
+            backgroundColor: "#111827",
 
-        const link =
-            document.createElement("a");
+            logging: false,
 
-        link.download =
-            playerName +
-            "_PlayerCard.png";
+            windowWidth:
+                card.scrollWidth,
 
-        link.href =
-            canvas.toDataURL("image/png");
+            windowHeight:
+                card.scrollHeight
 
-        document.body.appendChild(link);
+        }).then(function(canvas) {
 
-        link.click();
 
-        document.body.removeChild(link);
+            /*
+            =================================
+            DOWNLOAD IMAGE
+            =================================
+            */
 
-    })
-    .catch(function(error) {
+            const playerName =
+                document.getElementById(
+                    "modalName"
+                )?.textContent.trim() ||
+                "Player";
 
-        console.error(
-            "Player card download error:",
-            error
-        );
 
-        alert(
-            "Unable to download player card."
-        );
+            const link =
+                document.createElement("a");
 
-    });
 
-}
-/* =========================================================
-   CLOSE MODAL WHEN CLICKING OUTSIDE
-   ========================================================= */
+            link.download =
+                playerName +
+                "_PlayerCard.png";
 
-window.addEventListener(
-    "click",
-    function(event) {
 
-        const modal =
-            document.getElementById(
-                "playerModal"
+            link.href =
+                canvas.toDataURL(
+                    "image/png"
+                );
+
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+
+
+        }).catch(function(error) {
+
+            console.error(
+                "Player card download error:",
+                error
             );
 
+            alert(
+                "Unable to download player card."
+            );
 
-        if (
-            modal &&
-            event.target === modal
-        ) {
+        });
 
-            modal.style.display =
-                "none";
+    }, 200);
 
-        }
-
-    }
-);
+}
 
 
 /* =========================================================
