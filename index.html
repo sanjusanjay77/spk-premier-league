@@ -295,35 +295,43 @@ Compare
 
 </section>
 
-<section>
+<section class="awards-section">
 
-<h2 class="section-title">
-🏅 Awards
-</h2>
+    <h2 class="section-title">
+        🏅 Awards
+    </h2>
 
-<div class="awards-grid">
+    <div class="awards-grid">
 
-<div class="award-card"
-onclick="showBestBatsmanHistory()">
+        <div class="award-card"
+             onclick="showBestBatsmanHistory()">
 
-🏏 Best Batsman
+            <h3>🏏 Best Batsman</h3>
 
-<div id="mostRuns"></div>
+            <p>
+                Click to view batting awards
+            </p>
 
-</div>
+        </div>
 
-<div class="award-card"
-onclick="showBestBowlerHistory()">
 
-🎯 Best Bowler
+        <div class="award-card"
+             onclick="showBestBowlerHistory()">
 
-<div id="mostWickets"></div>
+            <h3>🎯 Best Bowler</h3>
 
-</div>
+            <p>
+                Click to view bowling awards
+            </p>
 
-</div>
+        </div>
 
-<div id="awardHistory"></div>
+    </div>
+
+
+    <!-- Results appear only after clicking -->
+
+    <div id="awardHistory"></div>
 
 </section>
 <section class="hall-of-fame">
