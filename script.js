@@ -4177,3 +4177,939 @@ if (table) {
    ========================================================= */
 
 loadPlayers();
+
+
+
+/* =========================================================
+   SPK DEEP LEARNING PERFORMANCE PREDICTOR
+   ========================================================= */
+
+let spkAIModel = null;
+
+const SPK_SEQUENCE_LENGTH = 5;
+
+
+/* ---------------------------------------------------------
+   LOAD PLAYERS INTO AI DROPDOWN
+   --------------------------------------------------------- */
+
+function initializeSPKAI() {
+
+    const select =
+        document.getElementById("aiPlayerSelect");
+
+    if (!select) return;
+
+    select.innerHTML =
+        `<option value="">Select Player</option>`;
+
+    const names =
+        [...new Set(
+            players
+                .map(function(player) {
+                    return String(
+                        player.name || ""
+                    ).trim();
+                })
+                .filter(Boolean)
+        )];
+
+    names.forEach(function(name) {
+
+        const option =
+            document.createElement("option");
+
+        option.value = name;
+
+        option.textContent = name;
+
+        select.appendChild(option);
+
+    });
+}
+
+
+/* ---------------------------------------------------------
+   GET PLAYER MATCH DATA
+   --------------------------------------------------------- */
+
+function getSPKAIPlayerData(name) {
+
+    return players
+
+        .filter(function(player) {
+
+            return String(
+                player.name || ""
+            ).trim() === name;
+
+        })
+
+        .sort(function(a, b) {
+
+            return getMatchNumber(
+                a.matchNo
+            ) -
+            getMatchNumber(
+                b.matchNo
+            );
+
+        });
+
+}
+
+
+/* ---------------------------------------------------------
+   EXTRACT MATCH NUMBER
+   --------------------------------------------------------- */
+
+function getMatchNumber(matchNo) {
+
+    const value =
+        String(matchNo || "");
+
+    const number =
+        parseInt(
+            value.replace(/\D/g, ""),
+            10
+        );
+
+    return isNaN(number)
+        ? 0
+        : number;
+}
+
+
+/* ---------------------------------------------------------
+   CREATE AI FEATURES
+   --------------------------------------------------------- */
+
+function createSPKAIFeatures(player) {
+
+    const runs =
+        Number(player.runs) || 0;
+
+    const ballsFaced =
+        Number(player.ballsFaced) || 0;
+
+    const fours =
+        Number(player.fours) || 0;
+
+    const sixes =
+        Number(player.sixes) || 0;
+
+    const wickets =
+        Number(player.wickets) || 0;
+
+    const ballsBowled =
+        Number(player.ballsBowled) || 0;
+
+    const runsConceded =
+        Number(player.runsConceded) || 0;
+
+    const strikeRate =
+        ballsFaced > 0
+            ? (runs / ballsFaced) * 100
+            : 0;
+
+    const economy =
+        ballsBowled > 0
+            ? (runsConceded * 6) /
+              ballsBowled
+            : 0;
+
+    return [
+
+        runs / 100,
+
+        ballsFaced / 30,
+
+        fours / 10,
+
+        sixes / 5,
+
+        wickets / 5,
+
+        ballsBowled / 24,
+
+        runsConceded / 50,
+
+        strikeRate / 200,
+
+        economy / 15
+
+    ];
+
+}
+
+
+/* ---------------------------------------------------------
+   BUILD TRAINING DATA
+   --------------------------------------------------------- */
+
+function buildSPKTrainingData(data) {
+
+    const xs = [];
+
+    const ys = [];
+
+    /*
+       We use the previous 5 matches
+       to predict the next match.
+    */
+
+    for (
+        let i = SPK_SEQUENCE_LENGTH;
+        i < data.length;
+        i++
+    ) {
+
+        const sequence =
+            data.slice(
+                i - SPK_SEQUENCE_LENGTH,
+                i
+            );
+
+
+        const features =
+            sequence.map(function(player) {
+
+                return createSPKAIFeatures(
+                    player
+                );
+
+            });
+
+
+        xs.push(features);
+
+
+        /*
+           Target = next match runs
+           normalized to 0-1
+        */
+
+        const nextRuns =
+            Number(
+                data[i].runs
+            ) || 0;
+
+        ys.push([
+            nextRuns / 100
+        ]);
+
+    }
+
+    return {
+        xs: xs,
+        ys: ys
+    };
+
+}
+
+
+/* ---------------------------------------------------------
+   CREATE LSTM MODEL
+   --------------------------------------------------------- */
+
+function createSPKLSTMModel(featureCount) {
+
+    const model =
+        tf.sequential();
+
+
+    model.add(
+        tf.layers.lstm({
+
+            units: 32,
+
+            inputShape: [
+                SPK_SEQUENCE_LENGTH,
+                featureCount
+            ],
+
+            returnSequences: false
+
+        })
+    );
+
+
+    model.add(
+        tf.layers.dropout({
+            rate: 0.2
+        })
+    );
+
+
+    model.add(
+        tf.layers.dense({
+
+            units: 16,
+
+            activation: "relu"
+
+        })
+    );
+
+
+    model.add(
+        tf.layers.dense({
+
+            units: 1,
+
+            activation: "linear"
+
+        })
+    );
+
+
+    model.compile({
+
+        optimizer:
+            tf.train.adam(0.01),
+
+        loss:
+            "meanSquaredError",
+
+        metrics:
+            ["mae"]
+
+    });
+
+
+    return model;
+}
+
+
+/* ---------------------------------------------------------
+   PREDICT NEXT MATCH
+   --------------------------------------------------------- */
+
+async function runSPKDeepLearning() {
+
+    const select =
+        document.getElementById(
+            "aiPlayerSelect"
+        );
+
+    const status =
+        document.getElementById(
+            "aiTrainingStatus"
+        );
+
+    const result =
+        document.getElementById(
+            "aiPredictionResult"
+        );
+
+    const button =
+        document.getElementById(
+            "aiPredictButton"
+        );
+
+
+    if (!select || !status || !result) {
+
+        console.error(
+            "SPK AI elements not found."
+        );
+
+        return;
+    }
+
+
+    const playerName =
+        select.value;
+
+
+    if (!playerName) {
+
+        alert(
+            "Please select a player first."
+        );
+
+        return;
+    }
+
+
+    const data =
+        getSPKAIPlayerData(
+            playerName
+        );
+
+
+    /*
+       Need enough matches to create
+       meaningful sequences.
+    */
+
+    if (
+        data.length <
+        SPK_SEQUENCE_LENGTH + 1
+    ) {
+
+        result.innerHTML = `
+
+            <div class="ai-placeholder">
+
+                ⚠️
+
+                <h3>
+                    Not enough match data
+                </h3>
+
+                <p>
+                    At least
+                    ${SPK_SEQUENCE_LENGTH + 1}
+                    matches are recommended
+                    for this player.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "🧠 Training AI...";
+
+
+    status.innerHTML =
+        "🧠 Preparing player match history...";
+
+
+    try {
+
+        const training =
+            buildSPKTrainingData(
+                data
+            );
+
+
+        const featureCount =
+            training.xs[0][0].length;
+
+
+        const xs =
+            tf.tensor3d(
+                training.xs
+            );
+
+
+        const ys =
+            tf.tensor2d(
+                training.ys
+            );
+
+
+        status.innerHTML =
+            "🧠 Training LSTM neural network...";
+
+
+        spkAIModel =
+            createSPKLSTMModel(
+                featureCount
+            );
+
+
+        await spkAIModel.fit(
+            xs,
+            ys,
+            {
+
+                epochs: 80,
+
+                batchSize:
+                    Math.min(
+                        8,
+                        training.xs.length
+                    ),
+
+                shuffle: true,
+
+                callbacks: {
+
+                    onEpochEnd:
+                        async function(
+                            epoch,
+                            logs
+                        ) {
+
+                            if (
+                                epoch % 10 === 0
+                            ) {
+
+                                status.innerHTML =
+                                    "🧠 Training AI... " +
+                                    (epoch + 1) +
+                                    "/80";
+
+                            }
+
+                        }
+
+                }
+
+            }
+        );
+
+
+        /*
+           Release training tensors
+        */
+
+        xs.dispose();
+        ys.dispose();
+
+
+        status.innerHTML =
+            "🔮 Generating next-match prediction...";
+
+
+        /*
+           Last 5 matches
+        */
+
+        const lastFive =
+            data.slice(
+                -SPK_SEQUENCE_LENGTH
+            );
+
+
+        const predictionFeatures =
+            lastFive.map(
+                function(player) {
+
+                    return createSPKAIFeatures(
+                        player
+                    );
+
+                }
+            );
+
+
+        const input =
+            tf.tensor3d([
+                predictionFeatures
+            ]);
+
+
+        const prediction =
+            spkAIModel.predict(
+                input
+            );
+
+
+        const predictionArray =
+            await prediction.data();
+
+
+        input.dispose();
+        prediction.dispose();
+
+
+        /*
+           Convert normalized prediction
+           back into runs.
+        */
+
+        let predictedRuns =
+            predictionArray[0] * 100;
+
+
+        /*
+           Prevent unrealistic values.
+        */
+
+        predictedRuns =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    predictedRuns
+                )
+            );
+
+
+        predictedRuns =
+            Math.round(
+                predictedRuns
+            );
+
+
+        /*
+           Calculate additional AI
+           indicators.
+        */
+
+        const recentRuns =
+            lastFive.map(function(player) {
+
+                return Number(
+                    player.runs
+                ) || 0;
+
+            });
+
+
+        const recentWickets =
+            lastFive.map(function(player) {
+
+                return Number(
+                    player.wickets
+                ) || 0;
+
+            });
+
+
+        const recentSixes =
+            lastFive.map(function(player) {
+
+                return Number(
+                    player.sixes
+                ) || 0;
+
+            });
+
+
+        const averageRuns =
+            recentRuns.reduce(
+                function(total, value) {
+
+                    return total + value;
+
+                },
+                0
+            ) /
+            recentRuns.length;
+
+
+        const averageWickets =
+            recentWickets.reduce(
+                function(total, value) {
+
+                    return total + value;
+
+                },
+                0
+            ) /
+            recentWickets.length;
+
+
+        const averageSixes =
+            recentSixes.reduce(
+                function(total, value) {
+
+                    return total + value;
+
+                },
+                0
+            ) /
+            recentSixes.length;
+
+
+        /*
+           Form trend
+        */
+
+        const firstHalf =
+            recentRuns
+                .slice(0, 2)
+                .reduce(
+                    (a, b) => a + b,
+                    0
+                ) / 2;
+
+
+        const secondHalf =
+            recentRuns
+                .slice(-2)
+                .reduce(
+                    (a, b) => a + b,
+                    0
+                ) / 2;
+
+
+        let trend =
+            "➡️ STABLE";
+
+
+        if (
+            secondHalf >
+            firstHalf * 1.15
+        ) {
+
+            trend =
+                "↗️ RISING";
+
+        }
+        else if (
+            secondHalf <
+            firstHalf * 0.85
+        ) {
+
+            trend =
+                "↘️ DECLINING";
+
+        }
+
+
+        /*
+           Duck probability
+        */
+
+        const ducks =
+            recentRuns.filter(
+                function(runs) {
+
+                    return runs === 0;
+
+                }
+            ).length;
+
+
+        const duckProbability =
+            Math.round(
+                (
+                    ducks /
+                    recentRuns.length
+                ) * 100
+            );
+
+
+        /*
+           Confidence.
+
+           This is NOT a statistical
+           probability. It is only an
+           estimate based on data volume
+           and recent consistency.
+        */
+
+        const dataConfidence =
+            Math.min(
+                95,
+                45 +
+                data.length * 2
+            );
+
+
+        /*
+           Display result
+        */
+
+        result.innerHTML = `
+
+            <div class="ai-result-header">
+
+                <h2>
+                    🤖 ${playerName}
+                </h2>
+
+                <p>
+                    Deep Learning Performance Prediction
+                </p>
+
+            </div>
+
+
+            <div class="ai-prediction-grid">
+
+
+                <div class="ai-stat">
+
+                    <div class="ai-stat-icon">
+                        🏏
+                    </div>
+
+                    <div class="ai-stat-title">
+                        Predicted Runs
+                    </div>
+
+                    <div class="ai-stat-value">
+                        ${predictedRuns}
+                    </div>
+
+                </div>
+
+
+                <div class="ai-stat">
+
+                    <div class="ai-stat-icon">
+                        🎯
+                    </div>
+
+                    <div class="ai-stat-title">
+                        Recent Avg Wickets
+                    </div>
+
+                    <div class="ai-stat-value">
+                        ${averageWickets.toFixed(1)}
+                    </div>
+
+                </div>
+
+
+                <div class="ai-stat">
+
+                    <div class="ai-stat-icon">
+                        💥
+                    </div>
+
+                    <div class="ai-stat-title">
+                        Recent Avg Sixes
+                    </div>
+
+                    <div class="ai-stat-value">
+                        ${averageSixes.toFixed(1)}
+                    </div>
+
+                </div>
+
+
+                <div class="ai-stat">
+
+                    <div class="ai-stat-icon">
+                        🥚
+                    </div>
+
+                    <div class="ai-stat-title">
+                        Duck Frequency
+                    </div>
+
+                    <div class="ai-stat-value">
+                        ${duckProbability}%
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="ai-trend">
+
+                <h3>
+                    📈 AI Form Trend
+                </h3>
+
+                <div class="ai-trend-value">
+                    ${trend}
+                </div>
+
+                <p>
+                    Recent average:
+                    <strong>
+                        ${averageRuns.toFixed(1)}
+                        runs
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <div class="ai-confidence">
+
+                <div class="ai-confidence-title">
+
+                    <span>
+                        🧠 AI Data Confidence
+                    </span>
+
+                    <strong>
+                        ${dataConfidence}%
+                    </strong>
+
+                </div>
+
+                <div class="ai-confidence-bar">
+
+                    <div
+                        class="ai-confidence-fill"
+                        style="width:${dataConfidence}%">
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        status.innerHTML =
+            "✅ AI prediction completed";
+
+
+    }
+    catch(error) {
+
+        console.error(
+            "SPK Deep Learning Error:",
+            error
+        );
+
+
+        status.innerHTML =
+            "❌ AI prediction failed";
+
+
+        result.innerHTML = `
+
+            <div class="ai-placeholder">
+
+                ❌
+
+                <h3>
+                    Prediction Error
+                </h3>
+
+                <p>
+                    ${error.message}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+    finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "🔮 Predict Next Match";
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   START AI AFTER GOOGLE SHEET LOADS
+   --------------------------------------------------------- */
+
+function startSPKAI() {
+
+    if (
+        typeof tf === "undefined"
+    ) {
+
+        console.error(
+            "TensorFlow.js not loaded."
+        );
+
+        return;
+    }
+
+
+    initializeSPKAI();
+
+    console.log(
+        "🤖 SPK Deep Learning initialized"
+    );
+
+}
