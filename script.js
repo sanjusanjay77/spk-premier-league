@@ -2143,60 +2143,109 @@ function generateRecentForm() {
 
     container.innerHTML = "";
 
+
+    /*
+    =========================================
+    GET UNIQUE PLAYERS
+    =========================================
+    */
+
     const playerNames = [
         ...new Set(
             players
-                .map(p => String(p.name || "").trim())
+                .map(function(player) {
+                    return String(
+                        player.name || ""
+                    ).trim();
+                })
                 .filter(Boolean)
         )
     ];
+
 
     let html =
         '<div class="recent-form-grid">';
 
 
+    /*
+    =========================================
+    EACH PLAYER
+    =========================================
+    */
+
     playerNames.forEach(function(name) {
 
+
         /*
-        =========================================
-        GET ALL MATCHES FOR THIS PLAYER
-        =========================================
+        =====================================
+        GET ONLY THIS PLAYER'S MATCHES
+        =====================================
         */
 
         const playerMatches =
             players.filter(function(player) {
 
                 return (
-                    String(player.name || "").trim() ===
-                    name
+                    String(
+                        player.name || ""
+                    ).trim() === name
                 );
 
             });
 
 
+        if (!playerMatches.length) {
+            return;
+        }
+
+
         /*
-        =========================================
-        SORT BY MATCH NUMBER - NEWEST FIRST
-        =========================================
+        =====================================
+        SORT BY MATCH NUMBER
+        NEWEST MATCH FIRST
+        =====================================
+
+        Example:
+
+        M15
+        M14
+        M13
+        M12
+        M11
+        M10
+        ...
+
         */
 
-        playerMatches.sort(function(a, b) {
+        playerMatches.sort(
+            function(a, b) {
 
-            const matchA =
-                Number(a.matchNo);
+                const matchA =
+                    parseInt(
+                        String(
+                            a.matchNo || ""
+                        ).replace(/\D/g, ""),
+                        10
+                    ) || 0;
 
-            const matchB =
-                Number(b.matchNo);
+                const matchB =
+                    parseInt(
+                        String(
+                            b.matchNo || ""
+                        ).replace(/\D/g, ""),
+                        10
+                    ) || 0;
 
-            return matchB - matchA;
+                return matchB - matchA;
 
-        });
+            }
+        );
 
 
         /*
-        =========================================
-        TAKE ONLY LAST 5 / MOST RECENT 5
-        =========================================
+        =====================================
+        LAST 5 MATCHES
+        =====================================
         */
 
         const recentMatches =
@@ -2204,20 +2253,28 @@ function generateRecentForm() {
 
 
         /*
-        =========================================
-        CALCULATE AVERAGE
-        =========================================
+        =====================================
+        TOTAL RUNS OF LAST 5
+        =====================================
         */
 
         let totalRuns = 0;
 
-        recentMatches.forEach(function(match) {
+        recentMatches.forEach(
+            function(match) {
 
-            totalRuns +=
-                Number(match.runs) || 0;
+                totalRuns +=
+                    Number(match.runs) || 0;
 
-        });
+            }
+        );
 
+
+        /*
+        =====================================
+        AVERAGE OF LAST 5
+        =====================================
+        */
 
         const average =
             recentMatches.length > 0
@@ -2229,9 +2286,9 @@ function generateRecentForm() {
 
 
         /*
-        =========================================
+        =====================================
         PLAYER PHOTO
-        =========================================
+        =====================================
         */
 
         const photo =
@@ -2239,9 +2296,9 @@ function generateRecentForm() {
 
 
         /*
-        =========================================
+        =====================================
         PLAYER CARD
-        =========================================
+        =====================================
         */
 
         html += `
@@ -2253,72 +2310,84 @@ function generateRecentForm() {
                     alt="${name}"
                 >
 
-                <h2>${name}</h2>
+                <h2>
+                    ${name}
+                </h2>
+
 
                 <div class="form-title">
-                    Last ${recentMatches.length} Matches
+                    Last 5 Matches
                 </div>
 
+
                 <div class="form-scores">
+
         `;
 
 
         /*
-        =========================================
-        SHOW MOST RECENT 5 SCORES
-        =========================================
+        =====================================
+        DISPLAY LAST 5 MATCHES
+        =====================================
         */
 
-        recentMatches.forEach(function(match) {
+        recentMatches.forEach(
+            function(match) {
 
-            const runs =
-                Number(match.runs) || 0;
-
-            let className =
-                "form-poor";
+                const runs =
+                    Number(match.runs) || 0;
 
 
-            if (runs >= 40) {
-
-                className =
-                    "form-good";
-
-            }
-            else if (runs >= 20) {
-
-                className =
-                    "form-average";
-
-            }
+                let className =
+                    "form-poor";
 
 
-            html += `
+                if (runs >= 40) {
 
-                <div class="score-wrapper">
+                    className =
+                        "form-good";
 
-                    <div class="score-box ${className}">
-                        ${runs}
+                }
+                else if (runs >= 20) {
+
+                    className =
+                        "form-average";
+
+                }
+
+
+                html += `
+
+                    <div class="score-wrapper">
+
+                        <div
+                            class="score-box ${className}"
+                        >
+                            ${runs}
+                        </div>
+
+                        <small>
+                            M${match.matchNo}
+                        </small>
+
                     </div>
 
-                    <small>
-                        M${match.matchNo}
-                    </small>
+                `;
 
-                </div>
-
-            `;
-
-        });
+            }
+        );
 
 
         html += `
 
                 </div>
 
+
                 <div class="avg-box">
 
                     <h3>
-                        Average (Last 5 Matches)
+                        Average
+                        (Last 5 Matches)
                     </h3>
 
                     <p>
@@ -2334,10 +2403,18 @@ function generateRecentForm() {
     });
 
 
-    html += "</div>";
+    html +=
+        "</div>";
 
 
-    container.innerHTML = html;
+    /*
+    =========================================
+    DISPLAY
+    =========================================
+    */
+
+    container.innerHTML =
+        html;
 
 }
 
@@ -2796,10 +2873,15 @@ function generateWinPercentage() {
 /* =========================================================
    AWARD HISTORY
    ========================================================= */
-
 function generateAwardHistory() {
 
     const matches = {};
+
+    /*
+    =========================================
+    GROUP PLAYERS BY MATCH
+    =========================================
+    */
 
     players.forEach(function(player) {
 
@@ -2820,107 +2902,185 @@ function generateAwardHistory() {
     let html = "";
 
 
+    /*
+    =========================================
+    SORT MATCHES NEWEST FIRST
+    =========================================
+    */
+
     Object.keys(matches)
         .sort(function(a, b) {
-            return Number(b) - Number(a);
+
+            const numA =
+                parseInt(
+                    String(a).replace(/\D/g, ""),
+                    10
+                ) || 0;
+
+            const numB =
+                parseInt(
+                    String(b).replace(/\D/g, ""),
+                    10
+                ) || 0;
+
+            return numB - numA;
+
         })
         .forEach(function(matchNo) {
+
 
             const matchPlayers =
                 matches[matchNo];
 
+
             if (!matchPlayers.length) return;
 
 
-            /* =========================
-               HIGHEST RUNS
-            ========================= */
+            /*
+            =========================================
+            FIND HIGHEST RUNS
+            =========================================
+            */
 
             const highestRuns =
                 Math.max.apply(
                     null,
                     matchPlayers.map(function(player) {
-                        return num(player.runs);
+
+                        return Number(player.runs) || 0;
+
                     })
                 );
 
+
+            /*
+            =========================================
+            GET ALL BEST BATSMEN
+            =========================================
+            */
 
             const bestBatsmen =
                 matchPlayers.filter(function(player) {
 
                     return (
-                        num(player.runs) ===
-                        highestRuns
-                    );
+                        Number(player.runs) || 0
+                    ) === highestRuns;
 
                 });
 
 
-            /* =========================
-               HIGHEST WICKETS
-            ========================= */
+            /*
+            =========================================
+            FIND HIGHEST WICKETS
+            =========================================
+            */
 
             const highestWickets =
                 Math.max.apply(
                     null,
                     matchPlayers.map(function(player) {
-                        return num(player.wickets);
+
+                        return Number(player.wickets) || 0;
+
                     })
                 );
 
+
+            /*
+            =========================================
+            GET ALL BEST BOWLERS
+            =========================================
+            */
 
             const bestBowlers =
                 matchPlayers.filter(function(player) {
 
                     return (
-                        num(player.wickets) ===
-                        highestWickets
-                    );
+                        Number(player.wickets) || 0
+                    ) === highestWickets;
 
                 });
 
 
-            /* =========================
-               BATSMEN DISPLAY
-            ========================= */
+            /*
+            =========================================
+            REMOVE DUPLICATE NAMES
+            =========================================
+            */
 
-            const batsmanNames =
-                bestBatsmen
-                    .map(function(player) {
-                        return player.name;
+            const batsmanNames = [
+                ...new Set(
+                    bestBatsmen.map(function(player) {
+                        return String(
+                            player.name || ""
+                        ).trim();
                     })
-                    .filter(function(name, index, array) {
-                        return array.indexOf(name) === index;
+                )
+            ].filter(Boolean);
+
+
+            const bowlerNames = [
+                ...new Set(
+                    bestBowlers.map(function(player) {
+                        return String(
+                            player.name || ""
+                        ).trim();
                     })
-                    .join(" & ");
+                )
+            ].filter(Boolean);
 
 
-            /* =========================
-               BOWLER DISPLAY
-            ========================= */
-
-            const bowlerNames =
-                bestBowlers
-                    .map(function(player) {
-                        return player.name;
-                    })
-                    .filter(function(name, index, array) {
-                        return array.indexOf(name) === index;
-                    })
-                    .join(" & ");
-
-
-            /* =========================
-               DATE
-            ========================= */
+            /*
+            =========================================
+            DATE
+            =========================================
+            */
 
             const matchDate =
                 matchPlayers[0].date || "-";
 
 
-            /* =========================
-               AWARD CARD
-            ========================= */
+            /*
+            =========================================
+            BEST BATSMAN HTML
+            =========================================
+            */
+
+            const batsmanHTML =
+                batsmanNames.map(function(name) {
+
+                    return `
+                        <span class="award-holder">
+                            ${name}
+                        </span>
+                    `;
+
+                }).join("");
+
+
+            /*
+            =========================================
+            BEST BOWLER HTML
+            =========================================
+            */
+
+            const bowlerHTML =
+                bowlerNames.map(function(name) {
+
+                    return `
+                        <span class="award-holder">
+                            ${name}
+                        </span>
+                    `;
+
+                }).join("");
+
+
+            /*
+            =========================================
+            AWARD CARD
+            =========================================
+            */
 
             html += `
 
@@ -2946,12 +3106,14 @@ function generateAwardHistory() {
                                 🔥 Best Batsman
                             </h4>
 
-                            <p>
-                                ${batsmanNames}
-                            </p>
+                            <div class="award-names">
+                                ${batsmanHTML}
+                            </div>
 
                             <p>
-                                ${highestRuns} Runs
+                                <strong>
+                                    ${highestRuns} Runs
+                                </strong>
                             </p>
 
                         </div>
@@ -2965,12 +3127,14 @@ function generateAwardHistory() {
                                 🎯 Best Bowler
                             </h4>
 
-                            <p>
-                                ${bowlerNames}
-                            </p>
+                            <div class="award-names">
+                                ${bowlerHTML}
+                            </div>
 
                             <p>
-                                ${highestWickets} Wickets
+                                <strong>
+                                    ${highestWickets} Wickets
+                                </strong>
                             </p>
 
                         </div>
@@ -2985,11 +3149,23 @@ function generateAwardHistory() {
         });
 
 
-    const awardContainer =
-        document.getElementById("awardHistory");
+    /*
+    =========================================
+    DISPLAY
+    =========================================
+    */
 
-    if (awardContainer) {
-        awardContainer.innerHTML = html;
+    const awardHistory =
+        document.getElementById(
+            "awardHistory"
+        );
+
+
+    if (awardHistory) {
+
+        awardHistory.innerHTML =
+            html;
+
     }
 
 }
@@ -3143,173 +3319,110 @@ function closeModal() {
 /* =========================================================
    DOWNLOAD PLAYER CARD
    ========================================================= */
-
 function downloadPlayerCard() {
 
-    try {
+    const card =
+        document.getElementById("downloadCard");
 
-        const card =
-            document.getElementById("downloadCard");
+    if (!card) {
+        alert("Player card not found.");
+        return;
+    }
 
-        if (!card) {
+    const dateTime =
+        document.getElementById("downloadDateTime");
 
-            console.error(
-                "downloadCard element not found"
-            );
+    /*
+    ==============================
+    CURRENT DATE + TIME
+    ==============================
+    */
 
-            alert("Player card not found.");
+    const now = new Date();
 
-            return;
-        }
-
-
-        /*
-        =========================================
-        GET CURRENT DATE & TIME
-        =========================================
-        */
-
-        const now =
-            new Date();
-
-
-        const date =
-            now.toLocaleDateString(
-                "en-IN",
-                {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric"
-                }
-            );
-
-
-        const time =
-            now.toLocaleTimeString(
-                "en-IN",
-                {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: true
-                }
-            );
-
-
-        /*
-        =========================================
-        UPDATE DATE/TIME INSIDE CARD
-        =========================================
-        */
-
-        const dateTimeElement =
-            document.getElementById(
-                "downloadDateTime"
-            );
-
-
-        if (dateTimeElement) {
-
-            dateTimeElement.textContent =
-                "Downloaded on: " +
-                date +
-                " | " +
-                time;
-
-        }
-
-
-        /*
-        =========================================
-        CAPTURE PLAYER CARD
-        =========================================
-        */
-
-        html2canvas(
-            card,
-            {
-
-                scale: 2,
-
-                useCORS: true,
-
-                allowTaint: false,
-
-                backgroundColor: "#111827",
-
-                logging: false
-
-            }
-        )
-        .then(function(canvas) {
-
-
-            /*
-            ================================
-            CREATE DOWNLOAD LINK
-            ================================
-            */
-
-            const link =
-                document.createElement("a");
-
-
-            const playerName =
-                document
-                    .getElementById("modalName")
-                    ?.textContent
-                    ?.trim() ||
-                "Player";
-
-
-            link.download =
-                playerName +
-                "_PlayerCard.png";
-
-
-            link.href =
-                canvas.toDataURL(
-                    "image/png"
-                );
-
-
-            document.body.appendChild(link);
-
-            link.click();
-
-            document.body.removeChild(link);
-
-        })
-        .catch(function(error) {
-
-            console.error(
-                "Player card download error:",
-                error
-            );
-
-            alert(
-                "Unable to download player card."
-            );
-
+    const formattedDate =
+        now.toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
         });
 
+    const formattedTime =
+        now.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true
+        });
+
+    /*
+    ==============================
+    PUT DATE/TIME INSIDE CARD
+    ==============================
+    */
+
+    if (dateTime) {
+
+        dateTime.textContent =
+            formattedDate +
+            " | " +
+            formattedTime;
 
     }
-    catch(error) {
+
+    /*
+    ==============================
+    CAPTURE CARD
+    ==============================
+    */
+
+    html2canvas(card, {
+
+        scale: 2,
+
+        useCORS: true,
+
+        backgroundColor: "#111827"
+
+    })
+    .then(function(canvas) {
+
+        const playerName =
+            document.getElementById("modalName")
+                ?.textContent
+                ?.trim() || "Player";
+
+        const link =
+            document.createElement("a");
+
+        link.download =
+            playerName +
+            "_PlayerCard.png";
+
+        link.href =
+            canvas.toDataURL("image/png");
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+    })
+    .catch(function(error) {
 
         console.error(
-            "Download Error:",
+            "Player card download error:",
             error
         );
 
         alert(
-            "Download Error"
+            "Unable to download player card."
         );
 
-    }
+    });
 
 }
-
 /* =========================================================
    CLOSE MODAL WHEN CLICKING OUTSIDE
    ========================================================= */
