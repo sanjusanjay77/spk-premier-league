@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
 
 </head>
 
@@ -459,6 +460,86 @@ Loading...
 <h2>🏏 Latest Match History</h2>
 
 <div id="latestMatchCard"></div>
+</section>
+
+
+<!-- =====================================================
+     SPK DEEP LEARNING PERFORMANCE PREDICTOR
+     ===================================================== -->
+
+<section class="deep-learning-section">
+
+    <h2 class="section-title">
+        🤖 SPK Deep Learning Performance Predictor
+    </h2>
+
+    <div class="deep-learning-card">
+
+        <div class="ai-header">
+            <div class="ai-icon">🧠</div>
+
+            <div>
+                <h2>SPK AI Predictor</h2>
+                <p>
+                    LSTM-based player performance analysis
+                </p>
+            </div>
+        </div>
+
+
+        <div class="ai-controls">
+
+            <label for="aiPlayerSelect">
+                Select Player
+            </label>
+
+            <select id="aiPlayerSelect">
+                <option value="">
+                    Select Player
+                </option>
+            </select>
+
+            <button
+                id="aiPredictButton"
+                onclick="runSPKDeepLearning()">
+
+                🔮 Predict Next Match
+
+            </button>
+
+        </div>
+
+
+        <div id="aiTrainingStatus"
+             class="ai-status">
+
+            💤 AI model waiting...
+
+        </div>
+
+
+        <div id="aiPredictionResult"
+             class="ai-result">
+
+            <div class="ai-placeholder">
+
+                🧠
+
+                <h3>
+                    Select a player
+                </h3>
+
+                <p>
+                    The AI will analyze recent match
+                    performance and predict the next match.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
 <!-- PLAYER POPUP MODAL -->
