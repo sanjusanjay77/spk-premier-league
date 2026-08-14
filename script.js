@@ -3225,8 +3225,7 @@ function showBestBatsmanHistory() {
 
     players.forEach(function(player) {
 
-        const matchNo =
-            String(player.matchNo || "").trim();
+        const matchNo = String(player.matchNo || "").trim();
 
         if (!matchNo) return;
 
@@ -3235,128 +3234,81 @@ function showBestBatsmanHistory() {
         }
 
         matches[matchNo].push(player);
-
     });
 
-
     let html = `
-        <div class="award-history">
-
+        <div class="award-history-card">
             <h3>🏏 Best Batsman History</h3>
     `;
 
+    const sortedMatches = Object.keys(matches).sort(function(a, b) {
 
-    Object.keys(matches)
-        .sort(function(a, b) {
+        const numA = parseInt(a.replace(/\D/g, "")) || 0;
+        const numB = parseInt(b.replace(/\D/g, "")) || 0;
 
-            const numA =
-                parseInt(
-                    String(a).replace(/\D/g, "")
-                ) || 0;
+        return numB - numA;
+    });
 
-            const numB =
-                parseInt(
-                    String(b).replace(/\D/g, "")
-                ) || 0;
+    sortedMatches.forEach(function(matchNo) {
 
-            return numB - numA;
+        const matchPlayers = matches[matchNo];
 
-        })
-        .forEach(function(matchNo) {
+        let highestRuns = 0;
 
-            const matchPlayers =
-                matches[matchNo];
+        matchPlayers.forEach(function(player) {
 
+            const runs = Number(player.runs) || 0;
 
-            const highestRuns =
-                Math.max.apply(
-                    null,
-                    matchPlayers.map(function(player) {
-
-                        return Number(player.runs) || 0;
-
-                    })
-                );
-
-
-            const bestBatsmen =
-                matchPlayers.filter(function(player) {
-
-                    return (
-                        (Number(player.runs) || 0) ===
-                        highestRuns
-                    );
-
-                });
-
-
-            if (highestRuns <= 0) return;
-
-
-            const date =
-                matchPlayers[0].date || "";
-
-
-            const names =
-                bestBatsmen
-                    .map(function(player) {
-
-                        return player.name;
-
-                    })
-                    .join(" & ");
-
-
-            html += `
-
-                <div class="award-history-card">
-
-                    <h4>
-                        🏏 Match ${matchNo}
-                    </h4>
-
-                    <p>
-                        📅 ${date}
-                    </p>
-
-                    <p>
-                        🔥 <strong>${names}</strong>
-                    </p>
-
-                    <p>
-                        ${highestRuns} Runs
-                    </p>
-
-                </div>
-
-            `;
+            if (runs > highestRuns) {
+                highestRuns = runs;
+            }
 
         });
 
+        if (highestRuns <= 0) return;
 
-    html += `
-        </div>
-    `;
+        const bestBatsmen = matchPlayers.filter(function(player) {
 
+            return Number(player.runs) === highestRuns;
 
-    const container =
+        });
+
+        const names = bestBatsmen.map(function(player) {
+
+            return String(player.name).trim();
+
+        });
+
+        html += `
+            <div class="award-history-card">
+
+                <h4>🏏 Match ${matchNo}</h4>
+
+                <p>
+                    📅 ${matchPlayers[0].date || ""}
+                </p>
+
+                <p>
+                    🔥 <strong>${names.join(" & ")}</strong>
+                </p>
+
+                <p>
+                    🏏 ${highestRuns} Runs
+                </p>
+
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+
+    const awardHistory =
         document.getElementById("awardHistory");
 
-
-    if (container) {
-
-        container.innerHTML = html;
-
-        container.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
+    if (awardHistory) {
+        awardHistory.innerHTML = html;
     }
-
 }
-
-
 /* =========================================================
    BEST BOWLER HISTORY
    ========================================================= */
@@ -3367,8 +3319,7 @@ function showBestBowlerHistory() {
 
     players.forEach(function(player) {
 
-        const matchNo =
-            String(player.matchNo || "").trim();
+        const matchNo = String(player.matchNo || "").trim();
 
         if (!matchNo) return;
 
@@ -3377,125 +3328,80 @@ function showBestBowlerHistory() {
         }
 
         matches[matchNo].push(player);
-
     });
 
-
     let html = `
-        <div class="award-history">
-
+        <div class="award-history-card">
             <h3>🎯 Best Bowler History</h3>
     `;
 
+    const sortedMatches = Object.keys(matches).sort(function(a, b) {
 
-    Object.keys(matches)
-        .sort(function(a, b) {
+        const numA = parseInt(a.replace(/\D/g, "")) || 0;
+        const numB = parseInt(b.replace(/\D/g, "")) || 0;
 
-            const numA =
-                parseInt(
-                    String(a).replace(/\D/g, "")
-                ) || 0;
+        return numB - numA;
+    });
 
-            const numB =
-                parseInt(
-                    String(b).replace(/\D/g, "")
-                ) || 0;
+    sortedMatches.forEach(function(matchNo) {
 
-            return numB - numA;
+        const matchPlayers = matches[matchNo];
 
-        })
-        .forEach(function(matchNo) {
+        let highestWickets = 0;
 
-            const matchPlayers =
-                matches[matchNo];
+        matchPlayers.forEach(function(player) {
 
+            const wickets = Number(player.wickets) || 0;
 
-            const highestWickets =
-                Math.max.apply(
-                    null,
-                    matchPlayers.map(function(player) {
-
-                        return Number(player.wickets) || 0;
-
-                    })
-                );
-
-
-            const bestBowlers =
-                matchPlayers.filter(function(player) {
-
-                    return (
-                        (Number(player.wickets) || 0) ===
-                        highestWickets
-                    );
-
-                });
-
-
-            if (highestWickets <= 0) return;
-
-
-            const date =
-                matchPlayers[0].date || "";
-
-
-            const names =
-                bestBowlers
-                    .map(function(player) {
-
-                        return player.name;
-
-                    })
-                    .join(" & ");
-
-
-            html += `
-
-                <div class="award-history-card">
-
-                    <h4>
-                        🎯 Match ${matchNo}
-                    </h4>
-
-                    <p>
-                        📅 ${date}
-                    </p>
-
-                    <p>
-                        🎯 <strong>${names}</strong>
-                    </p>
-
-                    <p>
-                        ${highestWickets} Wickets
-                    </p>
-
-                </div>
-
-            `;
+            if (wickets > highestWickets) {
+                highestWickets = wickets;
+            }
 
         });
 
+        if (highestWickets <= 0) return;
 
-    html += `
-        </div>
-    `;
+        const bestBowlers = matchPlayers.filter(function(player) {
 
+            return Number(player.wickets) === highestWickets;
 
-    const container =
+        });
+
+        const names = bestBowlers.map(function(player) {
+
+            return String(player.name).trim();
+
+        });
+
+        html += `
+            <div class="award-history-card">
+
+                <h4>🎯 Match ${matchNo}</h4>
+
+                <p>
+                    📅 ${matchPlayers[0].date || ""}
+                </p>
+
+                <p>
+                    🎯 <strong>${names.join(" & ")}</strong>
+                </p>
+
+                <p>
+                    🏆 ${highestWickets} Wickets
+                </p>
+
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+
+    const awardHistory =
         document.getElementById("awardHistory");
 
-
-    if (container) {
-
-        container.innerHTML = html;
-
-        container.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
+    if (awardHistory) {
+        awardHistory.innerHTML = html;
     }
-
 }
 
 /* =========================================================
