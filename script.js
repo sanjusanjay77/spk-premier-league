@@ -1052,11 +1052,6 @@ function generatePlayerCards() {
 
 }
 
-
-/* =========================================================
-   PLAYER POPUP
-   ========================================================= */
-
 function openPlayer(name) {
 
     /* =========================================
@@ -1091,21 +1086,25 @@ function openPlayer(name) {
 
     records.forEach(function(record) {
 
-        totalRuns += num(record.runs);
+        totalRuns += Number(record.runs) || 0;
 
-        totalWickets += num(record.wickets);
+        totalWickets += Number(record.wickets) || 0;
 
-        totalSixes += num(record.sixes);
+        totalSixes += Number(record.sixes) || 0;
 
-        totalFours += num(record.fours);
+        totalFours += Number(record.fours) || 0;
 
-        totalBallsFaced += num(record.ballsFaced);
+        totalBallsFaced +=
+            Number(record.ballsFaced) || 0;
 
-        totalBallsBowled += num(record.ballsBowled);
+        totalBallsBowled +=
+            Number(record.ballsBowled) || 0;
 
-        totalRunsConceded += num(record.runsConceded);
+        totalRunsConceded +=
+            Number(record.runsConceded) || 0;
 
-        totalSixesGiven += num(record.sixesGiven);
+        totalSixesGiven +=
+            Number(record.sixesGiven) || 0;
 
     });
 
@@ -1116,7 +1115,10 @@ function openPlayer(name) {
 
     const strikeRate =
         totalBallsFaced > 0
-            ? (totalRuns / totalBallsFaced) * 100
+            ? (
+                totalRuns /
+                totalBallsFaced
+            ) * 100
             : 0;
 
 
@@ -1126,64 +1128,10 @@ function openPlayer(name) {
 
     const economy =
         totalBallsBowled > 0
-            ? (totalRunsConceded * 6) / totalBallsBowled
+            ? (
+                totalRunsConceded * 6
+            ) / totalBallsBowled
             : 0;
-
-
-    /* =========================================
-       UPDATE POPUP
-       ========================================= */
-
-    setText("modalName", name);
-
-    setText("modalRuns", totalRuns);
-
-    setText("modalWickets", totalWickets);
-
-    setText("modalFours", totalFours);
-
-    setText("modalSixes", totalSixes);
-
-    setText(
-        "modalSR",
-        strikeRate.toFixed(1)
-    );
-
-    setText(
-        "modalEconomy",
-        economy.toFixed(2)
-    );
-
-    setText(
-        "modalBallsFaced",
-        totalBallsFaced
-    );
-
-    setText(
-        "modalBallsBowled",
-        totalBallsBowled
-    );
-
-
-    /* =========================================
-       NEW: RUNS CONCEDED
-       ========================================= */
-
-    setText(
-        "modalRunsConceded",
-        totalRunsConceded
-    );
-
-
-    setText(
-        "modalSixesGiven",
-        totalSixesGiven
-    );
-
-    setText(
-        "modalMatches",
-        records.length
-    );
 
 
     /* =========================================
@@ -1195,75 +1143,228 @@ function openPlayer(name) {
 
     if (modalImg) {
 
-        const photo =
+        modalImg.src =
             playerPhotos[name] || "";
 
-        modalImg.src = photo;
-
-        modalImg.alt = name + " Player Photo";
-
-        modalImg.style.display =
-            photo ? "block" : "none";
     }
 
 
     /* =========================================
-       ORANGE CAP HOLDERS
-       SUPPORTS TIED PLAYERS
+       BASIC PLAYER DETAILS
        ========================================= */
 
-    const orangeHolders =
-        String(orangeCapPlayer || "")
-            .split(" & ")
-            .map(function(value) {
-                return value.trim();
-            })
-            .filter(function(value) {
-                return value !== "";
-            });
+    const modalName =
+        document.getElementById("modalName");
+
+    if (modalName) {
+        modalName.textContent = name;
+    }
 
 
     /* =========================================
-       PURPLE CAP HOLDERS
-       SUPPORTS TIED PLAYERS
+       UPDATE POPUP STATISTICS
        ========================================= */
 
-    const purpleHolders =
-        String(purpleCapPlayer || "")
-            .split(" & ")
-            .map(function(value) {
-                return value.trim();
-            })
-            .filter(function(value) {
-                return value !== "";
-            });
+    const modalRuns =
+        document.getElementById("modalRuns");
+
+    if (modalRuns) {
+        modalRuns.textContent =
+            totalRuns;
+    }
+
+
+    const modalWickets =
+        document.getElementById("modalWickets");
+
+    if (modalWickets) {
+        modalWickets.textContent =
+            totalWickets;
+    }
+
+
+    const modalFours =
+        document.getElementById("modalFours");
+
+    if (modalFours) {
+        modalFours.textContent =
+            totalFours;
+    }
+
+
+    const modalSixes =
+        document.getElementById("modalSixes");
+
+    if (modalSixes) {
+        modalSixes.textContent =
+            totalSixes;
+    }
+
+
+    const modalSR =
+        document.getElementById("modalSR");
+
+    if (modalSR) {
+        modalSR.textContent =
+            strikeRate.toFixed(1);
+    }
+
+
+    const modalEconomy =
+        document.getElementById("modalEconomy");
+
+    if (modalEconomy) {
+        modalEconomy.textContent =
+            economy.toFixed(2);
+    }
+
+
+    const modalBallsFaced =
+        document.getElementById("modalBallsFaced");
+
+    if (modalBallsFaced) {
+        modalBallsFaced.textContent =
+            totalBallsFaced;
+    }
+
+
+    const modalBallsBowled =
+        document.getElementById("modalBallsBowled");
+
+    if (modalBallsBowled) {
+        modalBallsBowled.textContent =
+            totalBallsBowled;
+    }
 
 
     /* =========================================
-       ORANGE CAP FIREWORKS
+       ⭐ RUNS CONCEDED
+       THIS IS THE IMPORTANT PART
        ========================================= */
 
-    if (orangeHolders.includes(name)) {
+    const modalRunsConceded =
+        document.getElementById("modalRunsConceded");
+
+    if (modalRunsConceded) {
+
+        modalRunsConceded.textContent =
+            totalRunsConceded;
+
+    } else {
+
+        console.error(
+            "modalRunsConceded element NOT FOUND in HTML"
+        );
+
+    }
+
+
+    const modalSixesGiven =
+        document.getElementById("modalSixesGiven");
+
+    if (modalSixesGiven) {
+        modalSixesGiven.textContent =
+            totalSixesGiven;
+    }
+
+
+    const modalMatches =
+        document.getElementById("modalMatches");
+
+    if (modalMatches) {
+        modalMatches.textContent =
+            records.length;
+    }
+
+
+    /* =========================================
+       DEBUG
+       ========================================= */
+
+    console.log(
+        "Player:",
+        name
+    );
+
+    console.log(
+        "Balls Bowled:",
+        totalBallsBowled
+    );
+
+    console.log(
+        "Runs Conceded:",
+        totalRunsConceded
+    );
+
+
+    /* =========================================
+       ORANGE / PURPLE CAP EFFECT
+       ========================================= */
+
+    const orangeCapElement =
+        document.getElementById("orangeCapName");
+
+    const purpleCapElement =
+        document.getElementById("purpleCapName");
+
+    const orangeCap =
+        orangeCapElement
+            ? orangeCapElement.textContent.trim()
+            : "";
+
+    const purpleCap =
+        purpleCapElement
+            ? purpleCapElement.textContent.trim()
+            : "";
+
+
+    if (
+        orangeCap
+            .split("&")
+            .map(function(x) {
+                return x.trim();
+            })
+            .includes(name)
+    ) {
 
         showFireworks("#ff9800");
 
-        if (typeof playFireworkSound === "function") {
-            playFireworkSound();
+        const sound =
+            document.getElementById("fireworkSound");
+
+        if (sound) {
+
+            sound.currentTime = 0;
+
+            sound.play().catch(function() {});
+
         }
+
     }
 
 
-    /* =========================================
-       PURPLE CAP FIREWORKS
-       ========================================= */
-
-    if (purpleHolders.includes(name)) {
+    if (
+        purpleCap
+            .split("&")
+            .map(function(x) {
+                return x.trim();
+            })
+            .includes(name)
+    ) {
 
         showFireworks("#9c27b0");
 
-        if (typeof playFireworkSound === "function") {
-            playFireworkSound();
+        const sound =
+            document.getElementById("fireworkSound");
+
+        if (sound) {
+
+            sound.currentTime = 0;
+
+            sound.play().catch(function() {});
+
         }
+
     }
 
 
@@ -1282,21 +1383,20 @@ function openPlayer(name) {
 
 
     /* =========================================
-       DOWNLOAD DATE & TIME
+       DOWNLOAD DATE/TIME
        ========================================= */
 
-    setText(
-        "downloadDateTime",
-        new Date().toLocaleString("en-IN", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: true
-        })
-    );
+    const downloadDateTime =
+        document.getElementById(
+            "downloadDateTime"
+        );
+
+    if (downloadDateTime) {
+
+        downloadDateTime.textContent =
+            new Date().toLocaleString("en-IN");
+
+    }
 
 }
 
