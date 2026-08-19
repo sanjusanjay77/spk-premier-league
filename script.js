@@ -175,7 +175,6 @@ async function loadPlayers() {
         /* =================================================
            RUN DASHBOARD SECTIONS ONE BY ONE
            ================================================= */
-        startSPKAI();
         const tasks = [
 
     updateDashboard,
