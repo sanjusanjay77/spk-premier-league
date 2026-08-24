@@ -4010,6 +4010,35 @@ if (table) {
 loadPlayers();
 
 
+function loadDateSelector() {
+
+    const selector =
+        document.getElementById("dateSelector");
+
+    if (!selector) {
+        console.log("dateSelector not found");
+        return;
+    }
+
+    const uniqueDates =
+        [...new Set(players.map(p => p.date))];
+
+    console.log("Dates Loaded:", uniqueDates);
+
+    selector.innerHTML =
+        '<option value="">Select Date</option>';
+
+    uniqueDates.forEach(date => {
+
+        selector.innerHTML +=
+        `<option value="${date}">
+            ${date}
+        </option>`;
+
+    });
+
+}
+
 
 function showDatePerformance() {
 
