@@ -276,107 +276,6 @@ backdrop-filter:blur(15px);
 border-radius:25px;
 }
 
-/* Awards */
-
-.awards-grid{
-
-width:95%;
-margin:auto;
-
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-
-gap:30px;
-
-perspective:1200px;
-
-}
-
-.award-card{
-
-padding:35px;
-
-border-radius:25px;
-
-text-align:center;
-
-cursor:pointer;
-
-transform-style:preserve-3d;
-
-transition:all .5s ease;
-
-box-shadow:0 15px 35px rgba(255, 67, 67, 0.4);
-
-}
-
-.award-card:hover{
-
-transform:
-rotateY(12deg)
-rotateX(8deg)
-translateY(-15px)
-scale(1.05);
-
-}
-
-.batsman{
-
-background:
-linear-gradient(
-135deg,
-#FFD700,
-#ff9800
-);
-
-color:black;
-
-}
-
-.bowler{
-
-background:
-linear-gradient(
-135deg,
-#00D4FF,
-#006eff
-);
-
-}
-
-.award-icon{
-
-font-size:60px;
-
-margin-bottom:15px;
-
-}
-
-.award-card h3{
-
-font-size:28px;
-
-margin-bottom:15px;
-
-}
-
-.award-card p{
-
-font-size:20px;
-
-font-weight:700;
-
-}
-
-.award-card{
-padding:25px;
-border-radius:20px;
-text-align:center;
-font-weight:700;
-background:linear-gradient(135deg,#FFD700,#ff9800);
-color:black;
-}
-
 /* Match History */
 
 #matchHistory{
@@ -2511,177 +2410,7 @@ transition:.3s;
 
 
 
-/* Luxury Award History Card */
 
-.award-history-card{
-
-position:relative;
-
-margin:15px 0;
-padding:20px;
-
-border-radius:20px;
-
-background:linear-gradient(
-135deg,
-#0f172a,
-#1e293b,
-#111827
-);
-
-color:white;
-
-overflow:hidden;
-
-border:2px solid transparent;
-
-animation:rainbowGlow 3s linear infinite;
-
-box-shadow:
-0 0 20px rgba(255,255,255,.2);
-
-transition:.3s ease;
-
-}
-
-.award-history-card:hover{
-
-transform:translateY(-5px) scale(1.02);
-
-}
-
-/* Moving rainbow border */
-
-.award-history-card::before{
-
-content:"";
-
-position:absolute;
-
-top:-2px;
-left:-2px;
-right:-2px;
-bottom:-2px;
-
-border-radius:22px;
-
-background:linear-gradient(
-90deg,
-#ff0000,
-#ff9800,
-#ffff00,
-#00ff00,
-#00e5ff,
-#3f51b5,
-#9c27b0,
-#ff0000
-);
-
-background-size:400% 400%;
-
-z-index:-1;
-
-animation:borderMove 5s linear infinite;
-
-}
-
-/* Glass effect */
-
-.award-history-card::after{
-
-content:"";
-
-position:absolute;
-
-top:0;
-left:0;
-
-width:100%;
-height:100%;
-
-background:rgba(255,255,255,.03);
-
-backdrop-filter:blur(10px);
-
-border-radius:20px;
-
-z-index:-1;
-
-}
-
-@keyframes borderMove{
-
-0%{
-background-position:0% 50%;
-}
-
-100%{
-background-position:400% 50%;
-}
-
-}
-
-@keyframes rainbowGlow{
-
-0%{
-box-shadow:
-0 0 15px #ff0000,
-0 0 30px #ff0000;
-}
-
-25%{
-box-shadow:
-0 0 15px #00ff00,
-0 0 30px #00ff00;
-}
-
-50%{
-box-shadow:
-0 0 15px #00e5ff,
-0 0 30px #00e5ff;
-}
-
-75%{
-box-shadow:
-0 0 15px #9c27b0,
-0 0 30px #9c27b0;
-}
-
-100%{
-box-shadow:
-0 0 15px #ff9800,
-0 0 30px #ff9800;
-}
-
-}
-
-/* Text styling */
-
-.award-history-card p{
-
-font-size:16px;
-font-weight:600;
-
-margin:8px 0;
-
-text-shadow:
-0 0 10px rgba(255,255,255,.4);
-
-}
-
-/* Date */
-
-.award-history-card p:first-child{
-
-color:#ffd700;
-
-font-size:18px;
-
-text-shadow:
-0 0 10px #ffd700,
-0 0 20px #ff9800;
-
-}
 
 /* Head To Head Main Card */
 
@@ -3625,79 +3354,6 @@ padding:10px 14px;
 }
 
 
-.award-card {
-    position: relative;
-    padding: 30px 25px;
-    border-radius: 22px;
-    text-align: center;
-    cursor: pointer;
-    overflow: hidden;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,0.12),
-            rgba(255,255,255,0.03)
-        );
-
-    border: 1px solid rgba(255,255,255,0.15);
-
-    backdrop-filter: blur(15px);
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-
-.award-card:hover {
-    transform: translateY(-8px) scale(1.02);
-}
-
-
-.batting-award:hover {
-    box-shadow:
-        0 15px 45px rgba(255, 170, 0, 0.35);
-}
-
-
-.bowling-award:hover {
-    box-shadow:
-        0 15px 45px rgba(120, 80, 255, 0.35);
-}
-
-
-.award-icon {
-    font-size: 45px;
-    margin-bottom: 10px;
-}
-
-
-.award-card h3 {
-    font-size: 24px;
-    margin: 5px 0;
-}
-
-
-.award-card p {
-    opacity: 0.75;
-    margin: 8px 0 18px;
-}
-
-
-.award-click {
-    display: inline-block;
-
-    padding: 8px 18px;
-
-    border-radius: 20px;
-
-    background: rgba(255,255,255,0.1);
-
-    font-size: 13px;
-}
-
-
 /* =====================================================
    DAILY AWARD HISTORY
    ===================================================== */
@@ -3859,6 +3515,731 @@ padding:10px 14px;
     .daily-winners {
 
         flex-direction: column;
+
+    }
+
+}
+
+
+
+
+/* =====================================================
+   🏆 SPK DAILY PERFORMANCE AWARDS
+   PREMIUM UI
+   ===================================================== */
+
+.awards-section {
+
+    width: 95%;
+
+    max-width: 1150px;
+
+    margin:
+        70px auto;
+
+    position: relative;
+
+}
+
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.awards-header {
+
+    text-align: center;
+
+    margin-bottom: 35px;
+
+}
+
+
+.awards-badge {
+
+    display: inline-block;
+
+    padding:
+        7px 18px;
+
+    border-radius: 30px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    color: #fbbf24;
+
+    background:
+        rgba(251,191,36,0.12);
+
+    border:
+        1px solid
+        rgba(251,191,36,0.3);
+
+    box-shadow:
+        0 0 20px
+        rgba(251,191,36,0.12);
+
+}
+
+
+.awards-subtitle {
+
+    max-width: 600px;
+
+    margin:
+        10px auto 0;
+
+    color:
+        rgba(255,255,255,0.65);
+
+    font-size: 15px;
+
+}
+
+
+/* =====================================================
+   AWARD BUTTON GRID
+   ===================================================== */
+
+.awards-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 28px;
+
+    max-width: 950px;
+
+    margin:
+        0 auto 40px;
+
+}
+
+
+/* =====================================================
+   AWARD CARD
+   ===================================================== */
+
+.award-card {
+
+    position: relative;
+
+    min-height: 270px;
+
+    padding: 32px;
+
+    border: none;
+
+    border-radius: 28px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    color: white;
+
+    isolation: isolate;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0,0,0,0.25);
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease;
+
+}
+
+
+/* =====================================================
+   BATSMAN
+   ===================================================== */
+
+.batting-award {
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff7a18 0%,
+            #ffb000 45%,
+            #ffd54a 100%
+        );
+
+    color:
+        #241200;
+
+}
+
+
+.batting-award:hover {
+
+    transform:
+        translateY(-10px);
+
+    box-shadow:
+        0 25px 65px
+        rgba(255,160,0,.45);
+
+}
+
+
+/* =====================================================
+   BOWLER
+   ===================================================== */
+
+.bowling-award {
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f1d95 0%,
+            #7c3aed 45%,
+            #c084fc 100%
+        );
+
+}
+
+
+.bowling-award:hover {
+
+    transform:
+        translateY(-10px);
+
+    box-shadow:
+        0 25px 65px
+        rgba(124,58,237,.5);
+
+}
+
+
+/* =====================================================
+   GLOW
+   ===================================================== */
+
+.award-glow {
+
+    position: absolute;
+
+    width: 180px;
+
+    height: 180px;
+
+    border-radius: 50%;
+
+    right: -70px;
+
+    top: -70px;
+
+    background:
+        rgba(255,255,255,.25);
+
+    filter:
+        blur(25px);
+
+    z-index: -1;
+
+}
+
+
+/* =====================================================
+   ICON
+   ===================================================== */
+
+.award-icon {
+
+    width: 70px;
+
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 20px;
+
+    font-size: 38px;
+
+    background:
+        rgba(255,255,255,.18);
+
+    backdrop-filter:
+        blur(8px);
+
+    box-shadow:
+        inset 0 1px
+        rgba(255,255,255,.3);
+
+}
+
+
+/* =====================================================
+   CONTENT
+   ===================================================== */
+
+.award-content {
+
+    margin-top: 18px;
+
+}
+
+
+.award-label {
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    opacity: .7;
+
+}
+
+
+.award-content h3 {
+
+    margin:
+        5px 0;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+}
+
+
+.award-content p {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    opacity: .75;
+
+}
+
+
+/* =====================================================
+   ACTION
+   ===================================================== */
+
+.award-action {
+
+    margin-top: 20px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.award-action span {
+
+    font-size: 20px;
+
+    transition:
+        transform .3s ease;
+
+}
+
+
+.award-card:hover
+.award-action span {
+
+    transform:
+        translateX(6px);
+
+}
+
+
+/* =====================================================
+   RESULTS AREA
+   ===================================================== */
+
+.award-history {
+
+    width: 100%;
+
+    margin-top: 25px;
+
+}
+
+
+/* =====================================================
+   RESULT TITLE
+   ===================================================== */
+
+.award-history-title {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+
+}
+
+
+.award-history-title h3 {
+
+    font-size: 26px;
+
+    margin: 0;
+
+}
+
+
+.award-history-title p {
+
+    margin-top: 6px;
+
+    color:
+        rgba(255,255,255,.6);
+
+}
+
+
+/* =====================================================
+   DAILY RESULT GRID
+   ===================================================== */
+
+.daily-award-history {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(280px, 1fr));
+
+    gap: 22px;
+
+}
+
+
+/* =====================================================
+   DAILY CARD
+   ===================================================== */
+
+.daily-award-card {
+
+    position: relative;
+
+    padding: 25px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.11),
+            rgba(255,255,255,.04)
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        0 12px 35px
+        rgba(0,0,0,.2);
+
+    overflow: hidden;
+
+    animation:
+        awardFadeIn .45s ease both;
+
+}
+
+
+/* top line */
+
+.daily-award-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #f59e0b,
+            #8b5cf6
+        );
+
+}
+
+
+/* =====================================================
+   DATE
+   ===================================================== */
+
+.daily-award-date {
+
+    display: inline-flex;
+
+    padding:
+        7px 13px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color:
+        #fbbf24;
+
+    background:
+        rgba(251,191,36,.1);
+
+    margin-bottom: 15px;
+
+}
+
+
+/* =====================================================
+   TITLE
+   ===================================================== */
+
+.daily-award-title {
+
+    font-size: 20px;
+
+    font-weight: 800;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* =====================================================
+   WINNERS
+   ===================================================== */
+
+.daily-winners {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: stretch;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+}
+
+
+/* =====================================================
+   PLAYER WINNER
+   ===================================================== */
+
+.daily-winner {
+
+    flex:
+        1 1 150px;
+
+    max-width: 190px;
+
+    padding: 18px 12px;
+
+    text-align: center;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid
+        rgba(255,255,255,.09);
+
+    transition:
+        transform .3s ease,
+        background .3s ease;
+
+}
+
+
+.daily-winner:hover {
+
+    transform:
+        translateY(-5px);
+
+    background:
+        rgba(255,255,255,.12);
+
+}
+
+
+/* =====================================================
+   PLAYER PHOTO
+   ===================================================== */
+
+.daily-award-photo {
+
+    width: 82px;
+
+    height: 82px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    display: block;
+
+    margin:
+        0 auto 12px;
+
+    border:
+        3px solid
+        rgba(255,255,255,.9);
+
+    box-shadow:
+        0 8px 22px
+        rgba(0,0,0,.35);
+
+}
+
+
+/* =====================================================
+   PLAYER NAME
+   ===================================================== */
+
+.daily-winner-name {
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+}
+
+
+/* =====================================================
+   PLAYER STAT
+   ===================================================== */
+
+.daily-winner-stat {
+
+    margin-top: 7px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color:
+        #fbbf24;
+
+}
+
+
+/* =====================================================
+   ANIMATION
+   ===================================================== */
+
+@keyframes awardFadeIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(20px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 750px) {
+
+    .awards-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .daily-award-history {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .award-card {
+
+        min-height: 240px;
+
+        padding: 25px;
+
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .awards-section {
+
+        width: 92%;
+
+    }
+
+    .award-content h3 {
+
+        font-size: 25px;
+
+    }
+
+    .daily-award-card {
+
+        padding: 20px 15px;
 
     }
 
