@@ -4016,26 +4016,23 @@ function showDatePerformance() {
     const selectedDate =
         document.getElementById("dateSelector").value;
 
-    if (!selectedDate) return;
+    console.log("Selected:", selectedDate);
 
     const datePlayers =
         players.filter(
-            p => p.date === selectedDate
+            p => String(p.date).trim() === String(selectedDate).trim()
         );
 
-    let html =
-    '<div class="date-player-grid">';
+    console.log("Players Found:", datePlayers);
+
+    let html = "";
 
     datePlayers.forEach(player => {
 
-        const photo =
-            playerPhotos[player.name] || "";
-
         html += `
-
         <div class="date-player-card">
 
-            <img src="${photo}"
+            <img src="${playerPhotos[player.name] || ''}"
                  class="date-player-img">
 
             <h3>${player.name}</h3>
@@ -4045,12 +4042,9 @@ function showDatePerformance() {
             <p>🎯 Wickets: ${player.wickets}</p>
 
         </div>
-
         `;
 
     });
-
-    html += '</div>';
 
     document.getElementById(
         "datePerformanceContainer"
