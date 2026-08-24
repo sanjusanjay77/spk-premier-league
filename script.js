@@ -190,7 +190,7 @@ async function loadPlayers() {
     generateLatestMatch,
     generateCharts,
     updateTrophyCabinet,
-    showDatePerformance
+    loadDateSelector
 
 ];
 
@@ -4009,7 +4009,6 @@ if (table) {
 
 loadPlayers();
 
-
 function loadDateSelector() {
 
     const selector =
@@ -4021,48 +4020,91 @@ function loadDateSelector() {
     }
 
     const uniqueDates =
-        [...new Set(players.map(p => p.date))];
+        [...new Set(
+            players
+                .map(p => String(p.date || "").trim())
+                .filter(date => date)
+        )];
 
-    console.log("Dates Loaded:", uniqueDates);
+    uniqueDates.sort();
 
     selector.innerHTML =
         '<option value="">Select Date</option>';
 
     uniqueDates.forEach(date => {
 
-        selector.innerHTML +=
-        `<option value="${date}">
-            ${date}
-        </option>`;
+        const option =
+            document.createElement("option");
+
+        option.value = date;
+        option.textContent = date;
+
+        selector.appendChild(option);
 
     });
 
-}
+    console.log(
+        "Dates Loaded:",
+        uniqueDates
+    );
 
+}
 
 function showDatePerformance() {
 
     const selectedDate =
         document.getElementById("dateSelector").value;
 
-    console.log("Selected:", selectedDate);
-
-    const datePlayers =
-        players.filter(
-            p => String(p.date).trim() === String(selectedDate).trim()
+    const container =
+        document.getElementById(
+            "datePerformanceContainer"
         );
 
-    console.log("Players Found:", datePlayers);
+    if (!selectedDate) {
 
-    let html = "";
+        container.innerHTML = "";
+        return;
+
+    }
+
+    const datePlayers =
+        players.filter(player =>
+            String(player.date || "").trim() ===
+            String(selectedDate).trim()
+        );
+
+    console.log(
+        "Selected Date:",
+        selectedDate
+    );
+
+    console.log(
+        "Players Found:",
+        datePlayers
+    );
+
+    if (datePlayers.length === 0) {
+
+        container.innerHTML =
+            "<p>No data found for this date.</p>";
+
+        return;
+
+    }
+
+    let html =
+        '<div class="date-player-grid">';
 
     datePlayers.forEach(player => {
 
         html += `
+
         <div class="date-player-card">
 
-            <img src="${playerPhotos[player.name] || ''}"
-                 class="date-player-img">
+            <img
+                src="${playerPhotos[player.name] || ''}"
+                class="date-player-img"
+                alt="${player.name}">
 
             <h3>${player.name}</h3>
 
@@ -4071,12 +4113,13 @@ function showDatePerformance() {
             <p>🎯 Wickets: ${player.wickets}</p>
 
         </div>
+
         `;
 
     });
 
-    document.getElementById(
-        "datePerformanceContainer"
-    ).innerHTML = html;
+    html += "</div>";
+
+    container.innerHTML = html;
 
 }
