@@ -4052,74 +4052,226 @@ function loadDateSelector() {
 
 function showDatePerformance() {
 
-    const selectedDate =
-        document.getElementById("dateSelector").value;
+    const selector =
+        document.getElementById("dateSelector");
 
     const container =
-        document.getElementById(
-            "datePerformanceContainer"
-        );
+        document.getElementById("datePerformanceContainer");
 
+    if (!selector || !container) {
+        return;
+    }
+
+    const selectedDate =
+        String(selector.value || "").trim();
+
+    /* No date selected */
     if (!selectedDate) {
-
-        container.innerHTML = "";
+        container.innerHTML = `
+            <div class="date-empty">
+                📅 Select a match date to view performance
+            </div>
+        `;
         return;
-
     }
 
-    const datePlayers =
-        players.filter(player =>
-            String(player.date || "").trim() ===
-            String(selectedDate).trim()
-        );
 
-    console.log(
-        "Selected Date:",
-        selectedDate
-    );
+    /* =========================================
+       GET ALL RECORDS FROM SELECTED DATE
+       ========================================= */
 
-    console.log(
-        "Players Found:",
-        datePlayers
-    );
+    const datePlayers = players.filter(function(player) {
 
-    if (datePlayers.length === 0) {
+        return String(player.date || "").trim() === selectedDate;
 
-        container.innerHTML =
-            "<p>No data found for this date.</p>";
+    });
+
+
+    if (!datePlayers.length) {
+
+        container.innerHTML = `
+            <div class="date-empty">
+                ❌ No performance data found for ${selectedDate}
+            </div>
+        `;
 
         return;
-
     }
 
-    let html =
-        '<div class="date-player-grid">';
 
-    datePlayers.forEach(player => {
+    /* =========================================
+       COMBINE ALL MATCHES OF THAT DATE
+       PLAYER BY PLAYER
+       ========================================= */
+
+    const totals = {};
+
+
+    datePlayers.forEach(function(player) {
+
+        const name =
+            String(player.name || "").trim();
+
+        if (!name) {
+            return;
+        }
+
+
+        if (!totals[name]) {
+
+            totals[name] = {
+
+                name: name,
+
+                runs: 0,
+
+                wickets: 0,
+
+                matches: 0,
+
+                photo:
+                    playerPhotos[name] || ""
+
+            };
+
+        }
+
+
+        totals[name].runs +=
+            Number(player.runs) || 0;
+
+
+        totals[name].wickets +=
+            Number(player.wickets) || 0;
+
+
+        totals[name].matches++;
+
+    });
+
+
+    /* =========================================
+       CONVERT OBJECT → ARRAY
+       ========================================= */
+
+    const playersForDate =
+        Object.values(totals);
+
+
+    /* =========================================
+       DISPLAY TOTAL FOR SELECTED DATE
+       ========================================= */
+
+    let html = `
+
+        <div class="date-performance-header">
+
+            <h3>
+                📅 ${selectedDate}
+            </h3>
+
+            <p>
+                Match Day Total Performance
+            </p>
+
+        </div>
+
+        <div class="date-performance-grid">
+
+    `;
+
+
+    playersForDate.forEach(function(player) {
+
+        const photo =
+            player.photo || "";
+
 
         html += `
 
-        <div class="date-player-card">
+            <div class="date-player-card">
 
-            <img
-                src="${playerPhotos[player.name] || ''}"
-                class="date-player-img"
-                alt="${player.name}">
+                <div class="date-player-photo-wrapper">
 
-            <h3>${player.name}</h3>
+                    ${
+                        photo
+                        ?
+                        `<img
+                            src="${photo}"
+                            class="date-player-img"
+                            alt="${player.name}"
+                        >`
+                        :
+                        `<div class="date-player-img no-photo">
+                            🏏
+                         </div>`
+                    }
 
-            <p>🏏 Runs: ${player.runs}</p>
+                </div>
 
-            <p>🎯 Wickets: ${player.wickets}</p>
 
-        </div>
+                <h3>
+                    ${player.name}
+                </h3>
+
+
+                <div class="date-stat runs-stat">
+
+                    <span>🏏</span>
+
+                    <div>
+                        <small>Total Runs</small>
+
+                        <strong>
+                            ${player.runs}
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="date-stat wickets-stat">
+
+                    <span>🎯</span>
+
+                    <div>
+                        <small>Total Wickets</small>
+
+                        <strong>
+                            ${player.wickets}
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="date-match-count">
+
+                    🎮 ${player.matches} match${player.matches === 1 ? "" : "es"}
+
+                </div>
+
+            </div>
 
         `;
 
     });
 
-    html += "</div>";
+
+    html += `
+
+        </div>
+
+    `;
+
 
     container.innerHTML = html;
+
+
+    console.log(
+        "Date Performance:",
+        selectedDate,
+        playersForDate
+    );
 
 }
