@@ -252,48 +252,112 @@ Compare
 
 </section>
 
+<!-- =====================================================
+     🏅 DAILY PERFORMANCE AWARDS
+     ===================================================== -->
+
 <section class="awards-section">
 
-<h2 class="section-title">
-🏅 Daily Performance Awards
-</h2>
+    <div class="awards-header">
 
-<div class="awards-grid">
-
-    <div class="award-card batting-award"
-         onclick="showBestBatsmanHistory()">
-
-        <div class="award-icon">🏏</div>
-
-        <h3>Best Batsman</h3>
-
-        <p>Highest runs by each match day</p>
-
-        <span class="award-click">
-            Click to View
+        <span class="awards-badge">
+            🏆 SPK AWARDS
         </span>
+
+        <h2 class="section-title">
+            Daily Performance Awards
+        </h2>
+
+        <p class="awards-subtitle">
+            Discover the best batting and bowling performances
+            from every match day.
+        </p>
 
     </div>
 
 
-    <div class="award-card bowling-award"
-         onclick="showBestBowlerHistory()">
+    <div class="awards-grid">
 
-        <div class="award-icon">🎯</div>
+        <!-- BEST BATSMAN -->
 
-        <h3>Best Bowler</h3>
+        <button
+            class="award-card batting-award"
+            onclick="showBestBatsmanHistory()">
 
-        <p>Highest wickets by each match day</p>
+            <div class="award-glow"></div>
 
-        <span class="award-click">
-            Click to View
-        </span>
+            <div class="award-icon">
+                🏏
+            </div>
+
+            <div class="award-content">
+
+                <span class="award-label">
+                    BATTING AWARD
+                </span>
+
+                <h3>
+                    Best Batsman
+                </h3>
+
+                <p>
+                    Highest runs of every match day
+                </p>
+
+            </div>
+
+            <div class="award-action">
+                View Daily Results
+                <span>→</span>
+            </div>
+
+        </button>
+
+
+        <!-- BEST BOWLER -->
+
+        <button
+            class="award-card bowling-award"
+            onclick="showBestBowlerHistory()">
+
+            <div class="award-glow"></div>
+
+            <div class="award-icon">
+                🎯
+            </div>
+
+            <div class="award-content">
+
+                <span class="award-label">
+                    BOWLING AWARD
+                </span>
+
+                <h3>
+                    Best Bowler
+                </h3>
+
+                <p>
+                    Highest wickets of every match day
+                </p>
+
+            </div>
+
+            <div class="award-action">
+                View Daily Results
+                <span>→</span>
+            </div>
+
+        </button>
 
     </div>
 
-</div>
 
-<div id="awardHistory"></div>
+    <!-- RESULTS APPEAR HERE -->
+
+    <div
+        id="awardHistory"
+        class="award-history">
+    </div>
 
 </section>
 <section class="hall-of-fame">
