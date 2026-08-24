@@ -3179,160 +3179,323 @@ function generateAwardHistory() {
 }
 
 
-/* =========================================================
-   BEST BATSMAN HISTORY
-   ========================================================= */
 function showBestBatsmanHistory() {
 
-    const totals = {};
+    const dailyData = {};
 
-    // Calculate TOTAL runs for every player
     players.forEach(function(player) {
 
-        const name = String(player.name || "").trim();
+        const date =
+            String(player.date || "").trim();
 
-        if (!name) return;
+        const name =
+            String(player.name || "").trim();
 
-        if (!totals[name]) {
-            totals[name] = 0;
+        if (!date || !name) {
+            return;
         }
 
-        totals[name] += Number(player.runs) || 0;
-    });
+        if (!dailyData[date]) {
+            dailyData[date] = {};
+        }
 
+        if (!dailyData[date][name]) {
+            dailyData[date][name] = 0;
+        }
 
-    const entries = Object.entries(totals);
-
-    if (!entries.length) return;
-
-
-    // Find highest TOTAL tournament runs
-    const highestRuns = Math.max.apply(
-        null,
-        entries.map(function(entry) {
-            return entry[1];
-        })
-    );
-
-
-    // Get ALL players having the same total
-    const bestBatsmen = entries.filter(function(entry) {
-
-        return entry[1] === highestRuns;
+        dailyData[date][name] +=
+            Number(player.runs) || 0;
 
     });
 
 
-    const names = bestBatsmen.map(function(entry) {
+    const dates =
+        Object.keys(dailyData).sort(function(a, b) {
 
-        return entry[0];
+            return new Date(b) - new Date(a);
 
-    });
+        });
 
 
-    const html = `
+    let html = `
+        <div class="daily-award-history">
 
-        <div class="award-history-card">
-
-            <h3>🏏 Tournament Best Batsman</h3>
-
-            <p>
-                🔥 <strong>${names.join(" & ")}</strong>
-            </p>
-
-            <p>
-                🏏 <strong>${highestRuns} Total Runs</strong>
-            </p>
-
-        </div>
+            <h3>🏏 Best Batsman — Daily Results</h3>
 
     `;
+
+
+    dates.forEach(function(date) {
+
+        const playersForDay =
+            Object.entries(dailyData[date]);
+
+
+        if (!playersForDay.length) {
+            return;
+        }
+
+
+        const highestRuns =
+            Math.max.apply(
+                null,
+                playersForDay.map(function(entry) {
+                    return entry[1];
+                })
+            );
+
+
+        const winners =
+            playersForDay.filter(function(entry) {
+
+                return entry[1] === highestRuns;
+
+            });
+
+
+        html += `
+
+            <div class="daily-award-card">
+
+                <div class="daily-award-date">
+                    📅 ${escapeHTML(date)}
+                </div>
+
+                <div class="daily-award-title">
+                    🏏 Best Batsman
+                </div>
+
+                <div class="daily-winners">
+
+        `;
+
+
+        winners.forEach(function(entry) {
+
+            const name = entry[0];
+
+            const photo =
+                playerPhotos[name] || "";
+
+
+            html += `
+
+                <div class="daily-winner">
+
+                    <img
+                        src="${escapeHTML(photo)}"
+                        class="daily-award-photo"
+                        alt="${escapeHTML(name)}"
+                    >
+
+                    <div class="daily-winner-name">
+                        ${escapeHTML(name)}
+                    </div>
+
+                    <div class="daily-winner-stat">
+                        🏏 ${highestRuns} Runs
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+
+        html += `
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    html += `</div>`;
 
 
     const container =
         document.getElementById("awardHistory");
 
+
     if (container) {
+
         container.innerHTML = html;
+
+        container.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
     }
 
 }
-/* =========================================================
-   BEST BOWLER HISTORY
-   ========================================================= */
+
 
 function showBestBowlerHistory() {
 
-    const totals = {};
+    const dailyData = {};
 
-    // Calculate TOTAL wickets for every player
     players.forEach(function(player) {
 
-        const name = String(player.name || "").trim();
+        const date =
+            String(player.date || "").trim();
 
-        if (!name) return;
+        const name =
+            String(player.name || "").trim();
 
-        if (!totals[name]) {
-            totals[name] = 0;
+        if (!date || !name) {
+            return;
         }
 
-        totals[name] += Number(player.wickets) || 0;
-    });
+        if (!dailyData[date]) {
+            dailyData[date] = {};
+        }
 
+        if (!dailyData[date][name]) {
+            dailyData[date][name] = 0;
+        }
 
-    const entries = Object.entries(totals);
-
-    if (!entries.length) return;
-
-
-    // Find highest TOTAL wickets
-    const highestWickets = Math.max.apply(
-        null,
-        entries.map(function(entry) {
-            return entry[1];
-        })
-    );
-
-
-    // Get ALL players having the same total
-    const bestBowlers = entries.filter(function(entry) {
-
-        return entry[1] === highestWickets;
+        dailyData[date][name] +=
+            Number(player.wickets) || 0;
 
     });
 
 
-    const names = bestBowlers.map(function(entry) {
+    const dates =
+        Object.keys(dailyData).sort(function(a, b) {
 
-        return entry[0];
+            return new Date(b) - new Date(a);
 
-    });
+        });
 
 
-    const html = `
+    let html = `
+        <div class="daily-award-history">
 
-        <div class="award-history-card">
-
-            <h3>🎯 Tournament Best Bowler</h3>
-
-            <p>
-                🎯 <strong>${names.join(" & ")}</strong>
-            </p>
-
-            <p>
-                🏆 <strong>${highestWickets} Total Wickets</strong>
-            </p>
-
-        </div>
+            <h3>🎯 Best Bowler — Daily Results</h3>
 
     `;
+
+
+    dates.forEach(function(date) {
+
+        const playersForDay =
+            Object.entries(dailyData[date]);
+
+
+        if (!playersForDay.length) {
+            return;
+        }
+
+
+        const highestWickets =
+            Math.max.apply(
+                null,
+                playersForDay.map(function(entry) {
+                    return entry[1];
+                })
+            );
+
+
+        /*
+           Don't show a day where nobody
+           took a wicket.
+        */
+
+        if (highestWickets <= 0) {
+            return;
+        }
+
+
+        const winners =
+            playersForDay.filter(function(entry) {
+
+                return entry[1] === highestWickets;
+
+            });
+
+
+        html += `
+
+            <div class="daily-award-card">
+
+                <div class="daily-award-date">
+                    📅 ${escapeHTML(date)}
+                </div>
+
+                <div class="daily-award-title">
+                    🎯 Best Bowler
+                </div>
+
+                <div class="daily-winners">
+
+        `;
+
+
+        winners.forEach(function(entry) {
+
+            const name = entry[0];
+
+            const photo =
+                playerPhotos[name] || "";
+
+
+            html += `
+
+                <div class="daily-winner">
+
+                    <img
+                        src="${escapeHTML(photo)}"
+                        class="daily-award-photo"
+                        alt="${escapeHTML(name)}"
+                    >
+
+                    <div class="daily-winner-name">
+                        ${escapeHTML(name)}
+                    </div>
+
+                    <div class="daily-winner-stat">
+                        🎯 ${highestWickets} Wickets
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+
+        html += `
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    html += `</div>`;
 
 
     const container =
         document.getElementById("awardHistory");
 
+
     if (container) {
+
         container.innerHTML = html;
+
+        container.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
     }
 
 }
