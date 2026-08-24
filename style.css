@@ -680,162 +680,372 @@ font-weight:bold;
 color:#FFD700;
 
 }
-/* CAP HOLDERS */
+//* =====================================================
+   🏅 CAP HOLDERS
+   ===================================================== */
 
-.cap-section{
+.cap-section {
+    width: 95%;
+    max-width: 1100px;
+    margin: 50px auto;
+}
 
-width:95%;
-margin:auto;
-margin-top:50px;
+
+/* =====================================================
+   CAP CONTAINER
+   ===================================================== */
+
+.caps-container {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(300px, 1fr));
+
+    gap: 35px;
+
+    justify-content: center;
+    align-items: stretch;
+}
+
+
+/* =====================================================
+   CAP CARD
+   ===================================================== */
+
+.cap-card {
+    padding: 35px 25px;
+
+    border-radius: 25px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    position: relative;
+
+    overflow: hidden;
+
+    /* CENTER EVERYTHING */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    min-height: 380px;
+
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+
+/* Shine effect */
+
+.cap-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    top: -90px;
+    right: -90px;
+
+    background:
+        rgba(255,255,255,0.25);
+
+    border-radius: 50%;
+
+    filter: blur(25px);
+
+    pointer-events: none;
+}
+
+
+/* Hover */
+
+.cap-card:hover {
+
+    transform:
+        translateY(-12px)
+        scale(1.03);
 
 }
 
-.caps-container{
 
-display:grid;
+/* =====================================================
+   CAP ICON
+   ===================================================== */
 
-grid-template-columns:
-repeat(auto-fit,minmax(320px,1fr));
+.cap-icon {
 
-gap:30px;
+    font-size: 60px;
+
+    margin-bottom: 5px;
+
+    line-height: 1;
+}
+
+
+/* =====================================================
+   PLAYER PHOTO
+   ===================================================== */
+
+.cap-card img {
+
+    width: 140px;
+    height: 140px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    display: block;
+
+    /* PERFECT CENTER */
+    margin:
+        15px auto 18px;
+
+    border:
+        5px solid white;
+
+    background:
+        rgba(255,255,255,0.15);
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,0.35);
+
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+
+/* Photo hover */
+
+.cap-card:hover img {
+
+    transform:
+        scale(1.08);
+
+    box-shadow:
+        0 0 30px
+        rgba(255,255,255,0.65);
 
 }
 
-.cap-card{
 
-padding:30px;
+/* =====================================================
+   CAP TITLE
+   ===================================================== */
 
-border-radius:25px;
+.cap-card h3 {
 
-text-align:center;
+    font-size: 30px;
 
-transition:.4s;
+    margin:
+        5px 0 10px;
 
-cursor:pointer;
-
-position:relative;
-
-overflow:hidden;
+    font-weight: 800;
 
 }
 
-.cap-card:hover{
 
-transform:
-translateY(-12px)
-scale(1.04);
+/* =====================================================
+   PLAYER NAME
+   ===================================================== */
 
-}
+.cap-card h4 {
 
-.cap-card img{
+    font-size: 24px;
 
-width:130px;
-height:130px;
+    margin:
+        5px 0 8px;
 
-border-radius:50%;
-
-object-fit:cover;
-
-border:5px solid white;
-
-margin:15px 0;
+    font-weight: 700;
 
 }
 
-.cap-icon{
 
-font-size:60px;
+/* =====================================================
+   CAP STAT
+   ===================================================== */
 
-margin-bottom:10px;
+.cap-card p {
 
-}
+    font-size: 20px;
 
-.cap-card h3{
+    font-weight: 700;
 
-font-size:30px;
-
-margin-bottom:10px;
-
-}
-
-.cap-card h4{
-
-font-size:24px;
-
-margin-bottom:8px;
+    margin:
+        5px 0;
 
 }
 
-.cap-card p{
 
-font-size:20px;
+/* =====================================================
+   🟠 ORANGE CAP
+   ===================================================== */
 
-font-weight:700;
+.orange-card {
 
-}
+    background:
+        linear-gradient(
+            135deg,
+            #ff9800,
+            #FFD700
+        );
 
-.orange-card{
+    color: black;
 
-background:
-linear-gradient(
-135deg,
-#ff9800,
-#FFD700
-);
-
-color:black;
-
-box-shadow:
-0 10px 30px
-rgba(255,152,0,.4);
+    box-shadow:
+        0 10px 30px
+        rgba(255,152,0,0.4);
 
 }
 
-.purple-card{
 
-background:
-linear-gradient(
-135deg,
-#7B1FA2,
-#BA68C8
-);
+.orange-card:hover {
 
-box-shadow:
-0 10px 30px
-rgba(123,31,162,.4);
+    box-shadow:
+        0 20px 55px
+        rgba(255,152,0,0.75);
 
 }
 
-.orange-card:hover{
 
-box-shadow:
-0 20px 50px
-rgba(255,152,0,.7);
+/* Orange photo */
 
-}
+.orange-card img {
 
-.purple-card:hover{
-
-box-shadow:
-0 20px 50px
-rgba(123,31,162,.7);
+    border-color:
+        #ffffff;
 
 }
 
-@media(max-width:768px){
 
-.cap-card{
+/* =====================================================
+   🟣 PURPLE CAP
+   ===================================================== */
 
-padding:20px;
+.purple-card {
+
+    background:
+        linear-gradient(
+            135deg,
+            #7B1FA2,
+            #BA68C8
+        );
+
+    color: white;
+
+    box-shadow:
+        0 10px 30px
+        rgba(123,31,162,0.4);
 
 }
 
-.cap-card img{
 
-width:100px;
-height:100px;
+.purple-card:hover {
+
+    box-shadow:
+        0 20px 55px
+        rgba(123,31,162,0.75);
 
 }
+
+
+/* Purple photo */
+
+.purple-card img {
+
+    border-color:
+        #ffffff;
+
+}
+
+
+/* =====================================================
+   📱 TABLET
+   ===================================================== */
+
+@media (max-width: 800px) {
+
+    .caps-container {
+
+        grid-template-columns:
+            1fr;
+
+        max-width: 500px;
+
+        margin:
+            0 auto;
+
+    }
+
+    .cap-card {
+
+        min-height: 350px;
+
+    }
+
+}
+
+
+/* =====================================================
+   📱 MOBILE
+   ===================================================== */
+
+@media (max-width: 480px) {
+
+    .cap-section {
+
+        width: 92%;
+
+    }
+
+    .cap-card {
+
+        padding:
+            25px 15px;
+
+        min-height: 320px;
+
+    }
+
+    .cap-icon {
+
+        font-size: 50px;
+
+    }
+
+    .cap-card img {
+
+        width: 115px;
+        height: 115px;
+
+    }
+
+    .cap-card h3 {
+
+        font-size: 25px;
+
+    }
+
+    .cap-card h4 {
+
+        font-size: 20px;
+
+    }
+
+    .cap-card p {
+
+        font-size: 17px;
+
+    }
 
 }
 /* HALL OF FAME */
@@ -3393,3 +3603,266 @@ padding:10px 14px;
     }
 
 }
+
+
+
+/* =====================================================
+   DAILY PERFORMANCE AWARDS
+   ===================================================== */
+
+.awards-section {
+    width: 100%;
+    margin: 50px auto;
+}
+
+
+.awards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+    gap: 25px;
+    max-width: 850px;
+    margin: 0 auto 30px;
+}
+
+
+.award-card {
+    position: relative;
+    padding: 30px 25px;
+    border-radius: 22px;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.12),
+            rgba(255,255,255,0.03)
+        );
+
+    border: 1px solid rgba(255,255,255,0.15);
+
+    backdrop-filter: blur(15px);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+.award-card:hover {
+    transform: translateY(-8px) scale(1.02);
+}
+
+
+.batting-award:hover {
+    box-shadow:
+        0 15px 45px rgba(255, 170, 0, 0.35);
+}
+
+
+.bowling-award:hover {
+    box-shadow:
+        0 15px 45px rgba(120, 80, 255, 0.35);
+}
+
+
+.award-icon {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+
+.award-card h3 {
+    font-size: 24px;
+    margin: 5px 0;
+}
+
+
+.award-card p {
+    opacity: 0.75;
+    margin: 8px 0 18px;
+}
+
+
+.award-click {
+    display: inline-block;
+
+    padding: 8px 18px;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.1);
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   DAILY AWARD HISTORY
+   ===================================================== */
+
+.daily-award-history {
+    max-width: 1000px;
+    margin: 30px auto;
+}
+
+
+.daily-award-history > h3 {
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 25px;
+}
+
+
+.daily-award-card {
+
+    margin-bottom: 25px;
+
+    padding: 25px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.10),
+            rgba(255,255,255,0.03)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    backdrop-filter: blur(14px);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.18);
+}
+
+
+.daily-award-date {
+
+    text-align: center;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    margin-bottom: 8px;
+}
+
+
+.daily-award-title {
+
+    text-align: center;
+
+    font-size: 20px;
+
+    font-weight: 600;
+
+    margin-bottom: 20px;
+}
+
+
+.daily-winners {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 30px;
+
+    flex-wrap: wrap;
+}
+
+
+.daily-winner {
+
+    min-width: 170px;
+
+    text-align: center;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(255,255,255,0.07);
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+.daily-winner:hover {
+
+    transform:
+        translateY(-5px);
+
+}
+
+
+.daily-award-photo {
+
+    width: 90px;
+
+    height: 90px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    display: block;
+
+    margin: 0 auto 10px;
+
+    border:
+        3px solid rgba(255,255,255,0.8);
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.25);
+}
+
+
+.daily-winner-name {
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    margin-top: 5px;
+}
+
+
+.daily-winner-stat {
+
+    margin-top: 7px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .awards-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .daily-winners {
+
+        flex-direction: column;
+
+    }
+
+}
+
+
+
