@@ -189,7 +189,8 @@ async function loadPlayers() {
     generateHallOfFame,
     generateLatestMatch,
     generateCharts,
-    updateTrophyCabinet
+    updateTrophyCabinet,
+    showDatePerformance
 
 ];
 
@@ -4007,3 +4008,52 @@ if (table) {
    ========================================================= */
 
 loadPlayers();
+
+
+
+function showDatePerformance() {
+
+    const selectedDate =
+        document.getElementById("dateSelector").value;
+
+    if (!selectedDate) return;
+
+    const datePlayers =
+        players.filter(
+            p => p.date === selectedDate
+        );
+
+    let html =
+    '<div class="date-player-grid">';
+
+    datePlayers.forEach(player => {
+
+        const photo =
+            playerPhotos[player.name] || "";
+
+        html += `
+
+        <div class="date-player-card">
+
+            <img src="${photo}"
+                 class="date-player-img">
+
+            <h3>${player.name}</h3>
+
+            <p>🏏 Runs: ${player.runs}</p>
+
+            <p>🎯 Wickets: ${player.wickets}</p>
+
+        </div>
+
+        `;
+
+    });
+
+    html += '</div>';
+
+    document.getElementById(
+        "datePerformanceContainer"
+    ).innerHTML = html;
+
+}
