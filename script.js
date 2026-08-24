@@ -3178,8 +3178,30 @@ function generateAwardHistory() {
 
 }
 
-
 function showBestBatsmanHistory() {
+
+    const container =
+        document.getElementById("awardHistory");
+
+    if (!container) return;
+
+    /* If batsman results are already open,
+       close them */
+    if (
+        container.classList.contains("award-open") &&
+        container.dataset.type === "batsman"
+    ) {
+
+        container.classList.remove("award-open");
+        container.dataset.type = "";
+
+        setTimeout(function() {
+            container.innerHTML = "";
+        }, 350);
+
+        return;
+    }
+
 
     const dailyData = {};
 
@@ -3191,17 +3213,18 @@ function showBestBatsmanHistory() {
         const name =
             String(player.name || "").trim();
 
-        if (!date || !name) {
-            return;
-        }
+        if (!date || !name) return;
+
 
         if (!dailyData[date]) {
             dailyData[date] = {};
         }
 
+
         if (!dailyData[date][name]) {
             dailyData[date][name] = 0;
         }
+
 
         dailyData[date][name] +=
             Number(player.runs) || 0;
@@ -3218,37 +3241,44 @@ function showBestBatsmanHistory() {
 
 
     let html = `
-        <div class="daily-award-history">
 
-            <h3>🏏 Best Batsman — Daily Results</h3>
+        <div class="award-history-title">
+
+            <h3>🏏 Best Batsman</h3>
+
+            <p>
+                Highest runs from each full match day
+            </p>
+
+        </div>
+
+        <div class="daily-award-history">
 
     `;
 
 
     dates.forEach(function(date) {
 
-        const playersForDay =
+        const dayPlayers =
             Object.entries(dailyData[date]);
 
 
-        if (!playersForDay.length) {
-            return;
-        }
+        if (!dayPlayers.length) return;
 
 
         const highestRuns =
             Math.max.apply(
                 null,
-                playersForDay.map(function(entry) {
-                    return entry[1];
+                dayPlayers.map(function(item) {
+                    return item[1];
                 })
             );
 
 
         const winners =
-            playersForDay.filter(function(entry) {
+            dayPlayers.filter(function(item) {
 
-                return entry[1] === highestRuns;
+                return item[1] === highestRuns;
 
             });
 
@@ -3270,9 +3300,9 @@ function showBestBatsmanHistory() {
         `;
 
 
-        winners.forEach(function(entry) {
+        winners.forEach(function(item) {
 
-            const name = entry[0];
+            const name = item[0];
 
             const photo =
                 playerPhotos[name] || "";
@@ -3317,27 +3347,51 @@ function showBestBatsmanHistory() {
     html += `</div>`;
 
 
-    const container =
-        document.getElementById("awardHistory");
+    /* Replace previous results */
 
+    container.innerHTML = html;
 
-    if (container) {
+    container.dataset.type = "batsman";
 
-        container.innerHTML = html;
+    /* Force animation */
 
-        container.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
+    requestAnimationFrame(function() {
 
-    }
+        container.classList.add("award-open");
+
+    });
 
 }
 
-
 function showBestBowlerHistory() {
 
+    const container =
+        document.getElementById("awardHistory");
+
+    if (!container) return;
+
+
+    /* If bowler results are already open,
+       close them */
+
+    if (
+        container.classList.contains("award-open") &&
+        container.dataset.type === "bowler"
+    ) {
+
+        container.classList.remove("award-open");
+        container.dataset.type = "";
+
+        setTimeout(function() {
+            container.innerHTML = "";
+        }, 350);
+
+        return;
+    }
+
+
     const dailyData = {};
+
 
     players.forEach(function(player) {
 
@@ -3347,17 +3401,18 @@ function showBestBowlerHistory() {
         const name =
             String(player.name || "").trim();
 
-        if (!date || !name) {
-            return;
-        }
+        if (!date || !name) return;
+
 
         if (!dailyData[date]) {
             dailyData[date] = {};
         }
 
+
         if (!dailyData[date][name]) {
             dailyData[date][name] = 0;
         }
+
 
         dailyData[date][name] +=
             Number(player.wickets) || 0;
@@ -3374,37 +3429,42 @@ function showBestBowlerHistory() {
 
 
     let html = `
-        <div class="daily-award-history">
 
-            <h3>🎯 Best Bowler — Daily Results</h3>
+        <div class="award-history-title">
+
+            <h3>🎯 Best Bowler</h3>
+
+            <p>
+                Highest wickets from each full match day
+            </p>
+
+        </div>
+
+        <div class="daily-award-history">
 
     `;
 
 
     dates.forEach(function(date) {
 
-        const playersForDay =
+        const dayPlayers =
             Object.entries(dailyData[date]);
 
 
-        if (!playersForDay.length) {
-            return;
-        }
+        if (!dayPlayers.length) return;
 
 
         const highestWickets =
             Math.max.apply(
                 null,
-                playersForDay.map(function(entry) {
-                    return entry[1];
+                dayPlayers.map(function(item) {
+                    return item[1];
                 })
             );
 
 
-        /*
-           Don't show a day where nobody
-           took a wicket.
-        */
+        /* Don't show days where
+           nobody took a wicket */
 
         if (highestWickets <= 0) {
             return;
@@ -3412,9 +3472,9 @@ function showBestBowlerHistory() {
 
 
         const winners =
-            playersForDay.filter(function(entry) {
+            dayPlayers.filter(function(item) {
 
-                return entry[1] === highestWickets;
+                return item[1] === highestWickets;
 
             });
 
@@ -3436,9 +3496,9 @@ function showBestBowlerHistory() {
         `;
 
 
-        winners.forEach(function(entry) {
+        winners.forEach(function(item) {
 
-            const name = entry[0];
+            const name = item[0];
 
             const photo =
                 playerPhotos[name] || "";
@@ -3483,20 +3543,16 @@ function showBestBowlerHistory() {
     html += `</div>`;
 
 
-    const container =
-        document.getElementById("awardHistory");
+    container.innerHTML = html;
+
+    container.dataset.type = "bowler";
 
 
-    if (container) {
+    requestAnimationFrame(function() {
 
-        container.innerHTML = html;
+        container.classList.add("award-open");
 
-        container.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
-    }
+    });
 
 }
 /* =========================================================
