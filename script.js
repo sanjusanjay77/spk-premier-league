@@ -179,7 +179,6 @@ async function loadPlayers() {
 
     updateDashboard,
     updateRecords,
-    generateLeaderboard,
     generateCapHolders,
     generatePlayerCards,
     calculateMVP,
