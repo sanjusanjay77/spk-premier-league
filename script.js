@@ -617,191 +617,132 @@ function setHTML(id, value) {
 
 }
 
-
 function generateCapHolders() {
 
-const totals = {};
+    if (!players.length) return;
 
-// Calculate tournament totals
-players.forEach(function(player) {
+    // Get latest date
+    const latestDate =
+        players[players.length - 1].date;
 
-    const name = String(player.name || "").trim();
+    // Only players from latest date
+    const latestPlayers =
+        players.filter(
+            p => p.date === latestDate
+        );
 
-    if (!name) {
-        return;
-    }
+    const totals = {};
 
-    if (!totals[name]) {
-        totals[name] = {
-            runs: 0,
-            wickets: 0,
-            photo: playerPhotos[name] || ""
-        };
-    }
+    latestPlayers.forEach(player => {
 
-    totals[name].runs += Number(player.runs) || 0;
-    totals[name].wickets += Number(player.wickets) || 0;
+        const name =
+            String(player.name || "").trim();
 
-});
+        if (!totals[name]) {
 
-const allPlayers = Object.entries(totals);
+            totals[name] = {
+                runs: 0,
+                wickets: 0,
+                photo:
+                    playerPhotos[name] || ""
+            };
 
-if (allPlayers.length === 0) {
-    return;
-}
+        }
 
+        totals[name].runs +=
+            Number(player.runs) || 0;
 
-// ==========================================
-// ORANGE CAP - HIGHEST RUNS
-// ==========================================
+        totals[name].wickets +=
+            Number(player.wickets) || 0;
 
-const highestRuns = Math.max(
-    ...allPlayers.map(function(entry) {
-        return entry[1].runs;
-    })
-);
+    });
 
-const orangeHolders = allPlayers.filter(function(entry) {
-    return entry[1].runs === highestRuns;
-});
+    const allPlayers =
+        Object.entries(totals);
 
+    if (!allPlayers.length) return;
 
-// ==========================================
-// PURPLE CAP - HIGHEST WICKETS
-// ==========================================
+    const highestRuns =
+        Math.max(
+            ...allPlayers.map(
+                ([n, d]) => d.runs
+            )
+        );
 
-const highestWickets = Math.max(
-    ...allPlayers.map(function(entry) {
-        return entry[1].wickets;
-    })
-);
+    const highestWickets =
+        Math.max(
+            ...allPlayers.map(
+                ([n, d]) => d.wickets
+            )
+        );
 
-const purpleHolders = allPlayers.filter(function(entry) {
-    return entry[1].wickets === highestWickets;
-});
+    const orangeHolders =
+        allPlayers.filter(
+            ([n, d]) =>
+                d.runs === highestRuns
+        );
 
+    const purpleHolders =
+        allPlayers.filter(
+            ([n, d]) =>
+                d.wickets === highestWickets
+        );
 
-// ==========================================
-// ORANGE CAP ELEMENTS
-// ==========================================
+    // Orange Cap
+    document.getElementById(
+        "orangeCapName"
+    ).innerHTML =
+        orangeHolders
+            .map(([n]) => n)
+            .join(" & ");
 
-const orangePhoto = document.getElementById("orangeCapPhoto");
-const orangeName = document.getElementById("orangeCapName");
-const orangeRuns = document.getElementById("orangeCapRuns");
+    document.getElementById(
+        "orangeCapRuns"
+    ).innerHTML =
+        highestRuns +
+        " Runs<br>" +
+        latestDate;
 
+    // Purple Cap
+    document.getElementById(
+        "purpleCapName"
+    ).innerHTML =
+        purpleHolders
+            .map(([n]) => n)
+            .join(" & ");
 
-// Create holder photos
-if (orangePhoto) {
+    document.getElementById(
+        "purpleCapWickets"
+    ).innerHTML =
+        highestWickets +
+        " Wickets<br>" +
+        latestDate;
+
+    // Photos
+    const orangePhoto =
+        document.getElementById(
+            "orangeCapPhoto"
+        );
+
+    const purplePhoto =
+        document.getElementById(
+            "purpleCapPhoto"
+        );
 
     if (orangeHolders.length === 1) {
 
-        orangePhoto.src = orangeHolders[0][1].photo;
-        orangePhoto.style.display = "block";
+        orangePhoto.src =
+            orangeHolders[0][1].photo;
+
+        orangePhoto.style.display =
+            "block";
 
     } else {
 
-        orangePhoto.style.display = "none";
+        orangePhoto.style.display =
+            "none";
+
     }
-}
-
-
-// Names
-if (orangeName) {
-
-    orangeName.innerHTML = orangeHolders
-        .map(function(entry) {
-            return entry[0];
-        })
-        .join(" & ");
-
-}
-
-
-// Runs
-if (orangeRuns) {
-
-    orangeRuns.textContent =
-        highestRuns + " Runs";
-
-}
-
-
-// ==========================================
-// CREATE MULTIPLE ORANGE CAP PHOTOS
-// ==========================================
-
-let orangePhotoContainer =
-    document.getElementById("orangeCapPhotoContainer");
-
-if (!orangePhotoContainer) {
-
-    orangePhotoContainer =
-        document.createElement("div");
-
-    orangePhotoContainer.id =
-        "orangeCapPhotoContainer";
-
-    orangePhotoContainer.className =
-        "cap-photo-container";
-
-    if (orangePhoto) {
-        orangePhoto.parentNode.insertBefore(
-            orangePhotoContainer,
-            orangePhoto
-        );
-    }
-
-}
-
-orangePhotoContainer.innerHTML = "";
-
-orangeHolders.forEach(function(entry) {
-
-    const name = entry[0];
-    const photo = entry[1].photo;
-
-    const holder = document.createElement("div");
-
-    holder.className = "cap-holder";
-
-    holder.innerHTML = `
-        <img
-            src="${photo}"
-            class="cap-holder-photo"
-            alt="${name}"
-        >
-
-        <div class="cap-holder-name">
-            ${name}
-        </div>
-    `;
-
-    orangePhotoContainer.appendChild(holder);
-
-});
-
-
-// Hide original image because container handles photos
-if (orangePhoto) {
-    orangePhoto.style.display = "none";
-}
-
-
-// ==========================================
-// PURPLE CAP ELEMENTS
-// ==========================================
-
-const purplePhoto =
-    document.getElementById("purpleCapPhoto");
-
-const purpleName =
-    document.getElementById("purpleCapName");
-
-const purpleWickets =
-    document.getElementById("purpleCapWickets");
-
-
-if (purplePhoto) {
 
     if (purpleHolders.length === 1) {
 
@@ -817,118 +758,8 @@ if (purplePhoto) {
             "none";
 
     }
-}
-
-
-if (purpleName) {
-
-    purpleName.innerHTML =
-        purpleHolders
-            .map(function(entry) {
-                return entry[0];
-            })
-            .join(" & ");
 
 }
-
-
-if (purpleWickets) {
-
-    purpleWickets.textContent =
-        highestWickets + " Wickets";
-
-}
-
-
-// ==========================================
-// CREATE MULTIPLE PURPLE CAP PHOTOS
-// ==========================================
-
-let purplePhotoContainer =
-    document.getElementById(
-        "purpleCapPhotoContainer"
-    );
-
-if (!purplePhotoContainer) {
-
-    purplePhotoContainer =
-        document.createElement("div");
-
-    purplePhotoContainer.id =
-        "purpleCapPhotoContainer";
-
-    purplePhotoContainer.className =
-        "cap-photo-container";
-
-    if (purplePhoto) {
-
-        purplePhoto.parentNode.insertBefore(
-            purplePhotoContainer,
-            purplePhoto
-        );
-
-    }
-
-}
-
-purplePhotoContainer.innerHTML = "";
-
-
-purpleHolders.forEach(function(entry) {
-
-    const name = entry[0];
-    const photo = entry[1].photo;
-
-    const holder =
-        document.createElement("div");
-
-    holder.className =
-        "cap-holder";
-
-    holder.innerHTML = `
-        <img
-            src="${photo}"
-            class="cap-holder-photo"
-            alt="${name}"
-        >
-
-        <div class="cap-holder-name">
-            ${name}
-        </div>
-    `;
-
-    purplePhotoContainer.appendChild(holder);
-
-});
-
-
-// Hide original image
-if (purplePhoto) {
-    purplePhoto.style.display = "none";
-}
-
-
-// ==========================================
-// SAVE CAP HOLDERS
-// ==========================================
-
-orangeCapPlayer =
-    orangeHolders
-        .map(function(entry) {
-            return entry[0];
-        })
-        .join(" & ");
-
-
-purpleCapPlayer =
-    purpleHolders
-        .map(function(entry) {
-            return entry[0];
-        })
-        .join(" & ");
-
-}
-
 
 /* =========================================================
    PLAYER CARDS
