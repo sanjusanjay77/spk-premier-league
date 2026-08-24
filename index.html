@@ -194,50 +194,6 @@ class="weather-btn">
 </div>
 
 
-<!-- LEADERBOARD -->
-
-<section>
-
-<h2 class="section-title">
-📈 Leaderboard
-</h2>
-
-<div class="table-wrapper">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Match No</th>
-<th>Date</th>
-<th>Player</th>
-<th>Runs</th>
-<th>Balls</th>
-<th>Sixes</th>
-<th>Fours</th>
-<th>Strike Rate</th>
-<th>Wickets</th>
-<th>Runs Conceded</th>
-<th>Balls Bowled</th>
-<th>Sixes Given</th>
-<th>Economy</th>
-
-</tr>
-
-</thead>
-
-<tbody id="leaderboardBody">
-
-</tbody>
-
-</table>
-
-</div>
-
-</section>
-
 <!-- PLAYER CARDS -->
 
 <section>
@@ -298,41 +254,46 @@ Compare
 
 <section class="awards-section">
 
-    <h2 class="section-title">
-        🏅 Awards
-    </h2>
+<h2 class="section-title">
+🏅 Daily Performance Awards
+</h2>
 
-    <div class="awards-grid">
+<div class="awards-grid">
 
-        <div class="award-card"
-             onclick="showBestBatsmanHistory()">
+    <div class="award-card batting-award"
+         onclick="showBestBatsmanHistory()">
 
-            <h3>🏏 Best Batsman</h3>
+        <div class="award-icon">🏏</div>
 
-            <p>
-                Click to view batting awards
-            </p>
+        <h3>Best Batsman</h3>
 
-        </div>
+        <p>Highest runs by each match day</p>
 
-
-        <div class="award-card"
-             onclick="showBestBowlerHistory()">
-
-            <h3>🎯 Best Bowler</h3>
-
-            <p>
-                Click to view bowling awards
-            </p>
-
-        </div>
+        <span class="award-click">
+            Click to View
+        </span>
 
     </div>
 
 
-    <!-- Results appear only after clicking -->
+    <div class="award-card bowling-award"
+         onclick="showBestBowlerHistory()">
 
-    <div id="awardHistory"></div>
+        <div class="award-icon">🎯</div>
+
+        <h3>Best Bowler</h3>
+
+        <p>Highest wickets by each match day</p>
+
+        <span class="award-click">
+            Click to View
+        </span>
+
+    </div>
+
+</div>
+
+<div id="awardHistory"></div>
 
 </section>
 <section class="hall-of-fame">
