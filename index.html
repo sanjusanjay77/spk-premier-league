@@ -18,6 +18,32 @@
 
 <body>
 
+<div class="login-container">
+
+    <h2>🏏 SPK Login</h2>
+
+    <input
+        type="tel"
+        id="phoneNumber"
+        placeholder="+91 9876543210">
+
+    <button onclick="sendOTP()">
+        Send OTP
+    </button>
+
+    <input
+        type="text"
+        id="otpCode"
+        placeholder="Enter OTP">
+
+    <button onclick="verifyOTP()">
+        Login
+    </button>
+
+    <div id="recaptcha-container"></div>
+
+</div>
+
 <div class="bg-3d">
   <span></span>
   <span></span>
@@ -632,5 +658,80 @@ SPK Premier League © 2026
 
 <script src="script.js"></script>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+RecaptchaVerifier,
+signInWithPhoneNumber
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+
+    apiKey:"YOUR_API_KEY",
+    authDomain:"YOUR_PROJECT.firebaseapp.com",
+    projectId:"YOUR_PROJECT_ID"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.recaptchaVerifier =
+new RecaptchaVerifier(
+auth,
+"recaptcha-container",
+{}
+);
+
+window.sendOTP = async function(){
+
+    const phone =
+    document.getElementById(
+        "phoneNumber"
+    ).value;
+
+    const appVerifier =
+    window.recaptchaVerifier;
+
+    const result =
+    await signInWithPhoneNumber(
+        auth,
+        phone,
+        appVerifier
+    );
+
+    window.confirmationResult =
+    result;
+
+    alert("OTP Sent");
+
+};
+
+window.verifyOTP = async function(){
+
+    const code =
+    document.getElementById(
+        "otpCode"
+    ).value;
+
+    await window.confirmationResult
+        .confirm(code);
+
+    alert("Login Success");
+
+    window.location.href =
+    "index.html";
+
+};
+
+</script>
+
 </body>
 </html>
