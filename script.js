@@ -42,6 +42,22 @@ function num(value) {
 
 
 /* =========================================================
+   DISMISSAL / DUCK HELPERS
+   Google Sheet column 12 (L) should contain IsOut:
+   TRUE / FALSE, OUT / NOT OUT, or 1 / 0.
+   A duck is a dismissal for zero batter runs.
+   ========================================================= */
+function isDismissed(value) {
+    const status = String(value ?? "").trim().toLowerCase();
+    return ["true", "yes", "y", "1", "out", "dismissed", "wicket"].includes(status);
+}
+
+function isDuck(player) {
+    return num(player.runs) === 0 && isDismissed(player.isOut);
+}
+
+
+/* =========================================================
    CSV PARSER
    Handles commas inside quoted values
    ========================================================= */
@@ -156,7 +172,11 @@ async function loadPlayers() {
                         num(cols[9]),
 
                     sixesGiven:
-                        num(cols[10])
+                        num(cols[10]),
+
+                    // Column L in Google Sheets: TRUE/FALSE or OUT/NOT OUT
+                    isOut:
+                        cols[11]?.trim() || ""
 
                 };
 
@@ -408,11 +428,8 @@ function getPlayerTotals() {
 
         totals[name].matches++;
 
-        /* Duck Count */
-        if (
-            num(player.runs) === 0 &&
-            num(player.ballsFaced) > 0
-        ) {
+        /* Count only confirmed dismissals for zero runs. */
+        if (isDuck(player)) {
             totals[name].ducks++;
         }
 
@@ -577,28 +594,22 @@ function updateRecords() {
     purpleCapPlayer =
         mostWickets.map(p => p.name).join(" & ");
 
-    document.getElementById("mostRuns").innerHTML =
-        `${mostRuns.map(p => p.name).join(" & ")}<br>${highestRuns}`;
+    setHTML("mostRuns", `${mostRuns.map(p => escapeHTML(p.name)).join(" & ")}<br>${highestRuns}`);
 
-    document.getElementById("mostWickets").innerHTML =
-        `${mostWickets.map(p => p.name).join(" & ")}<br>${highestWickets}`;
+    setHTML("mostWickets", `${mostWickets.map(p => escapeHTML(p.name)).join(" & ")}<br>${highestWickets}`);
 
-    document.getElementById("mostSixes").innerHTML =
-        `${mostSixes.map(p => p.name).join(" & ")}<br>${highestSixes}`;
+    setHTML("mostSixes", `${mostSixes.map(p => escapeHTML(p.name)).join(" & ")}<br>${highestSixes}`);
 
-    document.getElementById("mostFours").innerHTML =
-        `${mostFours.map(p => p.name).join(" & ")}<br>${highestFours}`;
+    setHTML("mostFours", `${mostFours.map(p => escapeHTML(p.name)).join(" & ")}<br>${highestFours}`);
 
-    document.getElementById("mostDucks").innerHTML =
-        `${mostDucks.map(p => p.name).join(" & ")}<br>${highestDucks}`;
+    setHTML("mostDucks", `${mostDucks.map(p => escapeHTML(p.name)).join(" & ")}<br>${highestDucks} 🦆`);
 
-    document.getElementById("highestSR").innerHTML =
-        `${highestStrikeRate.map(p => p.name).join(" & ")}<br>${highestSR.toFixed(1)}`;
+    setHTML("highestSR", `${highestStrikeRate.map(p => escapeHTML(p.name)).join(" & ")}<br>${highestSR.toFixed(1)}`);
 
-    document.getElementById("bestEconomy").innerHTML =
+    setHTML("bestEconomy",
         bestEconomyPlayers.length
-            ? `${bestEconomyPlayers.map(p => p.name).join(" & ")}<br>${bestEconomy.toFixed(2)}`
-            : "-";
+            ? `${bestEconomyPlayers.map(p => escapeHTML(p.name)).join(" & ")}<br>${bestEconomy.toFixed(2)}`
+            : "-");
 
 }
 
@@ -807,6 +818,7 @@ function generatePlayerCards() {
                 runs: 0,
                 wickets: 0,
                 sixes: 0,
+                ducks: 0,
 
                 ballsFaced: 0,
                 ballsBowled: 0,
@@ -836,6 +848,10 @@ function generatePlayerCards() {
 
         playerMap[name].runsConceded +=
             num(player.runsConceded);
+
+        if (isDuck(player)) {
+            playerMap[name].ducks++;
+        }
 
         playerMap[name].matches++;
 
@@ -868,6 +884,10 @@ function generatePlayerCards() {
 
                     <p>
                         💥 ${player.sixes} Sixes
+                    </p>
+
+                    <p>
+                        🦆 ${player.ducks} Ducks
                     </p>
 
                     <p>
@@ -912,6 +932,7 @@ function openPlayer(name) {
 
     let totalRunsConceded = 0;
     let totalSixesGiven = 0;
+    let totalDucks = 0;
 
 
     records.forEach(function(record) {
@@ -935,6 +956,10 @@ function openPlayer(name) {
 
         totalSixesGiven +=
             Number(record.sixesGiven) || 0;
+
+        if (isDuck(record)) {
+            totalDucks++;
+        }
 
     });
 
@@ -1095,6 +1120,14 @@ function openPlayer(name) {
     if (modalSixesGiven) {
         modalSixesGiven.textContent =
             totalSixesGiven;
+    }
+
+
+    const modalDucks =
+        document.getElementById("modalDucks");
+
+    if (modalDucks) {
+        modalDucks.textContent = totalDucks;
     }
 
 
