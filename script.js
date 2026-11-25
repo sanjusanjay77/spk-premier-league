@@ -53,7 +53,7 @@ function isDismissed(value) {
 }
 
 function isDuck(player) {
-    return num(player.runs) === 0 && isDismissed(player.isOut);
+    return num(player.runs) === 0;
 }
 
 
@@ -602,8 +602,12 @@ function updateRecords() {
 
     setHTML("mostFours", `${mostFours.map(p => escapeHTML(p.name)).join(" & ")}<br>${highestFours}`);
 
-    setHTML("mostDucks", `${mostDucks.map(p => escapeHTML(p.name)).join(" & ")}<br>${highestDucks} 🦆`);
-
+    setHTML(
+    "mostDucks",
+    highestDucks > 0
+        ? `${mostDucks.map(p => escapeHTML(p.name)).join(" & ")}<br>${highestDucks} 🦆`
+        : "No Ducks Yet"
+);
     setHTML("highestSR", `${highestStrikeRate.map(p => escapeHTML(p.name)).join(" & ")}<br>${highestSR.toFixed(1)}`);
 
     setHTML("bestEconomy",
